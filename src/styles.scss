@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+:root {
+    --clinic-bg: #070711;
+    --clinic-surface: #11101a;
+    --clinic-card: #171521;
+
+    --clinic-pink: #ff3d91;
+    --clinic-purple: #9b5cff;
+    --clinic-violet: #6d35d9;
+
+    --clinic-text: #ffffff;
+    --clinic-muted: #a9a2b1;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--clinic-bg);
+    color: var(--clinic-text);
+    font-family: "Manrope", sans-serif;
+}
+
+.font-serif {
+    font-family: "DM Serif Display", serif;
+}

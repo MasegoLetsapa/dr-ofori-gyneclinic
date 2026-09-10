@@ -1,0 +1,132 @@
+<header class="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06]
+         bg-[#070711]/75 backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
+
+        <!-- Logo -->
+        <a href="#home" class="group flex items-center gap-3" (click)="closeMenu()">
+            <!-- Temporary logo mark -->
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl
+               border border-pink-400/30
+               bg-gradient-to-br from-pink-500/20 to-violet-500/20
+               shadow-[0_0_30px_rgba(255,63,145,0.12)]">
+                <span class="font-serif text-xl font-semibold text-pink-400">
+                    D
+                </span>
+            </div>
+
+            <div class="leading-none">
+                <div class="font-serif text-lg tracking-wide text-white">
+                    Dr. Ofori
+                </div>
+
+                <div class="mt-1 text-[8px] font-semibold tracking-[0.35em]
+                 text-pink-400">
+                    GYNE CLINIC
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden items-center gap-8 lg:flex">
+
+            <a href="#home" class="text-sm text-white transition hover:text-pink-400">
+                Home
+            </a>
+
+            <a href="#services" class="text-sm text-zinc-400 transition hover:text-pink-400">
+                Services
+            </a>
+
+            <a href="#about" class="text-sm text-zinc-400 transition hover:text-pink-400">
+                About
+            </a>
+
+            <a href="#doctor" class="text-sm text-zinc-400 transition hover:text-pink-400">
+                Dr. Ofori
+            </a>
+
+            <a href="#resources" class="text-sm text-zinc-400 transition hover:text-pink-400">
+                Resources
+            </a>
+
+            <a href="#contact" class="text-sm text-zinc-400 transition hover:text-pink-400">
+                Contact
+            </a>
+
+        </nav>
+
+
+        <!-- Desktop CTA -->
+        <a href="#appointment" class="hidden items-center gap-2 rounded-full
+             bg-gradient-to-r from-pink-500 to-violet-500
+             px-5 py-3 text-sm font-semibold text-white
+             shadow-[0_0_30px_rgba(255,63,145,0.18)]
+             transition duration-300
+             hover:-translate-y-0.5
+             hover:shadow-[0_0_40px_rgba(255,63,145,0.35)]
+             sm:flex">
+            Book Appointment
+            <span>↗</span>
+        </a>
+
+
+        <!-- Mobile Button -->
+        <button type="button" class="flex h-11 w-11 items-center justify-center
+             rounded-xl border border-white/10 bg-white/[0.04]
+             text-white lg:hidden" (click)="toggleMenu()" aria-label="Toggle navigation">
+            @if (!mobileMenuOpen()) {
+            <span class="text-xl">☰</span>
+            } @else {
+            <span class="text-xl">×</span>
+            }
+        </button>
+
+    </div>
+
+
+    <!-- Mobile Navigation -->
+    @if (mobileMenuOpen()) {
+
+    <div class="border-t border-white/[0.06]
+             bg-[#090811]/95 px-5 py-6 backdrop-blur-xl lg:hidden">
+
+        <nav class="flex flex-col">
+
+            <a href="#home" class="border-b border-white/[0.06] py-4 text-sm text-white" (click)="closeMenu()">
+                Home
+            </a>
+
+            <a href="#services" class="border-b border-white/[0.06] py-4 text-sm text-zinc-300" (click)="closeMenu()">
+                Services
+            </a>
+
+            <a href="#about" class="border-b border-white/[0.06] py-4 text-sm text-zinc-300" (click)="closeMenu()">
+                About
+            </a>
+
+            <a href="#doctor" class="border-b border-white/[0.06] py-4 text-sm text-zinc-300" (click)="closeMenu()">
+                Dr. Ofori
+            </a>
+
+            <a href="#resources" class="border-b border-white/[0.06] py-4 text-sm text-zinc-300" (click)="closeMenu()">
+                Resources
+            </a>
+
+            <a href="#contact" class="py-4 text-sm text-zinc-300" (click)="closeMenu()">
+                Contact
+            </a>
+
+            <a href="#appointment" class="mt-5 rounded-full bg-gradient-to-r
+                 from-pink-500 to-violet-500
+                 px-5 py-3 text-center text-sm font-semibold text-white" (click)="closeMenu()">
+                Book Appointment
+            </a>
+
+        </nav>
+
+    </div>
+
+    }
+
+</header>
