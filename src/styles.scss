@@ -1,29 +1,221 @@
 @import "tailwindcss";
 
+/* =========================================
+   DR. OFORI GYNE CLINIC
+   GLOBAL DESIGN SYSTEM
+========================================= */
+
 :root {
     --clinic-bg: #070711;
-    --clinic-surface: #11101a;
-    --clinic-card: #171521;
+    --clinic-bg-soft: #090811;
+    --clinic-surface: #0d0b14;
+    --clinic-surface-2: #11101a;
 
     --clinic-pink: #ff3d91;
+    --clinic-fuchsia: #e94bcf;
     --clinic-purple: #9b5cff;
-    --clinic-violet: #6d35d9;
+    --clinic-violet: #7138d8;
 
-    --clinic-text: #ffffff;
-    --clinic-muted: #a9a2b1;
+    --clinic-white: #ffffff;
+    --clinic-text: #f5f3f7;
+    --clinic-muted: #aaa4b3;
+    --clinic-subtle: #6f6978;
+
+    --clinic-border: rgba(255, 255, 255, 0.07);
+    --clinic-border-pink: rgba(255, 61, 145, 0.18);
 }
+
+/* =========================================
+   BASE
+========================================= */
 
 html {
     scroll-behavior: smooth;
+    background: var(--clinic-bg);
 }
 
 body {
     margin: 0;
-    background: var(--clinic-bg);
+    min-width: 320px;
+
+    background:
+        radial-gradient(circle at 50% -10%,
+            rgba(126, 38, 125, 0.08),
+            transparent 35%),
+        var(--clinic-bg);
+
     color: var(--clinic-text);
+
     font-family: "Manrope", sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+/* =========================================
+   TYPOGRAPHY
+========================================= */
 
 .font-serif {
     font-family: "DM Serif Display", serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+    font-family: "DM Serif Display", serif;
+}
+
+/* =========================================
+   SELECTION
+========================================= */
+
+::selection {
+    background: rgba(255, 61, 145, 0.25);
+    color: white;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #05050a;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(255, 61, 145, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 61, 145, 0.55);
+}
+
+/* =========================================
+   FOCUS
+========================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid rgba(255, 61, 145, 0.7);
+    outline-offset: 3px;
+}
+
+/* =========================================
+   BUTTON / LINK TRANSITIONS
+========================================= */
+
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   CLINIC GRADIENT TEXT
+========================================= */
+
+.clinic-gradient-text {
+    background: linear-gradient(110deg,
+            var(--clinic-pink),
+            var(--clinic-fuchsia),
+            var(--clinic-purple));
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* =========================================
+   SUBTLE GRID BACKGROUND
+========================================= */
+
+.clinic-grid {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px),
+        linear-gradient(90deg,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px);
+
+    background-size: 56px 56px;
+}
+
+/* =========================================
+   GLASS SURFACE
+========================================= */
+
+.clinic-glass {
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+section[id],
+footer[id] {
+  scroll-margin-top: 90px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+@keyframes clinic-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.clinic-reveal {
+    animation: clinic-fade-up 0.8s ease-out both;
+}
+
+.clinic-reveal-delay-1 {
+    animation-delay: 100ms;
+}
+
+.clinic-reveal-delay-2 {
+    animation-delay: 200ms;
+}
+
+.clinic-reveal-delay-3 {
+    animation-delay: 300ms;
+}
+
+.clinic-reveal-delay-4 {
+    animation-delay: 400ms;
 }

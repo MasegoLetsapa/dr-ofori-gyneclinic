@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
+import { Icon } from "../../shared/icon/icon";
 
 @Component({
-  imports: [],
+  imports: [Icon],
   standalone: true,
   selector: 'app-navbar',
   styleUrl: './navbar.scss',
@@ -10,12 +11,17 @@ import { Component, signal } from '@angular/core';
 export class Navbar {
   mobileMenuOpen = signal(false);
 
-  toggleMenu(): void {
-    this.mobileMenuOpen.update(value => !value);
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update(open => !open);
   }
 
-  closeMenu(): void {
+  closeMobileMenu(): void {
     this.mobileMenuOpen.set(false);
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    // We'll use this later for the navbar scroll effect.
   }
 
 }
