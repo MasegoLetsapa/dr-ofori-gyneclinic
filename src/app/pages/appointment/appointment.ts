@@ -1,7 +1,10 @@
 import { Component, inject } from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators
+import {
+  FormBuilder, ReactiveFormsModule, Validators
 } from '@angular/forms';
 import { Icon } from "../../shared/icon/icon";
+import { AppointmentService } from '../../core/services/appointment.service';
+import { CreateAppointmentRequest } from '../../core/models/appointment.model';
 
 @Component({
   imports: [ReactiveFormsModule, Icon],
@@ -13,8 +16,14 @@ import { Icon } from "../../shared/icon/icon";
 export class Appointment {
   private readonly fb = inject(FormBuilder);
 
+  private readonly appointmentService =
+    inject(AppointmentService);
+
   submitted = false;
   submitting = false;
+
+  successMessage = '';
+  errorMessage = '';
 
   appointmentForm = this.fb.group({
     firstName: [
@@ -113,38 +122,112 @@ export class Appointment {
     this.submitted = true;
 
     if (this.appointmentForm.invalid) {
+
       this.appointmentForm.markAllAsTouched();
+
       return;
     }
 
     this.submitting = true;
 
-    console.log(
-      'Appointment request:',
-      this.appointmentForm.getRawValue()
-    );
 
-    /*
-      API integration will be added here.
+    const formValue =
+      this.appointmentForm.getRawValue();
 
-      Example later:
 
-      this.appointmentService
-        .createAppointment(this.appointmentForm.getRawValue())
-        .subscribe({
-          next: () => {
-            this.submitting = false;
-          },
-          error: () => {
-            this.submitting = false;
-          }
-        });
-    */
+    const request: CreateAppointmentRequest = {
 
-    setTimeout(() => {
+      firstName:
+        formValue.firstName ?? '',
+
+      lastName:
+        formValue.lastName ?? '',
+
+      email:
+        formValue.email ?? '',
+
+      phone:
+        formValue.phone ?? '',
+
+      service:
+        formValue.service ?? '',
+
+      preferredDate:
+        formValue.preferredDate ?? '',
+
+      preferredTime:
+        formValue.preferredTime ?? '',
+
+      message:
+        formValue.message ?? ''
+
+    };
+
+
+    this.appointmentService
+      .createAppointment(request)
+      .subscribe({
+
+        next: response => {
+
+          console.log(
+            'Appointment created:',
+            response
+          );
+
+          this.submitting = false;
+
+          this.successMessage =
+            'Your appointment request has been received. Our team will contact you to confirm your appointment.';
+
+          this.errorMessage = '';
+
+          this.appointmentForm.reset();
+
+          this.submitted = false;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to create appointment:',
+            error
+          );
+
+          this.submitting = false;
+
+          this.errorMessage =
+            'We could not submit your request right now. Please try again or contact the clinic directly.';
+
+          this.successMessage = '';
+
+        }
+
+      });
+  }
+
+  /*
+    API integration will be added here.
+
+    Example later:
+
+    this.appointmentService
+      .createAppointment(this.appointmentForm.getRawValue())
+      .subscribe({
+        next: () => {
+          this.submitting = false;
+        },
+        error: () => {
+          this.submitting = false;
+        }
+      });
+  */
+
+  /*   setTimeout(() => {
       this.submitting = false;
       this.appointmentForm.reset();
       this.submitted = false;
     }, 1200);
-  }
+  } */
 }

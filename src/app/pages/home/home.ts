@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Icon, IconName } from '../../shared/icon/icon';
 import { Appointment } from '../appointment/appointment';
+import { Navbar } from "../../layout/navbar/navbar";
 
 interface Service {
   number: string;
@@ -39,7 +40,7 @@ interface Resource {
 }
 
 @Component({
-  imports: [Icon, Appointment],
+  imports: [Icon, Appointment, Navbar],
   selector: 'app-home',
   standalone: true,
   styleUrl: './home.scss',
