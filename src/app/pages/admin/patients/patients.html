@@ -1,0 +1,491 @@
+<div class="min-h-screen bg-[#08070d] px-6 py-8 text-white lg:px-8">
+
+    <!-- Header -->
+    <div class="mb-8 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+        <div>
+            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-fuchsia-400">
+                Clinic Management
+            </p>
+
+            <h1 class="text-3xl font-semibold tracking-tight md:text-4xl">
+                Patients
+            </h1>
+
+            <p class="mt-2 text-sm text-white/50">
+                Manage patient information and records.
+            </p>
+        </div>
+
+        <button type="button"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-600 px-5 py-3 text-sm font-semibold shadow-lg shadow-fuchsia-950/30 transition hover:scale-[1.02] hover:from-fuchsia-400 hover:to-violet-500">
+            <span class="text-lg">+</span>
+            Add Patient
+        </button>
+
+    </div>
+
+
+    <!-- KPI Cards -->
+    <div class="mb-8 grid gap-4 sm:grid-cols-3">
+
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-xl">
+
+            <p class="text-sm text-white/45">
+                Total Patients
+            </p>
+
+            <p class="mt-2 text-3xl font-semibold">
+                {{ totalPatients() }}
+            </p>
+
+        </div>
+
+
+        <div class="rounded-2xl border border-emerald-400/10 bg-emerald-400/[0.04] p-5 backdrop-blur-xl">
+
+            <p class="text-sm text-white/45">
+                Active Patients
+            </p>
+
+            <p class="mt-2 text-3xl font-semibold">
+                {{ activePatients() }}
+            </p>
+
+        </div>
+
+
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-xl">
+
+            <p class="text-sm text-white/45">
+                Inactive Patients
+            </p>
+
+            <p class="mt-2 text-3xl font-semibold">
+                {{ inactivePatients() }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Filters -->
+    <div class="mb-5 flex flex-col gap-3 md:flex-row">
+
+        <div class="relative flex-1">
+
+            <input type="text" placeholder="Search patients..."
+                class="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 focus:border-fuchsia-500/50"
+                (input)="setSearchTerm($any($event.target).value)" />
+
+        </div>
+
+
+        <select
+            class="rounded-xl border border-white/10 bg-[#111019] px-4 py-3 text-sm text-white outline-none focus:border-fuchsia-500/50"
+            [value]="selectedStatus()" (change)="setStatus($any($event.target).value)">
+            <option value="All">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+        </select>
+
+    </div>
+
+
+    <!-- Error -->
+    @if (errorMessage()) {
+
+    <div class="mb-5 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
+        {{ errorMessage() }}
+    </div>
+
+    }
+
+
+    <!-- Loading -->
+    @if (loading()) {
+
+    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-12 text-center">
+
+        <div class="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-fuchsia-500"></div>
+
+        <p class="text-sm text-white/45">
+            Loading patients...
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- Empty -->
+    @else if (filteredPatients().length === 0) {
+
+    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-12 text-center">
+
+        <p class="text-lg font-medium">
+            No patients found
+        </p>
+
+        <p class="mt-2 text-sm text-white/40">
+            Try adjusting your search or filter.
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- Patient Table -->
+    @else {
+
+    <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[850px]">
+
+                <thead class="border-b border-white/10 bg-white/[0.025]">
+
+                    <tr class="text-left text-xs uppercase tracking-wider text-white/35">
+
+                        <th class="px-5 py-4 font-medium">
+                            Patient
+                        </th>
+
+                        <th class="px-5 py-4 font-medium">
+                            Contact
+                        </th>
+
+                        <th class="px-5 py-4 font-medium">
+                            Gender
+                        </th>
+
+                        <th class="px-5 py-4 font-medium">
+                            Date of Birth
+                        </th>
+
+                        <th class="px-5 py-4 font-medium">
+                            Status
+                        </th>
+
+                        <th class="px-5 py-4 text-right font-medium">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody class="divide-y divide-white/5">
+
+                    @for (patient of filteredPatients(); track patient.id) {
+
+                    <tr class="transition hover:bg-white/[0.025]">
+
+                        <td class="px-5 py-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <div
+                                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-violet-500/20 text-sm font-semibold text-fuchsia-300">
+                                    {{ patient.firstName.charAt(0) }}{{ patient.lastName.charAt(0) }}
+                                </div>
+
+                                <div>
+
+                                    <p class="font-medium">
+                                        {{ patient.firstName }}
+                                        {{ patient.lastName }}
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-white/35">
+                                        {{ patient.patientNumber }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td class="px-5 py-4">
+
+                            <p class="text-sm">
+                                {{ patient.phone }}
+                            </p>
+
+                            @if (patient.email) {
+
+                            <p class="mt-1 text-xs text-white/35">
+                                {{ patient.email }}
+                            </p>
+
+                            }
+
+                        </td>
+
+
+                        <td class="px-5 py-4 text-sm text-white/60">
+                            {{ patient.gender || '—' }}
+                        </td>
+
+
+                        <td class="px-5 py-4 text-sm text-white/60">
+                            {{ patient.dateOfBirth ? (patient.dateOfBirth | date:'dd MMM yyyy') : '—' }}
+                        </td>
+
+
+                        <td class="px-5 py-4">
+
+                            @if (patient.isActive) {
+
+                            <span
+                                class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                                Active
+                            </span>
+
+                            } @else {
+
+                            <span
+                                class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/40">
+                                Inactive
+                            </span>
+
+                            }
+
+                        </td>
+
+
+                        <td class="px-5 py-4">
+
+                            <div class="flex justify-end gap-2">
+
+                                <button type="button"
+                                    class="rounded-lg border border-white/10 px-3 py-2 text-xs text-white/60 transition hover:border-fuchsia-400/30 hover:text-white"
+                                    (click)="openPatient(patient)">
+                                    View
+                                </button>
+
+                                <button type="button"
+                                    class="rounded-lg border border-red-400/10 px-3 py-2 text-xs text-red-300/70 transition hover:border-red-400/30 hover:text-red-300"
+                                    (click)="openDeleteModal(patient)">
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    }
+
+
+    <!-- Patient Details Modal -->
+    @if (showPatientModal() && selectedPatient(); as patient) {
+
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+
+        <div class="w-full max-w-2xl rounded-2xl border border-white/10 bg-[#111019] shadow-2xl">
+
+            <div class="flex items-center justify-between border-b border-white/10 px-6 py-5">
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-wider text-fuchsia-400">
+                        Patient Profile
+                    </p>
+
+                    <h2 class="mt-1 text-xl font-semibold">
+                        {{ patient.firstName }} {{ patient.lastName }}
+                    </h2>
+
+                </div>
+
+                <button type="button" class="rounded-lg px-3 py-2 text-white/40 hover:bg-white/5 hover:text-white"
+                    (click)="closePatientModal()">
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="grid gap-5 p-6 sm:grid-cols-2">
+
+                <div>
+                    <p class="text-xs text-white/35">
+                        Patient Number
+                    </p>
+                    <p class="mt-1 text-sm">
+                        {{ patient.patientNumber }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-white/35">
+                        Phone
+                    </p>
+                    <p class="mt-1 text-sm">
+                        {{ patient.phone }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-white/35">
+                        Email
+                    </p>
+                    <p class="mt-1 text-sm">
+                        {{ patient.email || '—' }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-white/35">
+                        Gender
+                    </p>
+                    <p class="mt-1 text-sm">
+                        {{ patient.gender || '—' }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-white/35">
+                        Date of Birth
+                    </p>
+                    <p class="mt-1 text-sm">
+                        {{ patient.dateOfBirth ? (patient.dateOfBirth | date:'dd MMM yyyy') : '—' }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-white/35">
+                        Status
+                    </p>
+                    <p class="mt-1 text-sm">
+                        {{ patient.isActive ? 'Active' : 'Inactive' }}
+                    </p>
+                </div>
+
+                <div class="sm:col-span-2">
+
+                    <p class="text-xs text-white/35">
+                        Address
+                    </p>
+
+                    <p class="mt-1 text-sm text-white/70">
+                        {{ patient.address || '—' }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-xs text-white/35">
+                        Emergency Contact
+                    </p>
+
+                    <p class="mt-1 text-sm">
+                        {{ patient.emergencyContactName || '—' }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-xs text-white/35">
+                        Emergency Phone
+                    </p>
+
+                    <p class="mt-1 text-sm">
+                        {{ patient.emergencyContactPhone || '—' }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="flex justify-end border-t border-white/10 px-6 py-4">
+
+                <button type="button"
+                    class="rounded-xl border border-white/10 px-5 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    (click)="closePatientModal()">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+
+    <!-- Delete Confirmation -->
+    @if (showDeleteModal() && patientToDelete(); as patient) {
+
+    <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+
+        <div class="w-full max-w-md rounded-2xl border border-red-400/10 bg-[#111019] p-6 shadow-2xl">
+
+            <div class="mb-5">
+
+                <p class="text-xs uppercase tracking-wider text-red-400">
+                    Delete Patient
+                </p>
+
+                <h2 class="mt-2 text-xl font-semibold">
+                    Are you sure?
+                </h2>
+
+                <p class="mt-2 text-sm leading-6 text-white/45">
+                    This will permanently delete
+                    <span class="text-white">
+                        {{ patient.firstName }} {{ patient.lastName }}
+                    </span>
+                    from the system.
+                </p>
+
+            </div>
+
+
+            <div class="flex justify-end gap-3">
+
+                <button type="button"
+                    class="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    (click)="closeDeleteModal()">
+                    Cancel
+                </button>
+
+                <button type="button"
+                    class="rounded-xl bg-red-500/90 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+                    [disabled]="deleting()" (click)="deletePatient()">
+                    {{ deleting() ? 'Deleting...' : 'Delete Patient' }}
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>
