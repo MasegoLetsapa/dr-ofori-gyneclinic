@@ -24,6 +24,44 @@ export class Appointments {
 
   error = signal<string | null>(null);
 
+  selectedAppointment = signal<Appointment | null>(null);
+
+  updatingStatus = signal(false);
+
+  deletingAppointment = signal(false);
+
+  appointmentToDelete = signal<Appointment | null>(null);
+
+  searchTerm = signal('');
+  selectedStatus = signal('All');
+
+  filteredAppointments = computed(() => {
+
+    const search = this.searchTerm()
+      .trim()
+      .toLowerCase();
+
+    const status = this.selectedStatus();
+
+    return this.appointments().filter(appointment => {
+
+      const matchesSearch =
+        !search ||
+        appointment.referenceNumber.toLowerCase().includes(search) ||
+        appointment.firstName.toLowerCase().includes(search) ||
+        appointment.lastName.toLowerCase().includes(search) ||
+        appointment.email.toLowerCase().includes(search) ||
+        appointment.phone.toLowerCase().includes(search) ||
+        appointment.service.toLowerCase().includes(search);
+
+      const matchesStatus =
+        status === 'All' ||
+        appointment.status.toLowerCase() === status.toLowerCase();
+
+      return matchesSearch && matchesStatus;
+    });
+
+  });
 
   // ========================================
   // APPOINTMENT COUNTS
@@ -110,6 +148,176 @@ export class Appointments {
 
   refreshAppointments(): void {
     this.loadAppointments();
+  }
+
+  // ========================================
+  // VIEW APPOINTMENT
+  // ========================================
+
+  viewAppointment(appointment: Appointment): void {
+    this.selectedAppointment.set(appointment);
+  }
+
+
+  // ========================================
+  // CLOSE APPOINTMENT DETAILS
+  // ========================================
+
+  closeAppointmentDetails(): void {
+    this.selectedAppointment.set(null);
+  }
+
+
+  // ========================================
+  // UPDATE APPOINTMENT STATUS
+  // ========================================
+
+  updateStatus(status: string): void {
+
+    const appointment = this.selectedAppointment();
+
+    if (!appointment) {
+      return;
+    }
+
+    this.updatingStatus.set(true);
+
+    this.appointmentService
+      .updateAppointmentStatus(
+        appointment.id,
+        status
+      )
+      .subscribe({
+
+        next: updatedAppointment => {
+
+          // Update the appointment in the local list
+          this.appointments.update(
+            appointments =>
+              appointments.map(item =>
+                item.id === updatedAppointment.id
+                  ? updatedAppointment
+                  : item
+              )
+          );
+
+          // Update the appointment currently
+          // displayed in the modal
+          this.selectedAppointment.set(
+            updatedAppointment
+          );
+
+          this.updatingStatus.set(false);
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to update appointment status:',
+            error
+          );
+
+          this.error.set(
+            'Unable to update the appointment status. Please try again.'
+          );
+
+          this.updatingStatus.set(false);
+        }
+
+      });
+  }
+
+  // ========================================
+  // SEARCH
+  // ========================================
+
+  setSearchTerm(value: string): void {
+    this.searchTerm.set(value);
+  }
+
+
+  // ========================================
+  // STATUS FILTER
+  // ========================================
+
+  setStatusFilter(status: string): void {
+    this.selectedStatus.set(status);
+  }
+
+  // ========================================
+  // OPEN DELETE CONFIRMATION
+  // ========================================
+
+  confirmDelete(appointment: Appointment): void {
+    this.appointmentToDelete.set(appointment);
+  }
+
+
+  // ========================================
+  // CLOSE DELETE CONFIRMATION
+  // ========================================
+
+  cancelDelete(): void {
+    this.appointmentToDelete.set(null);
+  }
+
+
+  // ========================================
+  // DELETE APPOINTMENT
+  // ========================================
+
+  deleteAppointment(): void {
+
+    const appointment = this.appointmentToDelete();
+
+    if (!appointment) {
+      return;
+    }
+
+    this.deletingAppointment.set(true);
+
+    this.appointmentService
+      .deleteAppointment(appointment.id)
+      .subscribe({
+
+        next: () => {
+
+          // Remove appointment from local list
+          this.appointments.update(
+            appointments =>
+              appointments.filter(
+                item => item.id !== appointment.id
+              )
+          );
+
+          // Close delete confirmation
+          this.appointmentToDelete.set(null);
+
+          // Close details modal if it is open
+          if (
+            this.selectedAppointment()?.id === appointment.id
+          ) {
+            this.selectedAppointment.set(null);
+          }
+
+          this.deletingAppointment.set(false);
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to delete appointment:',
+            error
+          );
+
+          this.error.set(
+            'Unable to delete the appointment. Please try again.'
+          );
+
+          this.deletingAppointment.set(false);
+        }
+
+      });
   }
 
 }

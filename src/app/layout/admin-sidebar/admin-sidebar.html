@@ -1,0 +1,175 @@
+<aside class="flex h-full w-72 flex-col border-r border-white/10
+         bg-[#0b0911]">
+
+    <!-- BRAND -->
+
+    <div class="border-b border-white/10 px-6 py-7">
+
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-fuchsia-400">
+            Dr. Ofori
+        </p>
+
+        <h1 class="mt-2 font-serif text-2xl text-white">
+            Gyne Clinic
+        </h1>
+
+        <p class="mt-1 text-xs text-white/30">
+            Administration Portal
+        </p>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="flex-1 overflow-y-auto px-4 py-6">
+
+        <p class="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+            Management
+        </p>
+
+        <div class="space-y-1">
+
+            @for (item of navigationItems; track item.route) {
+
+            <a [routerLink]="item.route" routerLinkActive="bg-fuchsia-400/10 text-fuchsia-300 border-fuchsia-400/20"
+                [routerLinkActiveOptions]="{ exact: item.route === '/admin' }" class="flex items-center gap-3 rounded-xl border border-transparent
+                 px-3 py-3 text-sm font-medium text-white/50
+                 transition hover:bg-white/[0.04] hover:text-white">
+
+                <!-- Dashboard -->
+
+                @if (item.icon === 'dashboard') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                </svg>
+                }
+
+
+                <!-- Calendar -->
+
+                @if (item.icon === 'calendar') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                    <path d="M16 2v4M8 2v4M3 10h18"></path>
+                </svg>
+                }
+
+
+                <!-- Users -->
+
+                @if (item.icon === 'users') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                }
+
+
+                <!-- Services -->
+
+                @if (item.icon === 'services') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M12 3v18"></path>
+                    <path d="M3 12h18"></path>
+                    <path d="M5.5 5.5l13 13"></path>
+                    <path d="M18.5 5.5l-13 13"></path>
+                </svg>
+                }
+
+
+                <!-- Messages -->
+
+                @if (item.icon === 'messages') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-9 8.5 9.4 9.4 0 0 1-4-.9L3 21l1.9-4.8A8.4 8.4 0 1 1 21 11.5Z">
+                    </path>
+                </svg>
+                }
+
+
+                <span>
+                    {{ item.label }}
+                </span>
+
+            </a>
+
+            }
+
+        </div>
+
+
+        <!-- SYSTEM -->
+
+        <div class="mt-8">
+
+            <p class="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+                System
+            </p>
+
+            <div class="space-y-1">
+
+                @for (item of bottomItems; track item.route) {
+
+                <a [routerLink]="item.route" routerLinkActive="bg-fuchsia-400/10 text-fuchsia-300 border-fuchsia-400/20"
+                    class="flex items-center gap-3 rounded-xl border border-transparent
+                   px-3 py-3 text-sm font-medium text-white/50
+                   transition hover:bg-white/[0.04] hover:text-white">
+
+                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.7">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.48a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.42-1.42.06-.06A1.7 1.7 0 0 0 9.4 15a1.7 1.7 0 0 0-1.56-1.03H7v-2h.84A1.7 1.7 0 0 0 9.4 10a1.7 1.7 0 0 0-.34-1.88L9 8.06l1.42-1.42.06.06A1.7 1.7 0 0 0 12.36 7.04 1.7 1.7 0 0 0 13.39 5.48V5h2v.48A1.7 1.7 0 0 0 16.42 7.04a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z">
+                        </path>
+                    </svg>
+
+                    <span>
+                        {{ item.label }}
+                    </span>
+
+                </a>
+
+                }
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- USER / FOOTER -->
+
+    <div class="border-t border-white/10 p-4">
+
+        <div class="flex items-center gap-3 rounded-xl bg-white/[0.03] p-3">
+
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-fuchsia-400/10">
+                <span class="text-xs font-semibold text-fuchsia-300">
+                    A
+                </span>
+            </div>
+
+            <div class="min-w-0">
+
+                <p class="truncate text-sm font-medium text-white/80">
+                    Administrator
+                </p>
+
+                <p class="truncate text-xs text-white/30">
+                    Clinic Admin
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
