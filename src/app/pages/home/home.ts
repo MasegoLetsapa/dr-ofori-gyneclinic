@@ -159,18 +159,18 @@ export class Home {
 
   testimonials: Testimonial[] = [
     {
-      initials: 'NM',
-      name: 'Nomsa M.',
-      category: 'Pregnancy Care',
-      quote:
-        'Dr. Ofori and her team made my pregnancy journey feel so smooth and stress-free. I felt safe, heard and cared for every step of the way.'
-    },
-    {
-      initials: 'TS',
-      name: 'Thandeka S.',
+      initials: 'NS',
+      name: 'Naila S.',
       category: 'Women’s Healthcare',
       quote:
-        'Professional, kind and very thorough. The best gynaecologist I have ever visited. I trust her completely.'
+        'The best! Very friendly, polite, always ready to answer all my questions.'
+    },
+    {
+      initials: 'PM',
+      name: 'Palesa M.',
+      category: 'Pregnancy Care',
+      quote:
+        'A very patient and friendly gynecologist,I felt comfortable and free to ask anything during consultation time about the pregnancy without fear of judgment.'
     },
     {
       initials: 'LK',
