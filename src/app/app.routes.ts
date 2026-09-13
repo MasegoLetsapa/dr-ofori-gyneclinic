@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Appointments } from './pages/admin/appointments/appointments';
 import { Home } from './pages/home/home';
 import { AdminLayout } from './layout/admin-layout/admin-layout';
+import { Dashboard } from './pages/admin/dashboard/dashboard';
 
 export const routes: Routes = [
     // ========================================
@@ -24,8 +25,7 @@ export const routes: Routes = [
 
             {
                 path: '',
-                redirectTo: 'appointments',
-                pathMatch: 'full'
+                component: Dashboard
             },
 
             {
