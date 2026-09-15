@@ -472,54 +472,95 @@
 
                     <!-- Service -->
 
+                    <!-- =================================
+                         SERVICE
+                    ================================== -->
+
                     <div class="mt-4">
 
                         <label for="service" class="text-[10px]
-                     font-semibold
-                     text-zinc-400">
+                                   font-semibold
+                                   text-zinc-400">
+
                             What can we help you with?
+
                         </label>
 
+
                         <select id="service" formControlName="service" class="mt-2 w-full
-                     appearance-none
-                     rounded-xl
-                     border border-white/[0.08]
-                     bg-[#11101a]
-                     px-4 py-3
-                     text-xs text-zinc-300
-                     outline-none
-                     transition
-                     focus:border-pink-400/40">
+                                   appearance-none
+                                   rounded-xl
+                                   border border-white/[0.08]
+                                   bg-[#11101a]
+                                   px-4 py-3
+                                   text-xs text-zinc-300
+                                   outline-none
+                                   transition
+                                   focus:border-pink-400/40">
+
+                            <!-- Default -->
 
                             <option value="">
+                                @if (servicesLoading) {
+                                Loading services...
+                                } @else {
                                 Select a service
+                                }
                             </option>
 
-                            <option value="pregnancy-care">
-                                Pregnancy Care
+
+                            <!-- Dynamic Services -->
+
+                            @for (
+                            clinicService of services;
+                            track clinicService.id
+                            ) {
+
+                            <option [value]="clinicService.slug">
+
+                                {{ clinicService.name }}
+
                             </option>
 
-                            <option value="family-planning">
-                                Family Planning
-                            </option>
-
-                            <option value="pap-smear">
-                                Pap Smear
-                            </option>
-
-                            <option value="ultrasound">
-                                Ultrasound
-                            </option>
-
-                            <option value="fertility-care">
-                                Fertility Care
-                            </option>
-
-                            <option value="menopause-care">
-                                Menopause Care
-                            </option>
+                            }
 
                         </select>
+
+
+                        <!-- Loading -->
+
+                        @if (servicesLoading) {
+
+                        <p class="mt-2 text-[9px] text-zinc-600">
+                            Loading available clinic services...
+                        </p>
+
+                        }
+
+
+                        <!-- Error -->
+
+                        @if (servicesError) {
+
+                        <p class="mt-2 text-[9px] text-pink-400">
+                            {{ servicesError }}
+                        </p>
+
+                        }
+
+
+                        <!-- Validation -->
+
+                        @if (
+                        service.invalid &&
+                        (service.touched || submitted)
+                        ) {
+
+                        <p class="mt-1 text-[9px] text-pink-400">
+                            Please select a service.
+                        </p>
+
+                        }
 
                     </div>
 

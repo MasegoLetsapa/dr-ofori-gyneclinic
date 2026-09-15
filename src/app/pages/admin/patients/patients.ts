@@ -1,8 +1,9 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { PatientService } from '../../../core/services/patient.service';
-import { CreatePatientRequest, Patient, UpdatePatientRequest } from '../../../core/models/patient.model';
+import { CreatePatientRequest, Patient, PatientProfile, UpdatePatientRequest } from '../../../core/models/patient.model';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, DatePipe],
@@ -15,8 +16,15 @@ export class Patients implements OnInit {
 
   private readonly patientService = inject(PatientService);
   private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
 
   patients = signal<Patient[]>([]);
+
+  profileLoading = signal(false);
+
+  archiving = signal(false);
+
+  restoring = signal(false);
 
   loading = signal(true);
 
@@ -30,11 +38,13 @@ export class Patients implements OnInit {
 
   selectedPatient = signal<Patient | null>(null);
 
-  patientToDelete = signal<Patient | null>(null);
+  selectedPatientProfile = signal<PatientProfile | null>(null);
+
+  patientToArchive = signal<Patient | null>(null);
 
   showPatientModal = signal(false);
 
-  showDeleteModal = signal(false);
+  showArchiveModal = signal(false);
 
   showFormModal = signal(false);
 
@@ -167,6 +177,7 @@ export class Patients implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
+
   }
 
 
@@ -178,10 +189,23 @@ export class Patients implements OnInit {
     this.patientService.getPatients().subscribe({
 
       next: patients => {
-
         this.patients.set(patients);
         this.loading.set(false);
 
+        const patientId =
+          Number(this.route.snapshot.queryParamMap.get('patientId'));
+
+        if (patientId) {
+
+          const patient =
+            patients.find(
+              x => x.id === patientId
+            );
+
+          if (patient) {
+            this.openPatient(patient);
+          }
+        }
       },
 
       error: error => {
@@ -222,16 +246,49 @@ export class Patients implements OnInit {
 
     this.selectedPatient.set(patient);
 
+    this.selectedPatientProfile.set(null);
+
+    this.profileLoading.set(true);
+
     this.showPatientModal.set(true);
 
-  }
+    this.patientService
+      .getPatientProfile(patient.id)
+      .subscribe({
 
+        next: profile => {
+
+          this.selectedPatientProfile.set(
+            profile
+          );
+
+          this.profileLoading.set(false);
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to load patient profile:',
+            error
+          );
+
+          this.profileLoading.set(false);
+
+        }
+
+      });
+  }
 
   closePatientModal(): void {
 
     this.showPatientModal.set(false);
 
     this.selectedPatient.set(null);
+
+    this.selectedPatientProfile.set(null);
+
+    this.profileLoading.set(false);
 
   }
 
@@ -527,60 +584,66 @@ export class Patients implements OnInit {
 
 
   // -----------------------------------------
-  // DELETE PATIENT
+  // ARCHIVE PATIENT
   // -----------------------------------------
 
-  openDeleteModal(patient: Patient): void {
+  openArchiveModal(patient: Patient): void {
 
-    this.patientToDelete.set(patient);
+    this.patientToArchive.set(patient);
 
-    this.showDeleteModal.set(true);
+    this.showArchiveModal.set(true);
 
   }
 
 
-  closeDeleteModal(): void {
+  closeArchiveModal(): void {
 
-    if (this.deleting()) {
+    if (this.archiving()) {
       return;
     }
 
-    this.showDeleteModal.set(false);
+    this.showArchiveModal.set(false);
 
-    this.patientToDelete.set(null);
+    this.patientToArchive.set(null);
 
   }
 
 
-  deletePatient(): void {
+  archivePatient(): void {
 
-    const patient = this.patientToDelete();
+    const patient = this.patientToArchive();
 
     if (!patient) {
       return;
     }
 
-    this.deleting.set(true);
+    this.archiving.set(true);
 
     this.patientService
-      .deletePatient(patient.id)
+      .archivePatient(patient.id)
       .subscribe({
 
         next: () => {
 
           this.patients.update(
             patients =>
-              patients.filter(
-                item => item.id !== patient.id
+              patients.map(item =>
+                item.id === patient.id
+                  ? {
+                    ...item,
+                    isActive: false,
+                    updatedAt: new Date().toISOString()
+                  }
+                  : item
               )
           );
 
-          this.deleting.set(false);
+          this.archiving.set(false);
 
-          this.closeDeleteModal();
+          this.closeArchiveModal();
 
           this.successMessage.set(
-            'Patient deleted successfully.'
+            `${patient.patientNumber} has been archived.`
           );
 
         },
@@ -588,14 +651,69 @@ export class Patients implements OnInit {
         error: error => {
 
           console.error(
-            'Failed to delete patient:',
+            'Failed to archive patient:',
             error
           );
 
-          this.deleting.set(false);
+          this.archiving.set(false);
 
           this.errorMessage.set(
-            'Unable to delete patient. Please try again.'
+            'Unable to archive patient. Please try again.'
+          );
+
+        }
+
+      });
+
+  }
+
+
+  // -----------------------------------------
+  // RESTORE PATIENT
+  // -----------------------------------------
+
+  restorePatient(patient: Patient): void {
+
+    this.restoring.set(true);
+
+    this.patientService
+      .restorePatient(patient.id)
+      .subscribe({
+
+        next: () => {
+
+          this.patients.update(
+            patients =>
+              patients.map(item =>
+                item.id === patient.id
+                  ? {
+                    ...item,
+                    isActive: true,
+                    updatedAt: new Date().toISOString()
+                  }
+                  : item
+              )
+          );
+
+          this.restoring.set(false);
+
+          this.successMessage.set(
+            `${patient.patientNumber} has been restored.`
+          );
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to restore patient:',
+            error
+          );
+
+          this.restoring.set(false);
+
+          this.errorMessage.set(
+            'Unable to restore patient. Please try again.'
           );
 
         }

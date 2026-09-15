@@ -362,13 +362,46 @@
 
                             <td class="px-6 py-5">
 
-                                <div class="font-medium text-white">
-                                    {{ appointment.firstName }}
-                                    {{ appointment.lastName }}
-                                </div>
+                                <div class="flex items-center gap-3">
 
-                                <div class="mt-1 text-xs text-white/35">
-                                    {{ appointment.email }}
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-violet-500/20 text-xs font-semibold text-fuchsia-300">
+                                        @if (appointment.patient; as patient) {
+                                        {{ patient.firstName.charAt(0) }}{{ patient.lastName.charAt(0) }}
+                                        } @else {
+                                        {{ appointment.firstName.charAt(0) }}{{ appointment.lastName.charAt(0) }}
+                                        }
+                                    </div>
+
+                                    <div class="min-w-0">
+
+                                        <p class="truncate text-sm font-medium text-white">
+                                            @if (appointment.patient; as patient) {
+                                            {{ patient.firstName }} {{ patient.lastName }}
+                                            } @else {
+                                            {{ appointment.firstName }} {{ appointment.lastName }}
+                                            }
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-white/35">
+                                            @if (appointment.patient; as patient) {
+                                            {{ patient.patientNumber }}
+                                            } @else {
+                                            Patient not linked
+                                            }
+                                        </p>
+                                        @if (appointment.patient; as patient) {
+
+                                        <button type="button"
+                                            class="mt-1 text-left text-[11px] font-medium text-fuchsia-400 transition hover:text-fuchsia-300"
+                                            (click)="viewPatient(patient.id)">
+                                            View patient →
+                                        </button>
+
+                                        }
+
+                                    </div>
+
                                 </div>
 
                             </td>
@@ -379,7 +412,7 @@
                             <td class="px-6 py-5">
 
                                 <span class="text-sm capitalize text-white/70">
-                                    {{ appointment.service.replace('-', ' ') }}
+                                    {{ serviceName(appointment) }}
                                 </span>
 
                             </td>
@@ -540,34 +573,68 @@
             <div class="mb-6">
 
                 <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">
-                    Patient Information
+                    Patient Information & Contact Details
                 </p>
 
                 <div class="grid gap-4 sm:grid-cols-2">
 
-                    <div>
-                        <p class="text-xs text-white/30">Full Name</p>
+                    <div class="flex items-center gap-3">
 
-                        <p class="mt-1 text-sm text-white/80">
-                            {{ appointment.firstName }}
-                            {{ appointment.lastName }}
-                        </p>
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-violet-500/20 text-xs font-semibold text-fuchsia-300">
+                            @if (appointment.patient; as patient) {
+                            {{ patient.firstName.charAt(0) }}{{ patient.lastName.charAt(0) }}
+                            } @else {
+                            {{ appointment.firstName.charAt(0) }}{{ appointment.lastName.charAt(0) }}
+                            }
+                        </div>
+
+                        <div class="min-w-0">
+
+                            <p class="truncate text-sm font-medium text-white">
+                                @if (appointment.patient; as patient) {
+                                {{ patient.firstName }} {{ patient.lastName }}
+                                } @else {
+                                {{ appointment.firstName }} {{ appointment.lastName }}
+                                }
+                            </p>
+
+                            <p class="mt-1 text-xs text-white/35">
+                                @if (appointment.patient; as patient) {
+                                {{ patient.patientNumber }}
+                                } @else {
+                                Patient not linked
+                                }
+                            </p>
+
+                        </div>
+
                     </div>
 
                     <div>
-                        <p class="text-xs text-white/30">Email</p>
 
-                        <p class="mt-1 text-sm text-white/80">
-                            {{ appointment.email }}
+                        @if (appointment.patient; as patient) {
+
+                        <p class="text-sm text-white/85">
+                            {{ patient.phone }}
                         </p>
-                    </div>
 
-                    <div>
-                        <p class="text-xs text-white/30">Phone</p>
+                        <p class="mt-1 truncate text-xs text-white/35">
+                            {{ patient.email || 'No email' }}
+                        </p>
 
-                        <p class="mt-1 text-sm text-white/80">
+                        } @else {
+
+                        <p class="text-sm text-white/85">
                             {{ appointment.phone }}
                         </p>
+
+                        <p class="mt-1 truncate text-xs text-white/35">
+                            {{ appointment.email }}
+                        </p>
+
+                        }
+
                     </div>
 
                 </div>
@@ -589,7 +656,7 @@
                         <p class="text-xs text-white/30">Service</p>
 
                         <p class="mt-1 text-sm capitalize text-white/80">
-                            {{ appointment.service.replace('-', ' ') }}
+                            {{ serviceName(appointment) }}
                         </p>
                     </div>
 

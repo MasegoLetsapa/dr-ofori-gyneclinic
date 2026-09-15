@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { Appointment } from '../../../core/models/appointment.model';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [DatePipe],
@@ -13,6 +14,9 @@ import { DatePipe } from '@angular/common';
 export class Appointments {
 
   private readonly appointmentService = inject(AppointmentService);
+
+  private readonly router = inject(Router);
+
 
   // ========================================
   // STATE
@@ -158,6 +162,21 @@ export class Appointments {
     this.selectedAppointment.set(appointment);
   }
 
+  // ========================================
+  // VIEW PATIENT
+  // 
+
+  viewPatient(patientId: number): void {
+    this.router.navigate(
+      ['/admin/patients'],
+      {
+        queryParams: {
+          patientId
+        }
+      }
+    );
+  }
+
 
   // ========================================
   // CLOSE APPOINTMENT DETAILS
@@ -165,6 +184,27 @@ export class Appointments {
 
   closeAppointmentDetails(): void {
     this.selectedAppointment.set(null);
+  }
+
+  // ========================================
+  // SERVICE HELPER
+  // ========================================
+
+
+
+  serviceName(appointment: Appointment): string {
+
+    if (appointment.serviceNavigation?.name) {
+      return appointment.serviceNavigation.name;
+    }
+
+    if (appointment.service) {
+      return appointment.service
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    return 'Unknown Service';
   }
 
 

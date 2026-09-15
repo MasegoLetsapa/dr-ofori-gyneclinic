@@ -6,6 +6,7 @@ import { Dashboard } from './pages/admin/dashboard/dashboard';
 import { Login } from './pages/admin/login/login';
 import { authGuard } from './core/guards/auth.guard';
 import { Patients } from './pages/admin/patients/patients';
+import { Services } from './pages/admin/services/services';
 
 export const routes: Routes = [
     // ========================================
@@ -52,6 +53,11 @@ export const routes: Routes = [
                     {
                         path: 'patients',
                         component: Patients
+                    },
+                    // SERVICES
+                    {
+                        path: 'services',
+                        component: Services
                     }
                 ]
             },

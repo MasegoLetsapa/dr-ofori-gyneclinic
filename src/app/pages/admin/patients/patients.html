@@ -277,11 +277,23 @@
                                     Edit
                                 </button>
 
+                                @if (patient.isActive) {
+
                                 <button type="button"
-                                    class="rounded-lg border border-red-400/10 px-3 py-2 text-xs text-red-300/70 transition hover:border-red-400/30 hover:text-red-300"
-                                    (click)="openDeleteModal(patient)">
-                                    Delete
+                                    class="rounded-lg border border-amber-400/10 px-3 py-2 text-xs text-amber-300/70 transition hover:border-amber-400/30 hover:text-amber-300"
+                                    (click)="openArchiveModal(patient)">
+                                    Archive
                                 </button>
+
+                                } @else {
+
+                                <button type="button"
+                                    class="rounded-lg border border-emerald-400/10 px-3 py-2 text-xs text-emerald-300/70 transition hover:border-emerald-400/30 hover:text-emerald-300"
+                                    [disabled]="restoring()" (click)="restorePatient(patient)">
+                                    {{ restoring() ? 'Restoring...' : 'Restore' }}
+                                </button>
+
+                                }
 
                             </div>
 
@@ -302,136 +314,420 @@
     }
 
 
-    <!-- Patient Details Modal -->
-    @if (showPatientModal() && selectedPatient(); as patient) {
+    <!-- Patient Profile Modal -->
+    @if (showPatientModal()) {
 
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
 
-        <div class="w-full max-w-2xl rounded-2xl border border-white/10 bg-[#111019] shadow-2xl">
+        <div
+            class="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-white/10 bg-[#111019] shadow-2xl">
 
-            <div class="flex items-center justify-between border-b border-white/10 px-6 py-5">
+            <!-- Header -->
+            <div
+                class="border-b border-white/10 bg-gradient-to-r from-fuchsia-500/[0.08] to-violet-500/[0.08] px-6 py-6">
 
-                <div>
+                <div class="flex items-start justify-between gap-4">
 
-                    <p class="text-xs uppercase tracking-wider text-fuchsia-400">
-                        Patient Profile
-                    </p>
+                    <div class="flex items-center gap-4">
 
-                    <h2 class="mt-1 text-xl font-semibold">
-                        {{ patient.firstName }} {{ patient.lastName }}
-                    </h2>
+                        <div
+                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500/25 to-violet-500/25 text-lg font-semibold text-fuchsia-300">
+
+                            @if (selectedPatient(); as patient) {
+                            {{ patient.firstName.charAt(0) }}{{ patient.lastName.charAt(0) }}
+                            }
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-400">
+                                Patient Profile
+                            </p>
+
+                            @if (selectedPatient(); as patient) {
+
+                            <h2 class="mt-1 text-2xl font-semibold">
+                                {{ patient.firstName }}
+                                {{ patient.lastName }}
+                            </h2>
+
+                            <p class="mt-1 text-sm text-white/40">
+                                {{ patient.patientNumber }}
+                            </p>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="button"
+                        class="rounded-lg px-3 py-2 text-white/40 transition hover:bg-white/5 hover:text-white"
+                        (click)="closePatientModal()">
+                        ✕
+                    </button>
 
                 </div>
 
-                <button type="button" class="rounded-lg px-3 py-2 text-white/40 hover:bg-white/5 hover:text-white"
-                    (click)="closePatientModal()">
-                    ✕
-                </button>
+
+
 
             </div>
 
 
-            <div class="grid gap-5 p-6 sm:grid-cols-2">
+            <!-- Loading -->
+            @if (profileLoading()) {
 
-                <div>
-                    <p class="text-xs text-white/35">
-                        Patient Number
-                    </p>
-                    <p class="mt-1 text-sm">
-                        {{ patient.patientNumber }}
-                    </p>
+            <div class="p-12 text-center">
+
+                <div
+                    class="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-fuchsia-500">
                 </div>
 
-                <div>
-                    <p class="text-xs text-white/35">
-                        Phone
-                    </p>
-                    <p class="mt-1 text-sm">
-                        {{ patient.phone }}
-                    </p>
+                <p class="text-sm text-white/45">
+                    Loading patient profile...
+                </p>
+
+            </div>
+
+            }
+
+
+            <!-- Profile -->
+            @else if (selectedPatientProfile(); as profile) {
+
+            <div class="p-6">
+
+
+                <!-- Information -->
+                <div class="grid gap-5 lg:grid-cols-2">
+
+
+                    <!-- Patient Information -->
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+
+                        <h3 class="text-sm font-semibold">
+                            Patient Information
+                        </h3>
+
+                        <div class="mt-5 grid grid-cols-2 gap-5">
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Patient Number
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    {{ profile.patientNumber }}
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Gender
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    {{ profile.gender || '—' }}
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Date of Birth
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    {{
+                                    profile.dateOfBirth
+                                    ? (profile.dateOfBirth | date:'dd MMM yyyy')
+                                    : '—'
+                                    }}
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Patient Since
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    {{ profile.createdAt | date:'dd MMM yyyy' }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Contact Information -->
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+
+                        <h3 class="text-sm font-semibold">
+                            Contact Information
+                        </h3>
+
+                        <div class="mt-5 space-y-4">
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Phone
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    {{ profile.phone }}
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Email
+                                </p>
+
+                                <p class="mt-1 text-sm">
+                                    {{ profile.email || '—' }}
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-xs text-white/35">
+                                    Address
+                                </p>
+
+                                <p class="mt-1 text-sm text-white/70">
+                                    {{ profile.address || '—' }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div>
-                    <p class="text-xs text-white/35">
-                        Email
-                    </p>
-                    <p class="mt-1 text-sm">
-                        {{ patient.email || '—' }}
-                    </p>
-                </div>
 
-                <div>
-                    <p class="text-xs text-white/35">
-                        Gender
-                    </p>
-                    <p class="mt-1 text-sm">
-                        {{ patient.gender || '—' }}
-                    </p>
-                </div>
+                <!-- Emergency Contact -->
+                <div class="mt-5 rounded-2xl border border-white/10 bg-white/[0.025] p-5">
 
-                <div>
-                    <p class="text-xs text-white/35">
-                        Date of Birth
-                    </p>
-                    <p class="mt-1 text-sm">
-                        {{ patient.dateOfBirth ? (patient.dateOfBirth | date:'dd MMM yyyy') : '—' }}
-                    </p>
-                </div>
-
-                <div>
-                    <p class="text-xs text-white/35">
-                        Status
-                    </p>
-                    <p class="mt-1 text-sm">
-                        {{ patient.isActive ? 'Active' : 'Inactive' }}
-                    </p>
-                </div>
-
-                <div class="sm:col-span-2">
-
-                    <p class="text-xs text-white/35">
-                        Address
-                    </p>
-
-                    <p class="mt-1 text-sm text-white/70">
-                        {{ patient.address || '—' }}
-                    </p>
-
-                </div>
-
-
-                <div>
-
-                    <p class="text-xs text-white/35">
+                    <h3 class="text-sm font-semibold">
                         Emergency Contact
-                    </p>
+                    </h3>
 
-                    <p class="mt-1 text-sm">
-                        {{ patient.emergencyContactName || '—' }}
-                    </p>
+                    <div class="mt-4 grid gap-5 sm:grid-cols-2">
+
+                        <div>
+
+                            <p class="text-xs text-white/35">
+                                Contact Name
+                            </p>
+
+                            <p class="mt-1 text-sm">
+                                {{ profile.emergencyContactName || '—' }}
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="text-xs text-white/35">
+                                Contact Phone
+                            </p>
+
+                            <p class="mt-1 text-sm">
+                                {{ profile.emergencyContactPhone || '—' }}
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <div>
+                <!-- Appointment History -->
+                <div class="mt-5 rounded-2xl border border-white/10 bg-white/[0.025]">
 
-                    <p class="text-xs text-white/35">
-                        Emergency Phone
-                    </p>
+                    <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
 
-                    <p class="mt-1 text-sm">
-                        {{ patient.emergencyContactPhone || '—' }}
-                    </p>
+                        <div>
+
+                            <h3 class="text-sm font-semibold">
+                                Appointment History
+                            </h3>
+
+                            <p class="mt-1 text-xs text-white/35">
+                                Previous and upcoming appointments.
+                            </p>
+
+                        </div>
+
+                        <span class="rounded-full bg-fuchsia-500/10 px-3 py-1 text-xs font-medium text-fuchsia-300">
+                            {{ profile.appointments.length }}
+                            {{
+                            profile.appointments.length === 1
+                            ? 'Appointment'
+                            : 'Appointments'
+                            }}
+                        </span>
+
+                    </div>
+
+
+                    @if (profile.appointments.length === 0) {
+
+                    <div class="p-8 text-center">
+
+                        <p class="text-sm text-white/50">
+                            No appointments found.
+                        </p>
+
+                    </div>
+
+                    } @else {
+
+                    <div class="divide-y divide-white/5">
+
+                        @for (
+                        appointment of profile.appointments;
+                        track appointment.id
+                        ) {
+
+                        <div
+                            class="flex flex-col gap-4 px-5 py-5 transition hover:bg-white/[0.02] md:flex-row md:items-center md:justify-between">
+
+                            <div>
+
+                                <p class="text-sm font-medium">
+                                    {{ appointment.service }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-white/35">
+                                    {{ appointment.referenceNumber }}
+                                </p>
+
+                            </div>
+
+
+                            <div class="flex flex-wrap items-center gap-4">
+
+                                <div>
+
+                                    <p class="text-xs text-white/35">
+                                        Date
+                                    </p>
+
+                                    <p class="mt-1 text-sm">
+                                        {{
+                                        appointment.preferredDate
+                                        | date:'dd MMM yyyy'
+                                        }}
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-xs text-white/35">
+                                        Time
+                                    </p>
+
+                                    <p class="mt-1 text-sm capitalize">
+                                        {{ appointment.preferredTime }}
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    @switch (appointment.status) {
+
+                                    @case ('Confirmed') {
+
+                                    <span
+                                        class="rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1 text-xs font-medium text-blue-300">
+                                        Confirmed
+                                    </span>
+
+                                    }
+
+                                    @case ('Completed') {
+
+                                    <span
+                                        class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                                        Completed
+                                    </span>
+
+                                    }
+
+                                    @case ('Cancelled') {
+
+                                    <span
+                                        class="rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1 text-xs font-medium text-red-300">
+                                        Cancelled
+                                    </span>
+
+                                    }
+
+                                    @default {
+
+                                    <span
+                                        class="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 text-xs font-medium text-amber-300">
+                                        Pending
+                                    </span>
+
+                                    }
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                    }
 
                 </div>
 
             </div>
 
+            }
 
+
+            <!-- Footer -->
             <div class="flex justify-end border-t border-white/10 px-6 py-4">
 
                 <button type="button"
-                    class="rounded-xl border border-white/10 px-5 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    class="rounded-xl border border-white/10 px-5 py-2.5 text-sm text-white/60 transition hover:bg-white/5 hover:text-white"
                     (click)="closePatientModal()">
                     Close
                 </button>
@@ -445,29 +741,31 @@
     }
 
 
-    <!-- Delete Confirmation -->
-    @if (showDeleteModal() && patientToDelete(); as patient) {
+    <!-- Archive Confirmation -->
+    @if (showArchiveModal() && patientToArchive(); as patient) {
 
     <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
 
-        <div class="w-full max-w-md rounded-2xl border border-red-400/10 bg-[#111019] p-6 shadow-2xl">
+        <div class="w-full max-w-md rounded-2xl border border-amber-400/10 bg-[#111019] p-6 shadow-2xl">
 
-            <div class="mb-5">
+            <div class="mb-6">
 
-                <p class="text-xs uppercase tracking-wider text-red-400">
-                    Delete Patient
+                <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-400/10 text-amber-300">
+                    !
+                </div>
+
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
+                    Archive Patient
                 </p>
 
                 <h2 class="mt-2 text-xl font-semibold">
-                    Are you sure?
+                    Archive {{ patient.firstName }} {{ patient.lastName }}?
                 </h2>
 
-                <p class="mt-2 text-sm leading-6 text-white/45">
-                    This will permanently delete
-                    <span class="text-white">
-                        {{ patient.firstName }} {{ patient.lastName }}
-                    </span>
-                    from the system.
+                <p class="mt-3 text-sm leading-6 text-white/45">
+                    This patient will be marked as inactive. Their
+                    profile and appointment history will remain safely
+                    stored in the system.
                 </p>
 
             </div>
@@ -476,15 +774,16 @@
             <div class="flex justify-end gap-3">
 
                 <button type="button"
-                    class="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/60 hover:bg-white/5 hover:text-white"
-                    (click)="closeDeleteModal()">
+                    class="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/60 transition hover:bg-white/5 hover:text-white"
+                    [disabled]="archiving()" (click)="closeArchiveModal()">
                     Cancel
                 </button>
 
+
                 <button type="button"
-                    class="rounded-xl bg-red-500/90 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-50"
-                    [disabled]="deleting()" (click)="deletePatient()">
-                    {{ deleting() ? 'Deleting...' : 'Delete Patient' }}
+                    class="rounded-xl bg-amber-500/90 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-500 disabled:opacity-50"
+                    [disabled]="archiving()" (click)="archivePatient()">
+                    {{ archiving() ? 'Archiving...' : 'Archive Patient' }}
                 </button>
 
             </div>

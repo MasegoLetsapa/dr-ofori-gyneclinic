@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreatePatientRequest, Patient, UpdatePatientRequest } from '../models/patient.model';
+import { CreatePatientRequest, Patient, PatientProfile, UpdatePatientRequest } from '../models/patient.model';
 
 @Service()
 export class PatientService {
@@ -39,9 +39,23 @@ export class PatientService {
         );
     }
 
-    deletePatient(id: number): Observable<void> {
-        return this.http.delete<void>(
-            `${this.apiUrl}/${id}`
+    archivePatient(id: number): Observable<void> {
+        return this.http.put<void>(
+            `${this.apiUrl}/${id}/archive`,
+            {}
+        );
+    }
+
+    restorePatient(id: number): Observable<void> {
+        return this.http.put<void>(
+            `${this.apiUrl}/${id}/restore`,
+            {}
+        );
+    }
+
+    getPatientProfile(id: number): Observable<PatientProfile> {
+        return this.http.get<PatientProfile>(
+            `${this.apiUrl}/${id}/profile`
         );
     }
 }

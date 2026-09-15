@@ -39,3 +39,18 @@ export interface UpdatePatientRequest {
     emergencyContactPhone?: string | null;
     isActive: boolean;
 }
+
+export interface PatientAppointment {
+    id: number;
+    referenceNumber: string;
+    service: string;
+    preferredDate: string;
+    preferredTime: string;
+    status: string;
+    message?: string | null;
+    createdAt: string;
+}
+
+export interface PatientProfile extends Patient {
+    appointments: PatientAppointment[];
+}

@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder, ReactiveFormsModule, Validators
 } from '@angular/forms';
 import { Icon } from "../../shared/icon/icon";
 import { AppointmentService } from '../../core/services/appointment.service';
 import { CreateAppointmentRequest } from '../../core/models/appointment.model';
+import { ClinicService } from '../../core/models/service.model';
+import { ServiceService } from '../../core/services/service.service';
 
 @Component({
   imports: [ReactiveFormsModule, Icon],
@@ -13,17 +15,39 @@ import { CreateAppointmentRequest } from '../../core/models/appointment.model';
   styleUrl: './appointment.scss',
   templateUrl: './appointment.html',
 })
-export class Appointment {
+export class Appointment implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   private readonly appointmentService =
     inject(AppointmentService);
+
+  private readonly serviceService =
+    inject(ServiceService);
+
+  // ========================================
+  // SERVICES
+  // ========================================
+
+  services: ClinicService[] = [];
+
+  servicesLoading = false;
+
+  servicesError = '';
+
+  // ========================================
+  // FORM STATE
+  // ========================================
+
 
   submitted = false;
   submitting = false;
 
   successMessage = '';
   errorMessage = '';
+
+  // ========================================
+  // APPOINTMENT FORM
+  // ========================================
 
   appointmentForm = this.fb.group({
     firstName: [
@@ -79,6 +103,64 @@ export class Appointment {
     ]
   });
 
+  // ========================================
+  // INITIALIZATION
+  // ========================================
+
+  ngOnInit(): void {
+
+    this.loadServices();
+
+  }
+
+  // ========================================
+  // LOAD SERVICES
+  // ========================================
+
+  private loadServices(): void {
+
+    this.servicesLoading = true;
+
+    this.servicesError = '';
+
+    this.serviceService
+      .getServices()
+      .subscribe({
+
+        next: services => {
+
+          this.services =
+            services.filter(
+              service => service.isActive
+            );
+
+          this.servicesLoading = false;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to load clinic services:',
+            error
+          );
+
+          this.services = [];
+
+          this.servicesLoading = false;
+
+          this.servicesError =
+            'We could not load our services right now. Please contact the clinic directly.';
+
+        }
+
+      });
+
+  }
+
+  // ========================================
+  // FORM CONTROLS
+  // ========================================
 
   get firstName() {
     return this.appointmentForm.controls.firstName;
@@ -108,6 +190,11 @@ export class Appointment {
     return this.appointmentForm.controls.preferredTime;
   }
 
+  // ========================================
+  // MINIMUM DATE
+  // ========================================
+
+
   get minDate(): string {
 
     const today = new Date();
@@ -115,6 +202,10 @@ export class Appointment {
     return today.toISOString().split('T')[0];
 
   }
+
+  // ========================================
+  // SUBMIT APPOINTMENT
+  // ========================================
 
 
   submitAppointment(): void {
