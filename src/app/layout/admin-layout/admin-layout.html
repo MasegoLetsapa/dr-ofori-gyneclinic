@@ -1,7 +1,6 @@
 <div class="flex min-h-screen bg-[#08070d] text-white">
 
-    <!-- SIDEBAR -->
-
+    <!-- Desktop sidebar -->
     <div class="hidden lg:block">
 
         <div class="sticky top-0 h-screen">
@@ -11,10 +10,23 @@
     </div>
 
 
-    <!-- MAIN -->
-
+    <!-- Main content -->
     <main class="min-w-0 flex-1">
 
+        <!-- Admin top bar -->
+        <header class="sticky top-0 z-50
+             flex h-20 items-center justify-end
+             border-b border-white/[0.06]
+             bg-[#08070d]/90
+             px-6 backdrop-blur-xl
+             sm:px-8">
+
+            <app-notification-center />
+
+        </header>
+
+
+        <!-- Routed page -->
         <router-outlet />
 
     </main>

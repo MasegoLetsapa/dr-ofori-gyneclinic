@@ -1,0 +1,29 @@
+.notification-panel {
+    animation: notificationPanelIn 0.18s ease-out;
+}
+
+.notification-item.unread {
+    background: rgba(236, 72, 153, 0.025);
+}
+
+.notification-item:last-child {
+    border-bottom: 0;
+}
+
+@keyframes notificationPanelIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notification-panel {
+        animation: none;
+    }
+}
