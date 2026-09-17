@@ -1,0 +1,48 @@
+:host {
+    display: block;
+}
+
+.settings-input {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.875rem;
+    background: rgba(255, 255, 255, 0.025);
+    padding: 0.8rem 0.9rem;
+    color: white;
+    font-size: 0.75rem;
+    outline: none;
+    transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.settings-input::placeholder {
+    color: rgba(161, 161, 170, 0.55);
+}
+
+.settings-input:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+.settings-input:focus {
+    border-color: rgba(244, 63, 94, 0.5);
+    background: rgba(255, 255, 255, 0.035);
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.08);
+}
+
+.settings-input option {
+    background: #111018;
+    color: white;
+}
+
+input[type='time']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+    .settings-input {
+        font-size: 0.8rem;
+    }
+}

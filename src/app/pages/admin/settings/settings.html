@@ -1,0 +1,468 @@
+<div class="min-h-screen bg-[#08070d] text-white">
+
+    <!-- Header -->
+    <header class="border-b border-white/[0.06] bg-[#0b0911]/80 backdrop-blur-xl">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-8">
+
+            <div>
+                <div class="text-[10px] font-bold uppercase tracking-[0.3em] text-pink-400">
+                    Administration
+                </div>
+
+                <h1 class="mt-2 font-serif text-3xl text-white">
+                    Settings
+                </h1>
+
+                <p class="mt-2 text-sm text-zinc-500">
+                    Manage clinic information, appointments and notifications.
+                </p>
+            </div>
+
+            <button type="button" (click)="resetForm()" class="rounded-xl border border-white/[0.08] bg-white/[0.03]
+               px-4 py-2.5 text-xs font-semibold text-zinc-300
+               transition hover:border-pink-400/30 hover:text-white">
+                Reload
+            </button>
+
+        </div>
+    </header>
+
+
+    <!-- Content -->
+    <main class="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+
+        <!-- Loading -->
+        @if (isLoading()) {
+
+        <div class="flex min-h-[400px] items-center justify-center">
+
+            <div class="text-center">
+
+                <div class="mx-auto h-10 w-10 animate-spin rounded-full
+                   border-2 border-white/10 border-t-pink-400">
+                </div>
+
+                <p class="mt-4 text-sm text-zinc-500">
+                    Loading clinic settings...
+                </p>
+
+            </div>
+
+        </div>
+
+        } @else {
+
+        <!-- Alerts -->
+        @if (successMessage()) {
+
+        <div class="mb-6 rounded-2xl border border-emerald-400/20
+                 bg-emerald-400/[0.06] px-5 py-4">
+
+            <div class="text-sm font-medium text-emerald-300">
+                {{ successMessage() }}
+            </div>
+
+        </div>
+
+        }
+
+        @if (errorMessage()) {
+
+        <div class="mb-6 rounded-2xl border border-red-400/20
+                 bg-red-400/[0.06] px-5 py-4">
+
+            <div class="text-sm font-medium text-red-300">
+                {{ errorMessage() }}
+            </div>
+
+        </div>
+
+        }
+
+
+        <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="space-y-6">
+
+
+            <!-- ======================================== -->
+            <!-- CLINIC INFORMATION -->
+            <!-- ======================================== -->
+
+            <section class="rounded-3xl border border-white/[0.07]
+                 bg-white/[0.02] p-6 lg:p-8">
+
+                <div class="mb-8">
+
+                    <div class="text-[10px] font-bold uppercase
+                        tracking-[0.25em] text-pink-400">
+                        Clinic Profile
+                    </div>
+
+                    <h2 class="mt-2 font-serif text-2xl text-white">
+                        Clinic information
+                    </h2>
+
+                    <p class="mt-2 text-sm text-zinc-500">
+                        Information displayed and used across the clinic platform.
+                    </p>
+
+                </div>
+
+
+                <div class="grid gap-6 md:grid-cols-2">
+
+                    <!-- Clinic Name -->
+                    <div class="md:col-span-2">
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Clinic Name
+                        </label>
+
+                        <input type="text" formControlName="clinicName" class="settings-input"
+                            placeholder="Dr. Ofori Gyne Clinic" />
+
+                        @if (clinicName.invalid && clinicName.touched) {
+                        <p class="mt-2 text-xs text-red-400">
+                            Clinic name is required.
+                        </p>
+                        }
+                    </div>
+
+
+                    <!-- Email -->
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Clinic Email
+                        </label>
+
+                        <input type="email" formControlName="email" class="settings-input"
+                            placeholder="clinic@example.com" />
+
+                        @if (email.invalid && email.touched) {
+                        <p class="mt-2 text-xs text-red-400">
+                            Enter a valid email address.
+                        </p>
+                        }
+                    </div>
+
+
+                    <!-- Phone -->
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Phone
+                        </label>
+
+                        <input type="text" formControlName="phone" class="settings-input" placeholder="018 381 5950" />
+
+                        @if (phone.invalid && phone.touched) {
+                        <p class="mt-2 text-xs text-red-400">
+                            Phone number is required.
+                        </p>
+                        }
+                    </div>
+
+
+                    <!-- WhatsApp -->
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            WhatsApp
+                        </label>
+
+                        <input type="text" formControlName="whatsApp" class="settings-input"
+                            placeholder="064 883 8483" />
+                    </div>
+
+
+                    <!-- Website -->
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Website
+                        </label>
+
+                        <input type="url" formControlName="website" class="settings-input"
+                            placeholder="https://www.gyneclinic.org.za" />
+                    </div>
+
+
+                    <!-- Address -->
+                    <div class="md:col-span-2">
+
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Clinic Address
+                        </label>
+
+                        <textarea formControlName="address" rows="3" class="settings-input resize-none"
+                            placeholder="Clinic address"></textarea>
+
+                        @if (address.invalid && address.touched) {
+                        <p class="mt-2 text-xs text-red-400">
+                            Clinic address is required.
+                        </p>
+                        }
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================== -->
+            <!-- APPOINTMENTS -->
+            <!-- ======================================== -->
+
+            <section class="rounded-3xl border border-white/[0.07]
+                 bg-white/[0.02] p-6 lg:p-8">
+
+                <div class="mb-8">
+
+                    <div class="text-[10px] font-bold uppercase
+                        tracking-[0.25em] text-violet-400">
+                        Appointment Configuration
+                    </div>
+
+                    <h2 class="mt-2 font-serif text-2xl text-white">
+                        Booking settings
+                    </h2>
+
+                    <p class="mt-2 text-sm text-zinc-500">
+                        Control the clinic's standard appointment schedule.
+                    </p>
+
+                </div>
+
+
+                <div class="grid gap-6 md:grid-cols-3">
+
+                    <!-- Opening -->
+                    <div>
+
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Opening Time
+                        </label>
+
+                        <input type="time" formControlName="openingTime" class="settings-input" />
+
+                    </div>
+
+
+                    <!-- Closing -->
+                    <div>
+
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Closing Time
+                        </label>
+
+                        <input type="time" formControlName="closingTime" class="settings-input" />
+
+                    </div>
+
+
+                    <!-- Duration -->
+                    <div>
+
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Appointment Duration
+                        </label>
+
+                        <select formControlName="appointmentDurationMinutes" class="settings-input">
+
+                            <option [ngValue]="15">15 minutes</option>
+                            <option [ngValue]="30">30 minutes</option>
+                            <option [ngValue]="45">45 minutes</option>
+                            <option [ngValue]="60">60 minutes</option>
+                            <option [ngValue]="90">90 minutes</option>
+                            <option [ngValue]="120">120 minutes</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Booking toggle -->
+                <div class="mt-8 flex items-center justify-between gap-6
+                   rounded-2xl border border-white/[0.06]
+                   bg-white/[0.02] p-5">
+
+                    <div>
+
+                        <h3 class="text-sm font-semibold text-white">
+                            Online booking
+                        </h3>
+
+                        <p class="mt-1 text-xs text-zinc-500">
+                            Allow patients to request appointments through the website.
+                        </p>
+
+                    </div>
+
+                    <label class="relative inline-flex cursor-pointer items-center">
+
+                        <input type="checkbox" formControlName="bookingEnabled" class="peer sr-only" />
+
+                        <div class="h-6 w-11 rounded-full bg-zinc-700
+                       transition peer-checked:bg-pink-500">
+
+                            <div class="absolute left-1 top-1 h-4 w-4 rounded-full
+                         bg-white transition
+                         peer-checked:translate-x-5">
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================== -->
+            <!-- NOTIFICATIONS -->
+            <!-- ======================================== -->
+
+            <section class="rounded-3xl border border-white/[0.07]
+                 bg-white/[0.02] p-6 lg:p-8">
+
+                <div class="mb-8">
+
+                    <div class="text-[10px] font-bold uppercase
+                        tracking-[0.25em] text-pink-400">
+                        Notifications
+                    </div>
+
+                    <h2 class="mt-2 font-serif text-2xl text-white">
+                        Notification preferences
+                    </h2>
+
+                    <p class="mt-2 text-sm text-zinc-500">
+                        Choose which clinic activities should generate notifications.
+                    </p>
+
+                </div>
+
+
+                <div class="space-y-4">
+
+                    <!-- Notification email -->
+                    <div>
+
+                        <label class="mb-2 block text-xs font-semibold text-zinc-300">
+                            Notification Email
+                        </label>
+
+                        <input type="email" formControlName="notificationEmail" class="settings-input"
+                            placeholder="notifications@example.com" />
+
+                    </div>
+
+
+                    <!-- Appointment notifications -->
+                    <label class="flex cursor-pointer items-center justify-between
+                     gap-6 rounded-2xl border border-white/[0.06]
+                     bg-white/[0.02] p-5">
+
+                        <div>
+
+                            <h3 class="text-sm font-semibold text-white">
+                                Appointment notifications
+                            </h3>
+
+                            <p class="mt-1 text-xs text-zinc-500">
+                                Receive notifications when patients request appointments.
+                            </p>
+
+                        </div>
+
+                        <input type="checkbox" formControlName="appointmentNotificationsEnabled"
+                            class="h-4 w-4 accent-pink-500" />
+
+                    </label>
+
+
+                    <!-- Message notifications -->
+                    <label class="flex cursor-pointer items-center justify-between
+                     gap-6 rounded-2xl border border-white/[0.06]
+                     bg-white/[0.02] p-5">
+
+                        <div>
+
+                            <h3 class="text-sm font-semibold text-white">
+                                Message notifications
+                            </h3>
+
+                            <p class="mt-1 text-xs text-zinc-500">
+                                Receive notifications when patients submit enquiries.
+                            </p>
+
+                        </div>
+
+                        <input type="checkbox" formControlName="messageNotificationsEnabled"
+                            class="h-4 w-4 accent-pink-500" />
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================== -->
+            <!-- SAVE BAR -->
+            <!-- ======================================== -->
+
+            <div class="sticky bottom-4 z-20 rounded-2xl border
+                 border-white/[0.08] bg-[#110e18]/95
+                 p-4 shadow-2xl backdrop-blur-xl">
+
+                <div class="flex flex-col gap-4 sm:flex-row
+                      sm:items-center sm:justify-between">
+
+                    <div>
+                        <p class="text-xs font-semibold text-white">
+                            Clinic settings
+                        </p>
+
+                        <p class="mt-1 text-[11px] text-zinc-500">
+                            Changes are saved directly to the clinic database.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3">
+
+                        <button type="button" (click)="resetForm()" class="rounded-xl border border-white/[0.08]
+                       px-5 py-3 text-xs font-semibold
+                       text-zinc-400 transition
+                       hover:border-white/20 hover:text-white">
+                            Reset
+                        </button>
+
+                        <button type="submit" [disabled]="isSaving()" class="rounded-xl bg-gradient-to-r
+                       from-pink-500 to-violet-500
+                       px-6 py-3 text-xs font-bold text-white
+                       shadow-lg transition
+                       hover:-translate-y-0.5
+                       disabled:cursor-not-allowed
+                       disabled:opacity-50">
+
+                            @if (isSaving()) {
+                            Saving...
+                            } @else {
+                            Save Changes
+                            }
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        }
+
+    </main>
+
+</div>

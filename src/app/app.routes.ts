@@ -7,6 +7,8 @@ import { Login } from './pages/admin/login/login';
 import { authGuard } from './core/guards/auth.guard';
 import { Patients } from './pages/admin/patients/patients';
 import { Services } from './pages/admin/services/services';
+import { Messages } from './pages/admin/messages/messages';
+import { Settings } from './pages/admin/settings/settings';
 
 export const routes: Routes = [
     // ========================================
@@ -58,6 +60,16 @@ export const routes: Routes = [
                     {
                         path: 'services',
                         component: Services
+                    },
+                    // MESSAGES
+                    {
+                        path: 'messages',
+                        component: Messages
+                    },
+                    // Settings
+                    {
+                        path: 'settings',
+                        component: Settings
                     }
                 ]
             },

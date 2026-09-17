@@ -1,0 +1,21 @@
+/* Appointment slide-over animation */
+
+@keyframes appointmentSlideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in {
+    animation: appointmentSlideIn 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-slide-in {
+        animation: none;
+    }
+}

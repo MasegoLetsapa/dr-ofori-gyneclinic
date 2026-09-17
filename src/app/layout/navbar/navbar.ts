@@ -1,5 +1,6 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { Icon } from "../../shared/icon/icon";
+import { AppointmentModalService } from '../../core/services/appointment-modal.service';
 
 @Component({
   imports: [Icon],
@@ -10,6 +11,13 @@ import { Icon } from "../../shared/icon/icon";
 })
 export class Navbar {
   mobileMenuOpen = signal(false);
+
+  private readonly appointmentModal = inject(AppointmentModalService);
+
+  openAppointment(): void {
+    this.closeMobileMenu();
+    this.appointmentModal.open();
+  }
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update(open => !open);

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder, ReactiveFormsModule, Validators
 } from '@angular/forms';
@@ -7,6 +7,9 @@ import { AppointmentService } from '../../core/services/appointment.service';
 import { CreateAppointmentRequest } from '../../core/models/appointment.model';
 import { ClinicService } from '../../core/models/service.model';
 import { ServiceService } from '../../core/services/service.service';
+import { ClinicSettingsService } from '../../core/services/clinic-settings.service';
+import { PublicClinicSettings } from '../../core/models/public-clinic-settings.model';
+import { AppointmentModalService } from '../../core/services/appointment-modal.service';
 
 @Component({
   imports: [ReactiveFormsModule, Icon],
@@ -16,6 +19,28 @@ import { ServiceService } from '../../core/services/service.service';
   templateUrl: './appointment.html',
 })
 export class Appointment implements OnInit {
+
+  private readonly clinicSettingsService = inject(ClinicSettingsService);
+
+  clinicSettings = signal<PublicClinicSettings | null>(null);
+
+
+  private readonly appointmentModal = inject(AppointmentModalService);
+
+  isOpen = this.appointmentModal.isOpen;
+
+  open(): void {
+    if (!this.clinicSettings()?.bookingEnabled) {
+      return;
+    }
+
+    this.appointmentModal.open();
+  }
+
+  close(): void {
+    this.appointmentModal.close();
+  }
+
   private readonly fb = inject(FormBuilder);
 
   private readonly appointmentService =
@@ -110,6 +135,15 @@ export class Appointment implements OnInit {
   ngOnInit(): void {
 
     this.loadServices();
+
+    this.clinicSettingsService.getSettings().subscribe({
+      next: (settings) => {
+        this.clinicSettings.set(settings);
+      },
+      error: (error) => {
+        console.error('Failed to load clinic settings:', error);
+      }
+    });
 
   }
 
@@ -211,6 +245,13 @@ export class Appointment implements OnInit {
   submitAppointment(): void {
 
     this.submitted = true;
+
+    if (!this.clinicSettings()?.bookingEnabled) {
+      this.errorMessage =
+        'Online booking is currently unavailable. Please contact the clinic directly.'
+        ;
+      return;
+    }
 
     if (this.appointmentForm.invalid) {
 

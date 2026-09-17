@@ -88,22 +88,28 @@
          DESKTOP CTA
     ========================== -->
 
-        <a href="#appointment" class="hidden items-center gap-2
-             rounded-full
-             bg-gradient-to-r
-             from-pink-500 to-violet-500
-             px-5 py-3
-             text-xs font-bold
-             text-white
-             shadow-[0_8px_30px_rgba(255,61,145,0.16)]
-             transition duration-300
-             hover:-translate-y-0.5
-             hover:shadow-[0_12px_40px_rgba(255,61,145,0.28)]
-             lg:inline-flex">
+        <button type="button" (click)="openAppointment()" class="group inline-flex
+                   items-center justify-center
+                   gap-3
+                   rounded-full
+                   bg-gradient-to-r
+                   from-pink-500
+                   to-violet-500
+                   px-7
+                   py-3.5
+                   text-xs
+                   font-bold
+                   text-white
+                   shadow-[0_12px_40px_rgba(255,61,145,0.18)]
+                   transition-all
+                   duration-300
+                   hover:-translate-y-1
+                   hover:shadow-[0_18px_50px_rgba(255,61,145,0.3)]
+                   active:translate-y-0">
             Book Appointment
 
             <app-icon name="arrow-right" [size]="14" />
-        </a>
+        </button>
 
 
         <!-- =========================
@@ -193,7 +199,7 @@
 
             <!-- Mobile CTA -->
 
-            <a href="#appointment" (click)="closeMobileMenu()" class="mt-6 flex w-full
+            <button type="button" (click)="openAppointment()" class="mt-6 flex w-full
                  items-center justify-center
                  gap-3 rounded-xl
                  bg-gradient-to-r
@@ -205,7 +211,7 @@
                 Book an Appointment
 
                 <app-icon name="arrow-right" [size]="16" />
-            </a>
+            </button>
 
         </nav>
 

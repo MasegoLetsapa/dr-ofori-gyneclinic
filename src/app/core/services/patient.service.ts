@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Service } from '@angular/core';
+import { inject, Injectable, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreatePatientRequest, Patient, PatientProfile, UpdatePatientRequest } from '../models/patient.model';
 
-@Service()
+@Injectable({
+    providedIn: 'root'
+})
 export class PatientService {
     private readonly http = inject(HttpClient);
 

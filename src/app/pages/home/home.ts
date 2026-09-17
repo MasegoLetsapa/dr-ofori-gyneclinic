@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Icon, IconName } from '../../shared/icon/icon';
 import { Appointment } from '../appointment/appointment';
 import { Navbar } from "../../layout/navbar/navbar";
+import { Contact } from '../contact/contact/contact';
+import { AppointmentModalService } from '../../core/services/appointment-modal.service';
 
 interface Service {
   number: string;
@@ -40,13 +42,19 @@ interface Resource {
 }
 
 @Component({
-  imports: [Icon, Appointment, Navbar],
+  imports: [Icon, Appointment, Contact, Navbar],
   selector: 'app-home',
   standalone: true,
   styleUrl: './home.scss',
   templateUrl: './home.html',
 })
 export class Home {
+
+  private readonly appointmentModal = inject(AppointmentModalService);
+
+  openAppointment(): void {
+    this.appointmentModal.open();
+  }
 
   services: Service[] = [
     {

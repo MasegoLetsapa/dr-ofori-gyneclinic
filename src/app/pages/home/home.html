@@ -82,24 +82,13 @@
                 <!-- Buttons -->
                 <div class="mt-9 flex flex-col gap-3 sm:flex-row">
 
-                    <a href="#appointment" class="group inline-flex
-                             items-center justify-center
-                             gap-3
-                             rounded-full
-                             bg-gradient-to-r
-                             from-pink-500
-                             to-violet-500
-                             px-7
-                             py-3.5
-                             text-xs
-                             font-bold
-                             text-white
-                             shadow-[0_12px_40px_rgba(255,61,145,0.18)]
-                             transition-all
-                             duration-300
-                             hover:-translate-y-1
-                             hover:shadow-[0_18px_50px_rgba(255,61,145,0.3)]
-                             active:translate-y-0">
+                    <button type="button" (click)="openAppointment()" class="group mt-9 inline-flex items-center gap-4
+                               rounded-full
+                               bg-gradient-to-r from-pink-500 to-violet-500
+                               px-6 py-4 text-sm font-semibold text-white
+                               shadow-[0_15px_50px_rgba(255,63,145,0.15)]
+                               transition hover:-translate-y-1
+                               hover:shadow-[0_20px_60px_rgba(255,63,145,0.28)]">
                         Book an Appointment
 
                         <span class="transition-transform
@@ -107,10 +96,10 @@
                                group-hover:translate-x-1">
                             <app-icon name="arrow-right" [size]="15" />
                         </span>
-                    </a>
+                    </button>
 
 
-                    <a href="#services" class="inline-flex
+                        <a href="#services" class="inline-flex
                              items-center
                              justify-center
                              rounded-full
@@ -127,8 +116,8 @@
                              hover:border-pink-400/25
                              hover:bg-pink-400/[0.04]
                              hover:text-white">
-                        Explore Services
-                    </a>
+                            Explore Services
+                        </a>
 
                 </div>
 
@@ -1001,16 +990,16 @@
         <!-- CTA -->
         <div class="mt-16 text-center">
 
-            <a href="#appointment" class="group inline-flex items-center gap-4
-               rounded-full
-               bg-gradient-to-r
-               from-pink-500 to-violet-500
-               px-7 py-4
-               text-sm font-semibold text-white
-               shadow-[0_15px_50px_rgba(255,63,145,0.15)]
-               transition duration-300
-               hover:-translate-y-1
-               hover:shadow-[0_20px_60px_rgba(255,63,145,0.3)]">
+            <button type="button" (click)="openAppointment()" class="group inline-flex items-center gap-4
+                       rounded-full
+                       bg-gradient-to-r
+                       from-pink-500 to-violet-500
+                       px-7 py-4
+                       text-sm font-semibold text-white
+                       shadow-[0_15px_50px_rgba(255,63,145,0.15)]
+                       transition duration-300
+                       hover:-translate-y-1
+                       hover:shadow-[0_20px_60px_rgba(255,63,145,0.3)]">
                 Start Your Journey
 
                 <span class="transition-transform
@@ -1018,7 +1007,7 @@
                     →
                 </span>
 
-            </a>
+            </button>
 
         </div>
 
@@ -1294,6 +1283,8 @@
 ========================= -->
 
 <app-appointment />
+
+<app-contact />
 
 <!-- =========================
      FOOTER
