@@ -778,6 +778,180 @@
 
             </div>
 
+            <!-- Communication History -->
+            <div class="mt-8 border-t border-white/[0.08] pt-6">
+
+                <div class="mb-4 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-white">
+                            Communication History
+                        </h3>
+
+                        <p class="mt-1 text-xs text-white/40">
+                            Emails and notifications sent for this appointment.
+                        </p>
+                    </div>
+
+                    @if (!communicationsLoading && communicationHistory.length > 0) {
+                    <span class="rounded-full border border-white/10 bg-white/[0.04]
+                           px-2.5 py-1 text-[11px] font-medium text-white/50">
+                        {{ communicationHistory.length }}
+                    </span>
+                    }
+                </div>
+
+                @if (communicationsLoading) {
+
+                <div class="flex items-center gap-3 rounded-xl border border-white/[0.06]
+                            bg-white/[0.02] p-4">
+
+                    <div class="h-4 w-4 animate-spin rounded-full border-2
+                           border-white/20 border-t-fuchsia-400">
+                    </div>
+
+                    <span class="text-sm text-white/50">
+                        Loading communication history...
+                    </span>
+
+                </div>
+
+                } @else if (communicationsError) {
+
+                <div class="rounded-xl border border-red-400/20
+                         bg-red-400/[0.05] p-4">
+
+                    <p class="text-sm text-red-300">
+                        {{ communicationsError }}
+                    </p>
+
+                </div>
+
+                } @else if (communicationHistory.length === 0) {
+
+                <div class="rounded-xl border border-white/[0.06]
+                         bg-white/[0.02] p-5 text-center">
+
+                    <p class="text-sm text-white/40">
+                        No communication has been recorded for this appointment yet.
+                    </p>
+
+                </div>
+
+                } @else {
+
+                <div class="relative space-y-4">
+
+                    @for (
+                    communication of communicationHistory;
+                    track communication.id
+                    ) {
+
+                    <div class="relative flex gap-4">
+
+                        <!-- Timeline -->
+                        <div class="flex flex-col items-center">
+
+                            <div class="flex h-9 w-9 shrink-0 items-center justify-center
+                                 rounded-full border
+                                 {{
+                                   communication.status === 'Sent'
+                                     ? 'border-emerald-400/20 bg-emerald-400/10'
+                                     : 'border-red-400/20 bg-red-400/10'
+                                 }}">
+
+                                @if (communication.status === 'Sent') {
+                                <span class="text-sm text-emerald-400">✓</span>
+                                } @else {
+                                <span class="text-sm text-red-400">!</span>
+                                }
+
+                            </div>
+
+                            @if (!$last) {
+                            <div class="mt-2 h-full min-h-8 w-px bg-white/[0.08]"></div>
+                            }
+
+                        </div>
+
+                        <!-- Communication -->
+                        <div class="min-w-0 flex-1 rounded-xl border
+                               border-white/[0.06] bg-white/[0.02] p-4">
+
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+
+                                <div>
+                                    <p class="text-sm font-semibold text-white">
+                                        {{ getCommunicationTypeLabel(communication.type) }}
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-white/40">
+                                        {{ communication.subject }}
+                                    </p>
+                                </div>
+
+                                <span class="rounded-full px-2.5 py-1 text-[10px] font-semibold
+                                   uppercase tracking-wider
+                                   {{
+                                     communication.status === 'Sent'
+                                       ? 'bg-emerald-400/10 text-emerald-400'
+                                       : 'bg-red-400/10 text-red-400'
+                                   }}">
+                                    {{ communication.status }}
+                                </span>
+
+                            </div>
+
+                            <div class="mt-4 grid gap-2 text-xs text-white/45 sm:grid-cols-2">
+
+                                <div>
+                                    <span class="text-white/25">Recipient</span>
+                                    <p class="mt-0.5 break-all text-white/60">
+                                        {{ communication.recipientEmail }}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <span class="text-white/25">Sent</span>
+                                    <p class="mt-0.5 text-white/60">
+                                        {{
+                                        communication.sentAt
+                                        ? (communication.sentAt | date:'dd MMM yyyy, HH:mm')
+                                        : 'Not sent'
+                                        }}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            @if (communication.errorMessage) {
+
+                            <div class="mt-3 rounded-lg border border-red-400/10
+                                   bg-red-400/[0.04] p-3">
+
+                                <p class="text-[11px] uppercase tracking-wider text-red-400/70">
+                                    Error
+                                </p>
+
+                                <p class="mt-1 text-xs text-red-300/80">
+                                    {{ communication.errorMessage }}
+                                </p>
+
+                            </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                }
+
+            </div>
+
         </div>
 
 

@@ -57,10 +57,122 @@
 
     <!-- Scrollable content -->
     <div class="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
+        @if (successMessage) {
 
-        @if (clinicSettings()?.bookingEnabled) {
+        <!-- SUCCESS STATE -->
+
+        <div class="flex min-h-[520px] flex-col
+                items-center justify-center
+                text-center">
+
+            <div class="flex h-16 w-16
+                    items-center justify-center
+                    rounded-full
+                    border border-emerald-400/20
+                    bg-emerald-400/[0.08]
+                    text-emerald-400">
+
+                <app-icon name="check" [size]="28" />
+
+            </div>
+
+            <p class="mt-6 text-[9px]
+                  font-bold uppercase
+                  tracking-[0.25em]
+                  text-emerald-400">
+
+                REQUEST RECEIVED
+
+            </p>
+
+            <h3 class="mt-2 font-serif
+                   text-3xl text-white">
+
+                Thank you.
+
+            </h3>
+
+            <p class="mt-4 max-w-md
+                  text-sm leading-6
+                  text-zinc-400">
+
+                {{ successMessage }}
+
+            </p>
+
+            @if (appointmentReference) {
+
+            <div class="mt-6 w-full max-w-sm
+                        rounded-2xl
+                        border border-white/[0.08]
+                        bg-white/[0.025]
+                        p-5">
+
+                <p class="text-[9px]
+                          font-bold uppercase
+                          tracking-[0.2em]
+                          text-zinc-600">
+
+                    Appointment Reference
+
+                </p>
+
+                <p class="mt-2 font-mono
+                          text-lg font-semibold
+                          tracking-wider
+                          text-pink-400">
+
+                    {{ appointmentReference }}
+
+                </p>
+
+                <p class="mt-2 text-[10px]
+                          leading-5 text-zinc-600">
+
+                    Please keep this reference for your records.
+
+                </p>
+
+            </div>
+
+            }
+
+            <div class="mt-8 flex w-full max-w-sm
+                    flex-col gap-3 sm:flex-row">
+
+                <button type="button" (click)="resetAppointmentForm()" class="flex flex-1 items-center
+                       justify-center rounded-xl
+                       border border-white/[0.08]
+                       bg-white/[0.03]
+                       px-5 py-3.5
+                       text-xs font-semibold
+                       text-zinc-300
+                       transition
+                       hover:bg-white/[0.07]
+                       hover:text-white">
+
+                    Book Another Appointment
+
+                </button>
+
+                <button type="button" (click)="close()" class="flex flex-1 items-center
+                       justify-center rounded-xl
+                       bg-gradient-to-r
+                       from-pink-500 to-violet-500
+                       px-5 py-3.5
+                       text-xs font-bold text-white">
+
+                    Done
+
+                </button>
+
+            </div>
+
+        </div>
+
+        } @else if (clinicSettings()?.bookingEnabled) {
+
         <form [formGroup]="appointmentForm" (ngSubmit)="submitAppointment()" novalidate>
-
             <!-- Names -->
 
             <div class="grid gap-4

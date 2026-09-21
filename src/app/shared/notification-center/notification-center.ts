@@ -1,13 +1,18 @@
 import {
   Component,
+  DestroyRef,
   HostListener,
   inject,
+  OnInit,
   signal
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../core/models/notification.model';
+import { Router } from '@angular/router';
+import { interval, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-notification-center',
@@ -16,10 +21,15 @@ import { Notification } from '../../core/models/notification.model';
   templateUrl: './notification-center.html',
   styleUrl: './notification-center.scss'
 })
-export class NotificationCenter {
+export class NotificationCenter implements OnInit {
 
   private readonly notificationService =
     inject(NotificationService);
+
+  private readonly router = inject(Router);
+
+  private readonly destroyRef =
+    inject(DestroyRef);
 
   isOpen = signal(false);
   notifications = signal<Notification[]>([]);
@@ -36,6 +46,40 @@ export class NotificationCenter {
 
   close(): void {
     this.isOpen.set(false);
+  }
+
+  ngOnInit(): void {
+    this.startNotificationPolling();
+  }
+
+  private startNotificationPolling(): void {
+    interval(30000)
+      .pipe(
+        startWith(0),
+        switchMap(() =>
+          this.notificationService.getNotifications()
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: notifications => {
+
+          this.notifications.set(notifications);
+
+          this.unreadCount.set(
+            notifications.filter(
+              notification => !notification.isRead
+            ).length
+          );
+        },
+
+        error: error => {
+          console.error(
+            'Unable to refresh notifications:',
+            error
+          );
+        }
+      });
   }
 
   loadNotifications(): void {
@@ -117,6 +161,27 @@ export class NotificationCenter {
           );
         }
       });
+  }
+
+  openNotification(notification: Notification): void {
+    this.markAsRead(notification);
+
+    this.close();
+
+    if (
+      notification.relatedEntityType === 'Appointment' &&
+      notification.relatedEntityId
+    ) {
+      this.router.navigate(['/admin/appointments']);
+      return;
+    }
+
+    if (
+      notification.relatedEntityType === 'Message' &&
+      notification.relatedEntityId
+    ) {
+      this.router.navigate(['/admin/messages']);
+    }
   }
 
   deleteNotification(notification: Notification): void {

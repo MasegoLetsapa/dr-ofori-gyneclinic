@@ -101,3 +101,14 @@ export interface Appointment {
     patient?: Patient | null;
 
 }
+
+export interface CommunicationLog {
+  id: number;
+  type: string;
+  recipientEmail: string;
+  subject: string;
+  status: string;
+  sentAt: string | null;
+  errorMessage: string | null;
+  createdAt: string;
+}

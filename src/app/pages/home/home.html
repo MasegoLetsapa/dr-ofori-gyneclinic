@@ -1,5 +1,5 @@
 <app-navbar />
-<section id="home" class="relative min-h-screen overflow-hidden bg-[#070711] ">
+<section id="home" class="hero-section relative min-h-screen overflow-hidden bg-[#070711] ">
 
     <!-- Ambient background -->
     <div class="pointer-events-none absolute -right-40 -top-40
@@ -99,7 +99,7 @@
                     </button>
 
 
-                        <a href="#services" class="inline-flex
+                    <a href="#services" class="inline-flex
                              items-center
                              justify-center
                              rounded-full
@@ -116,8 +116,8 @@
                              hover:border-pink-400/25
                              hover:bg-pink-400/[0.04]
                              hover:text-white">
-                            Explore Services
-                        </a>
+                        Explore Services
+                    </a>
 
                 </div>
 
@@ -163,7 +163,7 @@
 
 
             <!-- RIGHT -->
-            <div class="relative mx-auto w-full max-w-xl clinic-reveal clinic-reveal-delay-2">
+            <div class="relative md:mt-46 mx-auto w-full max-w-xl clinic-reveal clinic-reveal-delay-2">
 
                 <!-- Glow -->
                 <div class="absolute left-1/2 top-1/2
@@ -175,25 +175,25 @@
                  blur-[100px]"></div>
 
 
-                <!-- Image frame -->
-                <div class="relative mx-auto aspect-[4/5] max-w-[480px]
+                <!-- Image frame 
+                <div class="relative backdrop-blur-xl mx-auto aspect-[4/5] max-w-[480px]
                  overflow-hidden rounded-[220px_220px_35px_35px]
                  border border-white/10
                  bg-gradient-to-br
                  from-[#211625] via-[#14101c] to-[#0b0910]
                  shadow-[0_40px_100px_rgba(0,0,0,0.55)]">
 
-                    <!-- Image placeholder -->
-                    <div class="absolute inset-0 flex flex-col items-center
+                    Image placeholder 
+                    <div class="backdrop-blur-xl absolute inset-0 flex flex-col items-center
                    justify-center">
 
                         HERO IMAGE
-                        <!--  <img src="assets/images/hero-image.png" alt="Hero Image" class="" /> -->
+                         <img src="assets/images/hero-image.png" alt="Hero Image" class="" /> 
 
                     </div>
 
 
-                    <!-- Decorative circle -->
+                    
                     <div class="absolute -right-24 top-20 h-64 w-64
                    rounded-full border border-pink-400/20"></div>
 
@@ -201,7 +201,7 @@
                    rounded-full border border-violet-400/20"></div>
 
                 </div>
-
+-->
 
                 <!-- Floating card -->
                 <div class="absolute -left-4 top-1/3
@@ -365,14 +365,16 @@
 
 
                 <!-- Link -->
-                <a href="#appointment" class="mt-5 inline-flex items-center
-                       gap-2 text-[10px]
-                       font-semibold text-zinc-400
-                       transition
-                       group-hover:text-pink-400">
+                <a routerLink="/services" [queryParams]="{ service: service.slug }" class="mt-5 inline-flex items-center
+                           gap-2 text-[10px]
+                           font-semibold text-zinc-400
+                           transition
+                           group-hover:text-pink-400">
+
                     Learn more
 
                     <app-icon name="arrow-right" [size]="13" />
+
                 </a>
 
             </article>
@@ -385,7 +387,7 @@
         <!-- View all -->
         <div class="mt-12 text-center">
 
-            <a href="#services" class="inline-flex items-center gap-3 rounded-full
+            <a routerLink="/services" class="inline-flex items-center gap-3 rounded-full
                border border-white/10
                bg-white/[0.03]
                px-6 py-3 text-xs font-medium

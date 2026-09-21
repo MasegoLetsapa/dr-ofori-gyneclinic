@@ -1,0 +1,405 @@
+<section class="relative min-h-screen overflow-hidden bg-[#090811]
+           px-5 py-20 sm:px-8 lg:py-28">
+
+    <!-- Ambient glow -->
+    <div class="pointer-events-none absolute left-1/2 top-0
+               h-[500px] w-[700px]
+               -translate-x-1/2
+               rounded-full
+               bg-fuchsia-600/[0.06]
+               blur-[140px]">
+    </div>
+
+    <div class="relative mx-auto max-w-7xl">
+
+        <!-- Heading -->
+        <div class="mx-auto max-w-3xl text-center">
+
+            <div class="mb-5 flex items-center justify-center gap-3
+                       text-[9px] font-bold uppercase
+                       tracking-[0.32em] text-pink-400">
+
+                <span class="h-px w-8 bg-pink-400/70"></span>
+
+                OUR SERVICES
+
+                <span class="h-px w-8 bg-pink-400/70"></span>
+
+            </div>
+
+            <h1 class="font-serif text-4xl font-medium
+                       tracking-tight text-white
+                       sm:text-5xl lg:text-6xl">
+
+                Comprehensive
+
+                <span class="bg-gradient-to-r from-pink-400 to-violet-400
+                           bg-clip-text text-transparent">
+
+                    women's healthcare.
+
+                </span>
+
+            </h1>
+
+            <p class="mx-auto mt-6 max-w-2xl
+                       text-sm leading-7 text-zinc-500
+                       sm:text-base">
+
+                From preventive care to pregnancy and reproductive health,
+                we're here to support you through every stage of life.
+
+            </p>
+
+        </div>
+
+
+        <!-- Loading -->
+        @if (loading()) {
+
+        <div class="mt-16 flex min-h-[300px]
+                       items-center justify-center">
+
+            <div class="flex items-center gap-3">
+
+                <div class="h-5 w-5 animate-spin rounded-full
+                               border-2 border-white/10
+                               border-t-pink-400">
+                </div>
+
+                <span class="text-sm text-zinc-500">
+                    Loading services...
+                </span>
+
+            </div>
+
+        </div>
+
+        }
+
+        <!-- Error -->
+        @else if (error()) {
+
+        <div class="mx-auto mt-16 max-w-xl rounded-3xl
+                       border border-red-400/10
+                       bg-red-400/[0.04]
+                       p-8 text-center">
+
+            <p class="text-sm text-red-300">
+                {{ error() }}
+            </p>
+
+        </div>
+
+        }
+
+        <!-- Services -->
+        @else {
+
+        <div class="mt-16 grid gap-5
+                       sm:grid-cols-2
+                       lg:grid-cols-3">
+
+            @for (
+            service of services();
+            track service.id;
+            let i = $index
+            ) {
+
+            <article class="group relative flex min-h-[280px]
+                               flex-col rounded-3xl
+                               border border-white/[0.07]
+                               bg-white/[0.02]
+                               p-6
+                               transition-all duration-500
+                               hover:-translate-y-1
+                               hover:border-pink-400/25
+                               hover:bg-white/[0.035]">
+
+                <!-- Icon -->
+                <div class="mb-6 flex h-12 w-12
+                                   items-center justify-center
+                                   rounded-xl border
+                                   transition duration-300" [class.border-pink-400/20]="
+                                getServiceAccent(i) === 'pink'
+                            " [class.bg-pink-400/[0.07]]="
+                                getServiceAccent(i) === 'pink'
+                            " [class.text-pink-400]="
+                                getServiceAccent(i) === 'pink'
+                            " [class.border-violet-400/20]="
+                                getServiceAccent(i) === 'violet'
+                            " [class.bg-violet-400/[0.07]]="
+                                getServiceAccent(i) === 'violet'
+                            " [class.text-violet-400]="
+                                getServiceAccent(i) === 'violet'
+                            ">
+
+                    <app-icon [name]="getServiceIcon(service.slug)" [size]="20" />
+
+                </div>
+
+
+                <!-- Number -->
+                <span class="text-[9px] font-bold
+                                   tracking-[0.2em]
+                                   text-pink-400/70">
+
+                    {{ (i + 1).toString().padStart(2, '0') }}
+
+                </span>
+
+
+                <!-- Title -->
+                <h2 class="mt-3 font-serif
+                                   text-2xl leading-tight
+                                   text-white">
+
+                    {{ service.name }}
+
+                </h2>
+
+
+                <!-- Description -->
+                <p class="mt-4 flex-1
+                                   text-xs leading-6
+                                   text-zinc-500">
+
+                    {{ service.description }}
+
+                </p>
+
+
+                <!-- Learn more -->
+                <button type="button" (click)="openServiceDetails(service)" class="mt-6 inline-flex w-fit
+                           items-center gap-2
+                           text-xs font-semibold
+                           text-zinc-400
+                           transition
+                           group-hover:text-pink-400">
+
+                    Learn more
+
+                    <app-icon name="arrow-right" [size]="14" />
+
+                </button>
+
+            </article>
+
+            }
+
+        </div>
+
+        }
+
+    </div>
+
+</section>
+
+<!-- =========================
+     SERVICE DETAIL SLIDE-OVER
+========================= -->
+
+@if (selectedService(); as service) {
+
+<!-- Backdrop -->
+<div class="fixed inset-0 z-40
+               bg-black/60
+               backdrop-blur-sm" (click)="closeServiceDetails()">
+</div>
+
+
+<!-- Slide-over -->
+<aside class="fixed right-0 top-0 z-50
+               flex h-full w-full max-w-xl
+               flex-col
+               border-l border-white/[0.08]
+               bg-[#0d0b16]
+               shadow-2xl
+               animate-slide-in">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between
+                   border-b border-white/[0.07]
+                   px-6 py-5 sm:px-8">
+
+        <div>
+
+            <span class="text-[9px] font-bold uppercase
+                           tracking-[0.25em]
+                           text-pink-400">
+
+                SERVICE
+
+            </span>
+
+            <h2 class="mt-2 font-serif
+                           text-2xl text-white">
+
+                {{ service.name }}
+
+            </h2>
+
+        </div>
+
+
+        <!-- Close -->
+        <button type="button" (click)="closeServiceDetails()" aria-label="Close service details" class="flex h-10 w-10
+                       items-center justify-center
+                       rounded-full
+                       border border-white/10
+                       bg-white/[0.03]
+                       text-zinc-400
+                       transition
+                       hover:border-pink-400/30
+                       hover:text-pink-400">
+
+            <app-icon name="close" [size]="18" />
+
+        </button>
+
+    </div>
+
+
+    <!-- Content -->
+    <div class="flex-1 overflow-y-auto px-6 py-8 sm:px-8">
+
+        <!-- Icon -->
+        <div class="flex h-16 w-16
+                       items-center justify-center
+                       rounded-2xl
+                       border border-pink-400/20
+                       bg-pink-400/[0.07]
+                       text-pink-400">
+
+            <app-icon [name]="getServiceIcon(service.slug)" [size]="28" />
+
+        </div>
+
+
+        <!-- Service title -->
+        <h3 class="mt-8 font-serif
+                       text-3xl leading-tight
+                       text-white">
+
+            {{ service.name }}
+
+        </h3>
+
+
+        <!-- Description -->
+        <p class="mt-5 text-sm leading-7
+                       text-zinc-400">
+
+            {{ service.description }}
+
+        </p>
+
+
+        <!-- Service information -->
+        <div class="mt-8 grid gap-3
+                       sm:grid-cols-2">
+
+            <!-- Duration -->
+            <div class="rounded-2xl
+                           border border-white/[0.07]
+                           bg-white/[0.025]
+                           p-5">
+
+                <span class="text-[9px] font-bold uppercase
+                               tracking-[0.2em]
+                               text-zinc-500">
+
+                    Duration
+
+                </span>
+
+                <p class="mt-2 text-sm font-medium
+                               text-white">
+
+                    {{ service.durationMinutes }} minutes
+
+                </p>
+
+            </div>
+
+
+            <!-- Price -->
+            <div class="rounded-2xl
+                           border border-white/[0.07]
+                           bg-white/[0.025]
+                           p-5">
+
+                <span class="text-[9px] font-bold uppercase
+                               tracking-[0.2em]
+                               text-zinc-500">
+
+                    Consultation Fee
+
+                </span>
+
+                <p class="mt-2 text-sm font-medium
+                               text-white">
+
+                    @if (service.price !== null && service.price !== undefined) {
+                    R{{ service.price | number:'1.2-2' }}
+                    } @else {
+                    Contact clinic
+                    }
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Care note -->
+        <div class="mt-8 rounded-2xl
+                       border border-pink-400/10
+                       bg-pink-400/[0.035]
+                       p-5">
+
+            <p class="text-xs leading-6
+                           text-zinc-400">
+
+                Our team is here to provide personalised care
+                and help you understand the next steps for your
+                healthcare needs.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="border-t border-white/[0.07]
+                   bg-[#0d0b16]
+                   px-6 py-5 sm:px-8">
+
+        <button type="button" (click)="bookAppointment()" class="flex w-full
+                       items-center justify-center
+                       gap-2 rounded-full
+                       bg-gradient-to-r
+                       from-pink-500
+                       to-violet-500
+                       px-6 py-3.5
+                       text-sm font-semibold
+                       text-white
+                       transition
+                       hover:opacity-90">
+
+            Book Appointment
+
+            <app-icon name="arrow-right" [size]="16" />
+
+        </button>
+
+    </div>
+
+</aside>
+
+}
+
+<app-appointment></app-appointment>

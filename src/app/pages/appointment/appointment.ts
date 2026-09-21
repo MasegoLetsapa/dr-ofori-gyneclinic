@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder, ReactiveFormsModule, Validators
 } from '@angular/forms';
@@ -33,6 +33,13 @@ export class Appointment implements OnInit {
     if (!this.clinicSettings()?.bookingEnabled) {
       return;
     }
+
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.appointmentReference = '';
+    this.submitted = false;
+    this.submitting = false;
+    this.appointmentForm.reset();
 
     this.appointmentModal.open();
   }
@@ -69,6 +76,7 @@ export class Appointment implements OnInit {
 
   successMessage = '';
   errorMessage = '';
+  appointmentReference = '';
 
   // ========================================
   // APPOINTMENT FORM
@@ -127,6 +135,25 @@ export class Appointment implements OnInit {
       Validators.maxLength(500)
     ]
   });
+
+  constructor() {
+
+    effect(() => {
+
+      const selectedService =
+        this.appointmentModal.selectedService();
+
+      if (!selectedService) {
+        return;
+      }
+
+      this.appointmentForm.patchValue({
+        service: selectedService.slug
+      });
+
+    });
+
+  }
 
   // ========================================
   // INITIALIZATION
@@ -312,6 +339,9 @@ export class Appointment implements OnInit {
           this.successMessage =
             'Your appointment request has been received. Our team will contact you to confirm your appointment.';
 
+          this.appointmentReference =
+            response.referenceNumber;
+
           this.errorMessage = '';
 
           this.appointmentForm.reset();
@@ -337,6 +367,16 @@ export class Appointment implements OnInit {
         }
 
       });
+  }
+
+  resetAppointmentForm(): void {
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.appointmentReference = '';
+    this.submitted = false;
+    this.submitting = false;
+
+    this.appointmentForm.reset();
   }
 
   /*

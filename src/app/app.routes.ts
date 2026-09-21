@@ -9,6 +9,7 @@ import { Patients } from './pages/admin/patients/patients';
 import { Services } from './pages/admin/services/services';
 import { Messages } from './pages/admin/messages/messages';
 import { Settings } from './pages/admin/settings/settings';
+import { PublicServices } from './features/public-services/public-services';
 
 export const routes: Routes = [
     // ========================================
@@ -18,6 +19,10 @@ export const routes: Routes = [
     {
         path: '',
         component: Home
+    },
+    {
+        path: 'services',
+        component: PublicServices
     },
 
     // ========================================

@@ -4,10 +4,12 @@ import { Appointment } from '../appointment/appointment';
 import { Navbar } from "../../layout/navbar/navbar";
 import { Contact } from '../contact/contact/contact';
 import { AppointmentModalService } from '../../core/services/appointment-modal.service';
+import { RouterLink } from '@angular/router';
 
 interface Service {
   number: string;
   title: string;
+  slug: string;
   description: string;
   icon: IconName;
   accent: 'pink' | 'violet';
@@ -42,7 +44,7 @@ interface Resource {
 }
 
 @Component({
-  imports: [Icon, Appointment, Contact, Navbar],
+  imports: [Icon, Appointment, Contact, Navbar, RouterLink],
   selector: 'app-home',
   standalone: true,
   styleUrl: './home.scss',
@@ -52,6 +54,8 @@ export class Home {
 
   private readonly appointmentModal = inject(AppointmentModalService);
 
+
+
   openAppointment(): void {
     this.appointmentModal.open();
   }
@@ -60,6 +64,7 @@ export class Home {
     {
       number: '01',
       title: 'Pregnancy Care',
+      slug: 'pregnancy-care',
       description:
         'Supportive care throughout your pregnancy journey, from early pregnancy through delivery.',
       icon: 'baby',
@@ -68,6 +73,7 @@ export class Home {
     {
       number: '02',
       title: 'Family Planning',
+      slug: 'family-planning',
       description:
         'Personalised contraceptive advice and reproductive health planning tailored to your needs.',
       icon: 'calendar',
@@ -76,6 +82,7 @@ export class Home {
     {
       number: '03',
       title: 'Pap Smear',
+      slug: 'pap-smear',
       description:
         'Screening that helps detect cervical cell changes early and supports preventive care.',
       icon: 'screening',
@@ -84,6 +91,7 @@ export class Home {
     {
       number: '04',
       title: 'Ultrasound',
+      slug: 'ultrasound',
       description:
         'Advanced imaging services supporting accurate assessment and diagnosis.',
       icon: 'ultrasound',
@@ -92,6 +100,7 @@ export class Home {
     {
       number: '05',
       title: 'Fertility Care',
+      slug: 'fertility-care',
       description:
         'Compassionate reproductive health support for individuals and couples.',
       icon: 'fertility',
@@ -100,6 +109,7 @@ export class Home {
     {
       number: '06',
       title: 'Menopause Care',
+      slug: 'menopause-care',
       description:
         'Support and treatment options for a healthier, more comfortable transition.',
       icon: 'wellness',

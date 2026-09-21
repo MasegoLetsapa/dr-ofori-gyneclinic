@@ -1,5 +1,5 @@
 import { inject, Service } from '@angular/core';
-import { Appointment, AppointmentResponse, CreateAppointmentRequest } from '../models/appointment.model';
+import { Appointment, AppointmentResponse, CommunicationLog, CreateAppointmentRequest } from '../models/appointment.model';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -132,5 +132,17 @@ export class AppointmentService {
                     return throwError(() => error);
                 })
             );
+    }
+
+    // ========================================
+    // GET COMMUNICATION HISTORY FOR AN APPOINTMENT
+    // ========================================
+
+    getCommunicationHistory(
+        appointmentId: number
+    ) {
+        return this.http.get<CommunicationLog[]>(
+            `${this.apiUrl}/${appointmentId}/communications`
+        );
     }
 }

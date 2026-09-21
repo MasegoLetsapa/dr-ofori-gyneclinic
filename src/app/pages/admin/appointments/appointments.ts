@@ -1,6 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, signal } from '@angular/core';
 import { AppointmentService } from '../../../core/services/appointment.service';
-import { Appointment } from '../../../core/models/appointment.model';
+import { Appointment, CommunicationLog } from '../../../core/models/appointment.model';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -16,6 +16,29 @@ export class Appointments {
   private readonly appointmentService = inject(AppointmentService);
 
   private readonly router = inject(Router);
+
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  // ========================================
+  // COMMUNICATION HISTORY
+  // ========================================
+
+  communicationHistory: CommunicationLog[] = [];
+  communicationsLoading = false;
+  communicationsError = '';
+
+  getCommunicationTypeLabel(type: string): string {
+    const labels: Record<string, string> = {
+      AppointmentAdminNotification: 'Clinic Notification',
+      MessageAdminNotification: 'Message Notification',
+      PatientRequestReceived: 'Request Received',
+      PatientConfirmed: 'Appointment Confirmed',
+      PatientCancelled: 'Appointment Cancelled',
+      PatientReminder: 'Appointment Reminder'
+    };
+
+    return labels[type] ?? type;
+  }
 
 
   // ========================================
@@ -159,7 +182,43 @@ export class Appointments {
   // ========================================
 
   viewAppointment(appointment: Appointment): void {
+
     this.selectedAppointment.set(appointment);
+
+    this.communicationHistory = [];
+    this.communicationsLoading = true;
+    this.communicationsError = '';
+
+    this.appointmentService
+      .getCommunicationHistory(appointment.id)
+      .subscribe({
+        next: communications => {
+          console.log(
+            'Communication history received:',
+            communications
+          );
+
+          this.communicationHistory = communications;
+          this.communicationsLoading = false;
+
+          this.cdr.markForCheck();
+        },
+
+        error: error => {
+          console.error(
+            'Communication history request failed:',
+            error
+          );
+
+          this.communicationsLoading = false;
+          this.communicationsError =
+            'Unable to load communication history.';
+
+          this.cdr.markForCheck();
+        }
+      });
+
+
   }
 
   // ========================================
