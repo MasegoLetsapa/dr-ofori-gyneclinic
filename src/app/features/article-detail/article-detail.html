@@ -1,0 +1,80 @@
+<section class="min-h-screen bg-[#09070d] px-5 pb-24 pt-32 text-white sm:px-8 lg:px-10">
+
+    <div class="mx-auto max-w-4xl">
+
+        @if (loading()) {
+
+        <div class="flex min-h-[400px] items-center justify-center">
+            <p class="text-sm text-white/50">
+                Loading article...
+            </p>
+        </div>
+
+        }
+
+        @else if (error()) {
+
+        <div class="flex min-h-[400px] flex-col items-center justify-center text-center">
+
+            <p class="text-sm text-red-300">
+                {{ error() }}
+            </p>
+
+            <a routerLink="/resources" class="mt-6 text-sm text-pink-300 hover:text-white">
+                ← Back to resources
+            </a>
+
+        </div>
+
+        }
+
+        @else if (article(); as currentArticle) {
+
+        <a routerLink="/resources"
+            class="inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-pink-300">
+            ← Resources
+        </a>
+
+        <div class="mt-10">
+
+            @if (currentArticle.category) {
+            <p class="text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-pink-400">
+                {{ currentArticle.category }}
+            </p>
+            }
+
+            <h1 class="mt-4 font-serif text-4xl font-normal leading-tight tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+                {{ currentArticle.title }}
+            </h1>
+
+            <div class="mt-6 flex flex-wrap gap-4 text-xs text-white/40">
+
+                @if (currentArticle.author) {
+                <span>
+                    By {{ currentArticle.author }}
+                </span>
+                }
+
+                @if (currentArticle.publishedAt) {
+                <span>
+                    {{ currentArticle.publishedAt | date:'dd MMM yyyy' }}
+                </span>
+                }
+
+            </div>
+
+            <div class="mt-12 rounded-3xl border border-white/10 bg-white/[0.03] p-8">
+
+                <p class="text-lg leading-8 text-white/70">
+                    {{ currentArticle.content }}
+                </p>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+</section>

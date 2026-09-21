@@ -10,6 +10,8 @@ import { Services } from './pages/admin/services/services';
 import { Messages } from './pages/admin/messages/messages';
 import { Settings } from './pages/admin/settings/settings';
 import { PublicServices } from './features/public-services/public-services';
+import { Resources } from './features/resources/resources';
+import { ArticleDetail } from './features/article-detail/article-detail';
 
 export const routes: Routes = [
     // ========================================
@@ -23,6 +25,14 @@ export const routes: Routes = [
     {
         path: 'services',
         component: PublicServices
+    },
+    {
+        path: 'resources',
+        component: Resources
+    },
+    {
+        path: 'resources/:slug',
+        component: ArticleDetail
     },
 
     // ========================================
