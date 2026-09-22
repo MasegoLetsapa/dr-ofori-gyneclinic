@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Icon, IconName } from '../../shared/icon/icon';
 import { Appointment } from '../appointment/appointment';
 import { Navbar } from "../../layout/navbar/navbar";
 import { Contact } from '../contact/contact/contact';
 import { AppointmentModalService } from '../../core/services/appointment-modal.service';
 import { RouterLink } from '@angular/router';
+import { ArticleService } from '../../core/services/article.service';
+import { Article } from '../../core/models/article.model';
 
 interface Service {
   number: string;
@@ -50,14 +52,64 @@ interface Resource {
   styleUrl: './home.scss',
   templateUrl: './home.html',
 })
-export class Home {
+export class Home implements OnInit {
 
   private readonly appointmentModal = inject(AppointmentModalService);
 
+  private articleService = inject(ArticleService);
 
+  resources: Article[] = [];
+
+  featuredIcon?: string | null;
+
+  ngOnInit(): void {
+    this.loadResources();
+  }
+
+  private loadResources(): void {
+    this.articleService.getArticles().subscribe({
+      next: (articles) => {
+        this.resources = articles.slice(0, 3);
+      },
+      error: (error) => {
+        console.error('Failed to load resources:', error);
+        this.resources = [];
+      }
+    });
+  }
 
   openAppointment(): void {
     this.appointmentModal.open();
+  }
+
+  getArticleIcon(icon: string | null | undefined): IconName {
+    const validIcons: IconName[] = [
+      'heart',
+      'baby',
+      'calendar',
+      'screening',
+      'ultrasound',
+      'fertility',
+      'wellness',
+      'shield',
+      'spark',
+      'arrow-right',
+      'phone',
+      'mail',
+      'location',
+      'check',
+      'menu',
+      'close',
+      'instagram',
+      'facebook',
+      'whatsapp'
+    ];
+
+    if (icon && validIcons.includes(icon as IconName)) {
+      return icon as IconName;
+    }
+
+    return 'heart';
   }
 
   services: Service[] = [
@@ -199,30 +251,30 @@ export class Home {
     }
   ];
 
-  resources: Resource[] = [
-    {
-      category: 'Pregnancy',
-      title:
-        'Understanding Your Pregnancy: What to Expect From Your First Trimester',
-      description:
-        'A simple guide to the early stages of pregnancy and why starting antenatal care early matters.',
-      icon: 'baby',
-      featured: true
-    },
-    {
-      category: 'Preventive Care',
-      title: 'Why Regular Pap Smears Matter',
-      description:
-        'Understanding cervical screening and the importance of regular check-ups.',
-      icon: 'screening'
-    },
-    {
-      category: 'Women’s Health',
-      title: 'Taking Care of Your Reproductive Health',
-      description:
-        'Simple steps every woman can take to stay informed about her reproductive health.',
-      icon: 'heart'
-    }
-  ];
-
+  /*   resources: Resource[] = [
+      {
+        category: 'Pregnancy',
+        title:
+          'Understanding Your Pregnancy: What to Expect From Your First Trimester',
+        description:
+          'A simple guide to the early stages of pregnancy and why starting antenatal care early matters.',
+        icon: 'baby',
+        featured: true
+      },
+      {
+        category: 'Preventive Care',
+        title: 'Why Regular Pap Smears Matter',
+        description:
+          'Understanding cervical screening and the importance of regular check-ups.',
+        icon: 'screening'
+      },
+      {
+        category: 'Women’s Health',
+        title: 'Taking Care of Your Reproductive Health',
+        description:
+          'Simple steps every woman can take to stay informed about her reproductive health.',
+        icon: 'heart'
+      }
+    ];
+   */
 }

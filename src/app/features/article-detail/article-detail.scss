@@ -56,7 +56,40 @@
 }
 
 .article-body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
     color: rgba(255, 255, 255, 0.7);
+
+    /*     overflow-wrap: anywhere;
+    word-break: break-word; */
+}
+
+.article-body ::ng-deep * {
+    max-width: 100%;
+}
+
+.article-body ::ng-deep p,
+.article-body ::ng-deep h1,
+.article-body ::ng-deep h2,
+.article-body ::ng-deep h3,
+.article-body ::ng-deep h4,
+.article-body ::ng-deep li,
+.article-body ::ng-deep blockquote {
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.article-body ::ng-deep img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.article-body ::ng-deep a {
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .article-body ::ng-deep p {
