@@ -32,6 +32,11 @@ export class AdminSidebar {
       icon: 'services'
     },
     {
+      label: 'Articles',
+      route: '/admin/articles',
+      icon: 'articles'
+    },
+    {
       label: 'Messages',
       route: '/admin/messages',
       icon: 'messages'

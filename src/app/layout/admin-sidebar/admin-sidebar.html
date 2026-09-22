@@ -81,8 +81,18 @@
                     <path d="M18.5 5.5l-13 13"></path>
                 </svg>
                 }
-
-
+                
+                <!-- Articles -->
+                
+                @if (item.icon === 'articles') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"></path>
+                    <path d="M14 8H6"></path>
+                    <path d="M14 12H6"></path>
+                    <path d="M14 16H6"></path>
+                </svg>
+                }
+            
                 <!-- Messages -->
 
                 @if (item.icon === 'messages') {

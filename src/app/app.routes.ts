@@ -12,6 +12,8 @@ import { Settings } from './pages/admin/settings/settings';
 import { PublicServices } from './features/public-services/public-services';
 import { Resources } from './features/resources/resources';
 import { ArticleDetail } from './features/article-detail/article-detail';
+import { Articles } from './pages/admin/articles/articles';
+import { ArticleEditor } from './pages/admin/articles/article-editor/article-editor';
 
 export const routes: Routes = [
     // ========================================
@@ -75,6 +77,19 @@ export const routes: Routes = [
                     {
                         path: 'services',
                         component: Services
+                    },
+                    // ARTICLES
+                    {
+                        path: 'articles/new',
+                        component: ArticleEditor
+                    },
+                    {
+                        path: 'articles/:id/edit',
+                        component: ArticleEditor
+                    },
+                    {
+                        path: 'articles',
+                        component: Articles
                     },
                     // MESSAGES
                     {

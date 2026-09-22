@@ -86,4 +86,96 @@ export class ArticleDetail implements OnInit {
 
     return 'heart';
   }
+
+  readonly copied = signal(false);
+
+  shareWhatsApp(): void {
+    const article = this.article();
+
+    if (!article) {
+      return;
+    }
+
+    const url = this.getArticleUrl();
+    const text = `${article.title} — ${url}`;
+
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(text)}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }
+
+  shareFacebook(): void {
+    const url = this.getArticleUrl();
+
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }
+
+  shareX(): void {
+    const article = this.article();
+
+    if (!article) {
+      return;
+    }
+
+    const url = this.getArticleUrl();
+
+    const text = article.title;
+
+    window.open(
+      `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }
+
+  async copyLink(): Promise<void> {
+    const url = this.getArticleUrl();
+
+    try {
+      await navigator.clipboard.writeText(url);
+
+      this.copied.set(true);
+
+      setTimeout(() => {
+        this.copied.set(false);
+      }, 2000);
+
+    } catch (error) {
+      console.error('Failed to copy article link:', error);
+    }
+  }
+
+  async nativeShare(): Promise<void> {
+    const article = this.article();
+
+    if (!article || !navigator.share) {
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: article.title,
+        text: article.excerpt || article.title,
+        url: this.getArticleUrl()
+      });
+    } catch (error) {
+      // User cancelling the native share dialog is not an error we need to show.
+      console.log('Native share cancelled or unavailable.', error);
+    }
+  }
+
+  canNativeShare(): boolean {
+    return typeof navigator !== 'undefined' &&
+      typeof navigator.share === 'function';
+  }
+
+  private getArticleUrl(): string {
+    return window.location.href;
+  }
 }

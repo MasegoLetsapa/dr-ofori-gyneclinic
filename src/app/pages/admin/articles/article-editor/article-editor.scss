@@ -1,0 +1,176 @@
+:host {
+    display: block;
+    min-height: 100%;
+}
+
+.article-editor-wrapper {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.article-editor-wrapper ::ng-deep .ql-toolbar {
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.article-editor-wrapper ::ng-deep .ql-container {
+    border: 0;
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.article-editor-wrapper ::ng-deep .ql-editor {
+    min-height: 420px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+}
+
+.article-editor-wrapper ::ng-deep .ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.2);
+    font-style: normal;
+}
+
+.article-editor-wrapper ::ng-deep .ql-stroke {
+    stroke: rgba(255, 255, 255, 0.45);
+}
+
+.article-editor-wrapper ::ng-deep .ql-fill {
+    fill: rgba(255, 255, 255, 0.45);
+}
+
+.article-editor-wrapper ::ng-deep .ql-picker {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.article-editor-wrapper ::ng-deep .ql-picker-options {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #15121a;
+}
+
+.article-editor-wrapper ::ng-deep .ql-toolbar button:hover .ql-stroke,
+.article-editor-wrapper ::ng-deep .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #f472b6;
+}
+
+.article-editor-wrapper ::ng-deep .ql-toolbar button:hover .ql-fill,
+.article-editor-wrapper ::ng-deep .ql-toolbar button.ql-active .ql-fill {
+    fill: #f472b6;
+}
+
+.admin-input {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    outline: none;
+    transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.2);
+    }
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    &:focus {
+        border-color: rgba(217, 70, 239, 0.55);
+        background: rgba(217, 70, 239, 0.025);
+        box-shadow: 0 0 0 3px rgba(217, 70, 239, 0.08);
+    }
+}
+
+
+.media-type-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        color 180ms ease;
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    &--active {
+        border-color: rgba(217, 70, 239, 0.45);
+        background: rgba(217, 70, 239, 0.1);
+        color: rgba(244, 114, 182, 1);
+    }
+}
+
+.article-icon-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 72px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    background: rgba(0, 0, 0, 0.18);
+    color: rgba(255, 255, 255, 0.35);
+    transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+
+    span {
+        font-size: 0.65rem;
+        text-transform: capitalize;
+    }
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.7);
+        transform: translateY(-1px);
+    }
+
+    &--active {
+        border-color: rgba(217, 70, 239, 0.5);
+        background:
+            radial-gradient(circle at 50% 25%,
+                rgba(217, 70, 239, 0.16),
+                transparent 65%),
+            rgba(217, 70, 239, 0.07);
+        color: rgba(244, 114, 182, 1);
+        box-shadow: 0 0 24px rgba(217, 70, 239, 0.08);
+    }
+}
+
+.article-loading-spinner {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border: 2px solid rgba(217, 70, 239, 0.2);
+    border-top-color: rgba(244, 114, 182, 0.95);
+    border-radius: 999px;
+    animation: article-editor-spin 0.8s linear infinite;
+}
+
+@keyframes article-editor-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

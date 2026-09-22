@@ -1,0 +1,492 @@
+<div class="min-h-full bg-[#08070d] px-6 py-8 lg:px-8">
+
+    <!-- Loading -->
+    @if (loadingArticle()) {
+    <div class="mx-auto mb-6 max-w-7xl rounded-xl border border-fuchsia-400/20 bg-fuchsia-400/5 px-4 py-3">
+        <div class="flex items-center gap-3">
+
+            <div class="article-loading-spinner"></div>
+
+            <div>
+                <p class="text-sm font-medium text-white/70">
+                    Loading article
+                </p>
+
+                <p class="mt-1 text-xs text-white/35">
+                    Retrieving article information from the database...
+                </p>
+            </div>
+
+        </div>
+    </div>
+    }
+
+
+    <!-- Error -->
+    @if (error()) {
+    <div class="mx-auto mb-6 max-w-7xl rounded-xl border border-rose-400/20 bg-rose-400/5 px-4 py-3">
+
+        <p class="text-sm font-medium text-rose-300">
+            {{ error() }}
+        </p>
+
+    </div>
+    }
+
+    <div *ngIf="saveSuccess()"
+        class="mb-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">
+        {{ saveSuccess() }}
+    </div>
+
+    <div class="mx-auto max-w-7xl">
+
+        <!-- Header -->
+        <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+
+            <div>
+
+                <p class="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400">
+                    Content Management
+                </p>
+
+                <h1 class="font-serif text-4xl text-white">
+                    {{ pageTitle }}
+                </h1>
+
+                <p class="mt-2 text-sm text-white/40">
+                    {{ pageDescription }}
+                </p>
+
+            </div>
+
+
+            <button type="button" (click)="cancel()"
+                class="rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-white/60 transition hover:border-white/20 hover:bg-white/[0.04] hover:text-white">
+                Cancel
+            </button>
+
+        </div>
+
+
+        <!-- Article Form -->
+        <form [formGroup]="articleForm">
+
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+
+
+                <!-- MAIN ARTICLE CONTENT -->
+                <section class="rounded-2xl border border-white/10 bg-white/[0.025] p-6">
+
+                    <div class="mb-7">
+
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/30">
+                            Article Content
+                        </p>
+
+                        <h2 class="mt-2 font-serif text-2xl text-white">
+                            Write your article
+                        </h2>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+                    <div class="mb-6">
+
+                        <label for="title" class="mb-2 block text-sm font-medium text-white/70">
+                            Title
+                        </label>
+
+                        <input id="title" type="text" formControlName="title"
+                            placeholder="e.g. Understanding Women's Health" class="admin-input" />
+
+                        @if (
+                        articleForm.controls.title.touched &&
+                        articleForm.controls.title.invalid
+                        ) {
+
+                        <p class="mt-2 text-xs text-rose-400">
+                            Please enter an article title.
+                        </p>
+
+                        }
+
+                    </div>
+
+
+                    <!-- SLUG -->
+                    <div class="mb-6">
+
+                        <div class="mb-2 flex items-center justify-between gap-4">
+
+                            <label for="slug" class="block text-sm font-medium text-white/70">
+                                Slug
+                            </label>
+
+                            <button type="button" (click)="generateSlug()"
+                                class="text-xs font-medium text-fuchsia-400 transition hover:text-fuchsia-300">
+                                Generate from title
+                            </button>
+
+                        </div>
+
+
+                        <div class="flex items-center overflow-hidden rounded-xl border border-white/10 bg-black/20">
+
+                            <span class="hidden px-4 text-sm text-white/25 sm:block">
+                                /resources/
+                            </span>
+
+                            <input id="slug" type="text" formControlName="slug" placeholder="womens-health-and-wellness"
+                                class="min-w-0 flex-1 border-0 bg-transparent px-4 py-3 text-sm text-white outline-none placeholder:text-white/20 sm:px-2" />
+
+                        </div>
+
+
+                        <p class="mt-2 text-xs text-white/25">
+                            This becomes the public article URL.
+                        </p>
+
+                    </div>
+
+
+                    <!-- CATEGORY + AUTHOR -->
+                    <div class="mb-6 grid gap-5 md:grid-cols-2">
+
+                        <div>
+
+                            <label for="category" class="mb-2 block text-sm font-medium text-white/70">
+                                Category
+                            </label>
+
+                            <input id="category" type="text" formControlName="category" placeholder="Women's Health"
+                                class="admin-input" />
+
+                        </div>
+
+
+                        <div>
+
+                            <label for="author" class="mb-2 block text-sm font-medium text-white/70">
+                                Author
+                            </label>
+
+                            <input id="author" type="text" formControlName="author" placeholder="Dr. Ofori"
+                                class="admin-input" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EXCERPT -->
+                    <div class="mb-6">
+
+                        <label for="excerpt" class="mb-2 block text-sm font-medium text-white/70">
+                            Excerpt
+                        </label>
+
+                        <textarea id="excerpt" rows="4" formControlName="excerpt"
+                            placeholder="A short introduction that appears on the resources page..."
+                            class="admin-input resize-none">
+                        </textarea>
+
+
+                        <div class="mt-2 flex justify-end">
+
+                            <span class="text-xs text-white/25">
+                                {{ articleForm.controls.excerpt.value.length }}/500
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ARTICLE CONTENT -->
+                    <div>
+
+                        <label class="mb-2 block text-sm font-medium text-white/70">
+                            Article Content
+                        </label>
+
+                        <div class="article-editor-wrapper">
+
+                            <quill-editor formControlName="content" [modules]="quillModules"
+                                [styles]="{ height: '420px' }" placeholder="Write the full article content here...">
+                            </quill-editor>
+
+                        </div>
+
+                        <p class="mt-2 text-xs text-white/25">
+                            Your article content will appear on the public article page.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <!-- RIGHT SIDEBAR -->
+                <aside class="space-y-6">
+
+
+                    <!-- FEATURED MEDIA -->
+                    <section class="rounded-2xl border border-white/10 bg-white/[0.025] p-6">
+
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/30">
+                            Featured Media
+                        </p>
+
+                        <h2 class="mt-2 font-serif text-xl text-white">
+                            Media settings
+                        </h2>
+
+                        <p class="mt-2 text-sm leading-6 text-white/35">
+                            Choose how this article should appear on the resources page.
+                        </p>
+
+
+                        <!-- Media Type -->
+                        <div class="mt-5 grid grid-cols-2 gap-2">
+
+                            <button type="button" (click)="setFeaturedMediaType('icon')" class="media-type-button"
+                                [class.media-type-button--active]="
+                                    articleForm.controls.featuredMediaType.value === 'icon'
+                                ">
+
+                                <app-icon name="spark" [size]="17" [strokeWidth]="1.8">
+                                </app-icon>
+
+                                <span>
+                                    Icon
+                                </span>
+
+                            </button>
+
+
+                            <button type="button" (click)="setFeaturedMediaType('image')" class="media-type-button"
+                                [class.media-type-button--active]="
+                                    articleForm.controls.featuredMediaType.value === 'image'
+                                ">
+
+                                <span class="text-base">
+                                    ▧
+                                </span>
+
+                                <span>
+                                    Image
+                                </span>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- ICON SELECTION -->
+                        @if (articleForm.controls.featuredMediaType.value === 'icon') {
+
+                        <div class="mt-5">
+
+                            <p class="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-white/30">
+                                Select icon
+                            </p>
+
+
+                            <div class="grid grid-cols-3 gap-2">
+
+                                @for (icon of availableIcons; track icon) {
+
+                                <button type="button" (click)="selectFeaturedIcon(icon)" class="article-icon-option"
+                                    [class.article-icon-option--active]="
+                                        articleForm.controls.featuredIcon.value === icon
+                                    ">
+
+                                    <app-icon [name]="icon" [size]="22" [strokeWidth]="1.7">
+                                    </app-icon>
+
+                                    <span>
+                                        {{ icon }}
+                                    </span>
+
+                                </button>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                        }
+
+
+                        <!-- IMAGE SELECTION -->
+                        @if (articleForm.controls.featuredMediaType.value === 'image') {
+
+                        <div class="mt-5">
+
+                            <label for="featuredImage"
+                                class="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-white/30">
+                                Image URL
+                            </label>
+
+
+                            <input id="featuredImage" type="url" formControlName="featuredImage"
+                                placeholder="https://example.com/article-image.jpg" class="admin-input" />
+
+
+                            <p class="mt-2 text-xs leading-5 text-white/25">
+                                Enter the URL of the image you want to use as the featured image.
+                            </p>
+
+
+                            @if (articleForm.controls.featuredImage.value) {
+
+                            <div class="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
+
+                                <img [src]="articleForm.controls.featuredImage.value" alt="Featured article preview"
+                                    class="h-40 w-full object-cover" />
+
+                            </div>
+
+                            }
+
+                        </div>
+
+                        }
+
+                    </section>
+
+
+                    <!-- Publishing -->
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+
+                        <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-white/35">
+                            Publishing
+                        </p>
+
+                        <h2 class="mt-2 font-serif text-xl text-white">
+                            Publication status
+                        </h2>
+
+                        @if (isEditMode()) {
+
+                        @if (currentArticleIsPublished()) {
+
+                        <div class="mt-5 rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <span
+                                    class="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.6)]"></span>
+
+                                <span class="text-sm font-medium text-emerald-300">
+                                    Published
+                                </span>
+
+                            </div>
+
+                            <p class="mt-2 text-xs leading-5 text-white/40">
+                                This article is currently visible on the public website.
+                            </p>
+
+                        </div>
+
+                        } @else {
+
+                        <div class="mt-5 rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+
+                                <span class="text-sm font-medium text-amber-300">
+                                    Draft
+                                </span>
+
+                            </div>
+
+                            <p class="mt-2 text-xs leading-5 text-white/40">
+                                This article is saved as a draft and is not visible on the public website.
+                            </p>
+
+                        </div>
+
+                        }
+
+                        } @else {
+
+                        <div class="mt-5 rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+
+                                <span class="text-sm font-medium text-amber-300">
+                                    Draft
+                                </span>
+
+                            </div>
+
+                            <p class="mt-2 text-xs leading-5 text-white/40">
+                                New articles are saved as drafts until you publish them.
+                            </p>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                    @if (isEditMode()) {
+
+                    <button type="button" (click)="publishOrUnpublish()" [disabled]="saving()"
+                        class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50"
+                        [class.border-amber-400/20]="currentArticleIsPublished()"
+                        [class.bg-amber-400/5]="currentArticleIsPublished()"
+                        [class.text-amber-300]="currentArticleIsPublished()"
+                        [class.hover:bg-amber-400/10]="currentArticleIsPublished()"
+                        [class.border-emerald-400/20]="!currentArticleIsPublished()"
+                        [class.bg-emerald-400/5]="!currentArticleIsPublished()"
+                        [class.text-emerald-300]="!currentArticleIsPublished()"
+                        [class.hover:bg-emerald-400/10]="!currentArticleIsPublished()">
+                        <span *ngIf="saving()"
+                            class="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
+
+                        {{ saving()
+                        ? 'Updating...'
+                        : currentArticleIsPublished()
+                        ? 'Unpublish Article'
+                        : 'Publish Article'
+                        }}
+                    </button>
+
+                    }
+
+                </aside>
+
+            </div>
+
+            <!-- Article Actions -->
+            <div class="mt-8 flex items-center justify-end gap-3 border-t border-white/10 pt-6">
+
+                <button type="button" (click)="cancel()"
+                    class="rounded-xl border border-white/10 px-5 py-3 text-sm font-medium text-white/60 transition hover:border-white/20 hover:bg-white/5 hover:text-white">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="saveArticle()" [disabled]="saving()"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:from-fuchsia-400 hover:to-violet-400 disabled:cursor-not-allowed disabled:opacity-50">
+                    <span *ngIf="saving()"
+                        class="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></span>
+
+                    {{ saving() ? 'Saving...' : 'Save Article' }}
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
