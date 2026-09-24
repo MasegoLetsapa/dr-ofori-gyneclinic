@@ -5,6 +5,7 @@ import { Icon, IconName } from '../../shared/icon/icon';
 import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
 import { SocialFloat } from '../../shared/social-float/social-float';
+import { SeoService } from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-resources',
@@ -14,13 +15,27 @@ import { SocialFloat } from '../../shared/social-float/social-float';
     RouterLink,
     Icon,
     SocialFloat
-],
+  ],
   templateUrl: './resources.html',
   styleUrl: './resources.scss'
 })
 export class Resources implements OnInit {
 
   private readonly articleService = inject(ArticleService);
+
+  constructor(
+    private readonly seoService: SeoService
+  ) {
+
+    this.seoService.updateSeo(
+      'Women\'s Health Resources | Dr. Ofori Gyne Clinic',
+      'Read helpful information about women\'s health, pregnancy, family planning, fertility, screening and wellbeing from Dr. Ofori Gyne Clinic.',
+      'https://www.gyneclinic.org.za/resources'
+    );
+
+    // your existing code...
+  }
+
 
   readonly articles = signal<Article[]>([]);
   readonly loading = signal(true);

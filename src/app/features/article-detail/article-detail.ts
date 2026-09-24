@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Icon, IconName } from '../../shared/icon/icon';
 import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
+import { SeoService } from '../../core/services/seo.service';
 @Component({
   selector: 'app-article-detail',
   standalone: true,
@@ -19,6 +20,15 @@ export class ArticleDetail implements OnInit {
 
   private readonly route = inject(ActivatedRoute);
   private readonly articleService = inject(ArticleService);
+
+  constructor(
+    private readonly seoService: SeoService
+  ) {
+
+
+
+   
+  }
 
   readonly article = signal<Article | null>(null);
   readonly loading = signal(true);
@@ -41,12 +51,36 @@ export class ArticleDetail implements OnInit {
     this.error.set(null);
 
     this.articleService.getArticleBySlug(slug).subscribe({
+
       next: (article) => {
+
         this.article.set(article);
+
+        const title =
+          `${article.title} | Dr. Ofori Gyne Clinic`;
+
+        const description =
+          article.excerpt?.trim() ||
+          'Read women\'s health information and resources from Dr. Ofori Gyne Clinic.';
+
+        const url =
+          `https://www.gyneclinic.org.za/resources/${article.slug}`;
+
+        this.seoService.updateSeo(
+          title,
+          description,
+          url
+        );
+
         this.loading.set(false);
       },
+
       error: (error) => {
-        console.error('Failed to load article:', error);
+
+        console.error(
+          'Failed to load article:',
+          error
+        );
 
         this.error.set(
           'We could not find this article.'
@@ -54,6 +88,7 @@ export class ArticleDetail implements OnInit {
 
         this.loading.set(false);
       }
+
     });
   }
 

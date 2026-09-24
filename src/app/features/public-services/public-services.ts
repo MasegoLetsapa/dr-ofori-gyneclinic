@@ -17,6 +17,7 @@ import { DecimalPipe } from '@angular/common';
 import { Appointment } from '../../pages/appointment/appointment';
 import { ActivatedRoute } from '@angular/router';
 import { SocialFloat } from '../../shared/social-float/social-float';
+import { SeoService } from '../../core/services/seo.service';
 
 
 @Component({
@@ -44,6 +45,20 @@ export class PublicServices implements OnInit {
   loading = signal(true);
 
   error = signal('');
+
+
+  constructor(
+    private readonly seoService: SeoService
+  ) {
+
+    this.seoService.updateSeo(
+      'Women\'s Healthcare Services | Dr. Ofori Gyne Clinic',
+      'Explore pregnancy care, family planning, Pap smears, ultrasound, fertility care and menopause care at Dr. Ofori Gyne Clinic in Mahikeng and Lichtenburg, North West.',
+      'https://www.gyneclinic.org.za/services'
+    );
+
+    // your existing code...
+  }
 
 
   // Currently selected service

@@ -10,6 +10,7 @@ import { Article } from '../../core/models/article.model';
 import { Branches } from '../../features/branches/branches';
 import { Testimonials } from '../../features/testimonials/testimonials';
 import { SocialFloat } from '../../shared/social-float/social-float';
+import { SeoService } from '../../core/services/seo.service';
 
 interface Service {
   number: string;
@@ -55,6 +56,19 @@ export class Home implements OnInit {
   private readonly appointmentModal = inject(AppointmentModalService);
 
   private articleService = inject(ArticleService);
+
+  constructor(
+    private readonly seoService: SeoService
+  ) {
+
+    this.seoService.updateSeo(
+      'Dr. Ofori Gyne Clinic | Women\'s Healthcare in North West',
+      'Dr. Ofori Gyne Clinic provides compassionate women\'s healthcare, pregnancy care, family planning, Pap smears, ultrasound, fertility care and menopause care in Mahikeng and Lichtenburg, North West.',
+      'https://www.gyneclinic.org.za/'
+    );
+
+    // your existing code...
+  }
 
   resources: Article[] = [];
 
