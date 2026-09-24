@@ -9,7 +9,7 @@ export class DashboardService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/admin/dashboard';
+        'https://letsapamasego-001-site1.ltempurl.com/api/admin/dashboard';
 
 
     getDashboard(): Observable<DashboardResponse> {

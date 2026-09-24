@@ -10,7 +10,7 @@ export class AuthService {
     private readonly router = inject(Router);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/auth';
+        'https://letsapamasego-001-site1.ltempurl.com/api/auth';
 
 
     // ========================================

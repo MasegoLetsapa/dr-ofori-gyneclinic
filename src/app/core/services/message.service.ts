@@ -8,7 +8,7 @@ export class MessageService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/messages';
+        'https://letsapamasego-001-site1.ltempurl.com/api/messages';
 
     /**
      * Public contact form

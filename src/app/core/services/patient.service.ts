@@ -10,7 +10,7 @@ export class PatientService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/admin/patients';
+        'https://letsapamasego-001-site1.ltempurl.com/api/admin/patients';
 
     getPatients(): Observable<Patient[]> {
         return this.http.get<Patient[]>(this.apiUrl);

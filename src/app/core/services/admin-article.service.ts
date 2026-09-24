@@ -16,7 +16,7 @@ export class AdminArticleService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/admin/articles';
+        'https://letsapamasego-001-site1.ltempurl.com/api/admin/articles';
 
     getArticles(): Observable<Article[]> {
         return this.http.get<Article[]>(

@@ -10,7 +10,7 @@ export class ServiceService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/services';
+        'https://letsapamasego-001-site1.ltempurl.com/api/services';
 
 
     // Public services.

@@ -9,7 +9,7 @@ export class AppointmentService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/appointments';
+        'https://letsapamasego-001-site1.ltempurl.com/api/appointments';
 
 
     createAppointment(

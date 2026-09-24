@@ -7,6 +7,7 @@ import { AppointmentModalService } from '../../core/services/appointment-modal.s
 import { RouterLink } from '@angular/router';
 import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
+import { Branches } from '../../features/branches/branches';
 
 interface Service {
   number: string;
@@ -46,7 +47,7 @@ interface Resource {
 }
 
 @Component({
-  imports: [Icon, Appointment, Contact, Navbar, RouterLink],
+  imports: [Icon, Appointment, Contact, Navbar, RouterLink, Branches],
   selector: 'app-home',
   standalone: true,
   styleUrl: './home.scss',

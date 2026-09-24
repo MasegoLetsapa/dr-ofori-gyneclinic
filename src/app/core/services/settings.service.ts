@@ -16,7 +16,7 @@ export class SettingsService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/settings';
+        'https://letsapamasego-001-site1.ltempurl.com/api/settings';
 
     getSettings(): Observable<ClinicSettings> {
         return this.http.get<ClinicSettings>(this.apiUrl);

@@ -12,7 +12,7 @@ export class NotificationService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/notifications';
+        'https://letsapamasego-001-site1.ltempurl.com/api/notifications';
 
     getNotifications(): Observable<Notification[]> {
         return this.http.get<Notification[]>(this.apiUrl);

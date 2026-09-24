@@ -12,7 +12,7 @@ export class ClinicSettingsService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/settings/public';
+        'https://letsapamasego-001-site1.ltempurl.com/api/settings/public';
 
     private readonly settings$ =
         this.http
