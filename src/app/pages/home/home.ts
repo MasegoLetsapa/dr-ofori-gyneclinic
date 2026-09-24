@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
 import { Branches } from '../../features/branches/branches';
+import { Testimonials } from '../../features/testimonials/testimonials';
 
 interface Service {
   number: string;
@@ -31,12 +32,7 @@ interface JourneyStep {
   description: string;
 }
 
-interface Testimonial {
-  initials: string;
-  name: string;
-  category: string;
-  quote: string;
-}
+
 
 interface Resource {
   category: string;
@@ -47,7 +43,7 @@ interface Resource {
 }
 
 @Component({
-  imports: [Icon, Appointment, Contact, Navbar, RouterLink, Branches],
+  imports: [Icon, Appointment, Contact, Navbar, RouterLink, Branches, Testimonials],
   selector: 'app-home',
   standalone: true,
   styleUrl: './home.scss',
@@ -228,29 +224,7 @@ export class Home implements OnInit {
     }
   ];
 
-  testimonials: Testimonial[] = [
-    {
-      initials: 'NS',
-      name: 'Naila S.',
-      category: 'Women’s Healthcare',
-      quote:
-        'The best! Very friendly, polite, always ready to answer all my questions.'
-    },
-    {
-      initials: 'PM',
-      name: 'Palesa M.',
-      category: 'Pregnancy Care',
-      quote:
-        'A very patient and friendly gynecologist,I felt comfortable and free to ask anything during consultation time about the pregnancy without fear of judgment.'
-    },
-    {
-      initials: 'LK',
-      name: 'Lebogang K.',
-      category: 'General Consultation',
-      quote:
-        'The clinic is beautiful, clean and welcoming. Dr. Ofori takes time to explain everything and truly cares about her patients.'
-    }
-  ];
+
 
   /*   resources: Resource[] = [
       {
