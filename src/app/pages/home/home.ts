@@ -9,6 +9,7 @@ import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
 import { Branches } from '../../features/branches/branches';
 import { Testimonials } from '../../features/testimonials/testimonials';
+import { SocialFloat } from '../../shared/social-float/social-float';
 
 interface Service {
   number: string;
@@ -43,7 +44,7 @@ interface Resource {
 }
 
 @Component({
-  imports: [Icon, Appointment, Contact, Navbar, RouterLink, Branches, Testimonials],
+  imports: [Icon, Appointment, Contact, Navbar, RouterLink, Branches, Testimonials, SocialFloat],
   selector: 'app-home',
   standalone: true,
   styleUrl: './home.scss',

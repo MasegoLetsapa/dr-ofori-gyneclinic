@@ -16,12 +16,13 @@ import { AppointmentModalService } from '../../core/services/appointment-modal.s
 import { DecimalPipe } from '@angular/common';
 import { Appointment } from '../../pages/appointment/appointment';
 import { ActivatedRoute } from '@angular/router';
+import { SocialFloat } from '../../shared/social-float/social-float';
 
 
 @Component({
   selector: 'app-public-services',
   standalone: true,
-  imports: [Icon, DecimalPipe, Appointment],
+  imports: [Icon, DecimalPipe, Appointment, SocialFloat],
   templateUrl: './public-services.html',
   styleUrl: './public-services.scss'
 })

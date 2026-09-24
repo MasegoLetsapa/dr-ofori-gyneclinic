@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Icon, IconName } from '../../shared/icon/icon';
 import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
+import { SocialFloat } from '../../shared/social-float/social-float';
 
 @Component({
   selector: 'app-resources',
@@ -12,8 +13,8 @@ import { Article } from '../../core/models/article.model';
     CommonModule,
     RouterLink,
     Icon,
-
-  ],
+    SocialFloat
+],
   templateUrl: './resources.html',
   styleUrl: './resources.scss'
 })

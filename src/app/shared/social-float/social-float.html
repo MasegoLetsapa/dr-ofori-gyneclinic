@@ -1,0 +1,45 @@
+<div class="social-float">
+
+    <!-- Social buttons -->
+    <div class="social-actions" [class.is-open]="isOpen()">
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/gyneclinicdrofori/" target="_blank" rel="noopener noreferrer"
+            class="social-action instagram" aria-label="Instagram">
+            <app-icon name="instagram" [size]="20" [strokeWidth]="1.8" />
+        </a>
+
+
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/gyneclinicdrofori/" target="_blank" rel="noopener noreferrer"
+            class="social-action facebook" aria-label="Facebook">
+            <app-icon name="facebook" [size]="20" [strokeWidth]="1.8" />
+        </a>
+
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/27648838483" target="_blank" rel="noopener noreferrer" class="social-action whatsapp"
+            aria-label="WhatsApp">
+            <app-icon name="whatsapp" [size]="20" [strokeWidth]="1.8" />
+        </a>
+
+    </div>
+
+
+    <!-- Main toggle -->
+    <button type="button" class="social-toggle" [class.is-open]="isOpen()" (click)="toggle()"
+        [attr.aria-expanded]="isOpen()" aria-label="Social media">
+
+        @if (isOpen()) {
+
+        <app-icon name="close" [size]="22" [strokeWidth]="1.8" />
+
+        } @else {
+
+        <app-icon name="whatsapp" [size]="23" [strokeWidth]="1.8" />
+
+        }
+
+    </button>
+
+</div>
