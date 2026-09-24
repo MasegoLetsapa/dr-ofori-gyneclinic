@@ -193,10 +193,6 @@ export class Appointments {
       .getCommunicationHistory(appointment.id)
       .subscribe({
         next: communications => {
-          console.log(
-            'Communication history received:',
-            communications
-          );
 
           this.communicationHistory = communications;
           this.communicationsLoading = false;

@@ -133,11 +133,6 @@ export class Settings implements OnInit {
 
         next: settings => {
 
-          console.log(
-            'Clinic settings received:',
-            settings
-          );
-
           this.settingsForm.patchValue({
 
             clinicName:
@@ -180,11 +175,6 @@ export class Settings implements OnInit {
               settings.messageNotificationsEnabled
           });
 
-          console.log(
-            'Settings form populated:',
-            this.settingsForm.getRawValue()
-          );
-
           this.isLoading.set(false);
         },
 
@@ -204,10 +194,6 @@ export class Settings implements OnInit {
         },
 
         complete: () => {
-
-          console.log(
-            'Settings request completed.'
-          );
 
           this.isLoading.set(false);
         }

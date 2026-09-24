@@ -160,11 +160,6 @@ export class Contact implements OnInit {
 
         next: response => {
 
-          console.log(
-            'Message submitted:',
-            response
-          );
-
           this.submitting = false;
 
           this.successMessage =

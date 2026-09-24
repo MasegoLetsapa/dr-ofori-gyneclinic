@@ -166,7 +166,6 @@ export class ArticleDetail implements OnInit {
       });
     } catch (error) {
       // User cancelling the native share dialog is not an error we need to show.
-      console.log('Native share cancelled or unavailable.', error);
     }
   }
 

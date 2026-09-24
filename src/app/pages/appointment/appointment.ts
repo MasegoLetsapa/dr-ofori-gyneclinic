@@ -329,11 +329,6 @@ export class Appointment implements OnInit {
 
         next: response => {
 
-          console.log(
-            'Appointment created:',
-            response
-          );
-
           this.submitting = false;
 
           this.successMessage =
