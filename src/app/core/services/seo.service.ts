@@ -12,7 +12,9 @@ export class SeoService {
     updateSeo(
         title: string,
         description: string,
-        url: string
+        url: string,
+        image?: string,
+        type: string = 'website'
     ): void {
 
         this.title.setTitle(title);
@@ -27,6 +29,7 @@ export class SeoService {
             content: 'index, follow'
         });
 
+        // Open Graph
         this.meta.updateTag({
             property: 'og:title',
             content: title
@@ -44,7 +47,7 @@ export class SeoService {
 
         this.meta.updateTag({
             property: 'og:type',
-            content: 'website'
+            content: type
         });
 
         this.meta.updateTag({
@@ -52,6 +55,14 @@ export class SeoService {
             content: 'Dr. Ofori Gyne Clinic'
         });
 
+        if (image) {
+            this.meta.updateTag({
+                property: 'og:image',
+                content: image
+            });
+        }
+
+        // Twitter / X
         this.meta.updateTag({
             name: 'twitter:title',
             content: title
@@ -64,7 +75,14 @@ export class SeoService {
 
         this.meta.updateTag({
             name: 'twitter:card',
-            content: 'summary_large_image'
+            content: image ? 'summary_large_image' : 'summary'
         });
+
+        if (image) {
+            this.meta.updateTag({
+                name: 'twitter:image',
+                content: image
+            });
+        }
     }
 }

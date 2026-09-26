@@ -2,6 +2,7 @@ import { inject, Service, signal } from '@angular/core';
 import { LoginRequest, LoginResponse } from '../models/auth.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Service()
 export class AuthService {
@@ -9,9 +10,11 @@ export class AuthService {
     private readonly http = inject(HttpClient);
     private readonly router = inject(Router);
 
-    private readonly apiUrl =
+    /* private readonly apiUrl =
         'https://letsapamasego-001-site1.ltempurl.com/api/auth';
-
+ */
+    private readonly apiUrl =
+        `${environment.apiUrl}/auth`;
 
     // ========================================
     // AUTHENTICATED STATE

@@ -34,6 +34,16 @@
                 to support women through every stage of life.
             </p>
 
+            <div class="flex flex-col items-start justify-center text-center">
+                <p class="text-sm text-red-300">
+                    {{ error() }}
+                </p>
+
+                <a href="/" class="mt-6 text-sm text-pink-300 transition hover:text-white">
+                    ← Back to home
+                </a>
+            </div>
+
         </div>
 
         <!-- Loading -->
@@ -62,6 +72,7 @@
 
         }
 
+
         <!-- Empty -->
         @else if (articles().length === 0) {
 
@@ -73,6 +84,7 @@
         </div>
 
         }
+
 
         <!-- Articles -->
         @else {
@@ -183,6 +195,16 @@
 
         }
 
+    </div>
+
+    <div class="flex flex-col items-start justify-center text-center">
+        <p class="text-sm text-red-300">
+            {{ error() }}
+        </p>
+
+        <a href="/" class="mt-6 text-sm text-pink-300 transition hover:text-white">
+            ← Back to home
+        </a>
     </div>
 </section>
 

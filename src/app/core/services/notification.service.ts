@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Notification } from '../models/notification.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -11,8 +12,14 @@ export class NotificationService {
 
     private readonly http = inject(HttpClient);
 
-    private readonly apiUrl =
+    /* private readonly apiUrl =
         'https://letsapamasego-001-site1.ltempurl.com/api/notifications';
+ */
+
+    private readonly apiUrl =
+        `${environment.apiUrl}/notifications`;
+
+
 
     getNotifications(): Observable<Notification[]> {
         return this.http.get<Notification[]>(this.apiUrl);

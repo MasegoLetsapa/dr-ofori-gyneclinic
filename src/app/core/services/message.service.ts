@@ -2,17 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { CreateMessageRequest, Message, MessageResponse, UpdateMessageStatusRequest } from '../models/message.model';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Service()
 export class MessageService {
     private readonly http = inject(HttpClient);
 
-    private readonly apiUrl =
+    /* private readonly apiUrl =
         'https://letsapamasego-001-site1.ltempurl.com/api/messages';
+ */
+    private readonly apiUrl =
+        `${environment.apiUrl}/messages`;
 
     /**
-     * Public contact form
-     */
+ * Public contact form
+ */
     createMessage(
         request: CreateMessageRequest
     ): Observable<MessageResponse> {

@@ -53,6 +53,16 @@
 
         </div>
 
+        <div class="flex flex-col items-start justify-center text-center">
+            <p class="text-sm text-red-300">
+                {{ error() }}
+            </p>
+
+            <a href="/" class="mt-6 text-sm text-pink-300 transition hover:text-white">
+                ← Back to home
+            </a>
+        </div>
+
 
         <!-- Loading -->
         @if (loading()) {
@@ -191,6 +201,16 @@
 
         }
 
+    </div>
+
+    <div class="flex flex-col items-start justify-center text-center">
+        <p class="text-sm text-red-300">
+            {{ error() }}
+        </p>
+    
+        <a href="/" class="mt-6 text-sm text-pink-300 transition hover:text-white">
+            ← Back to home
+        </a>
     </div>
 
 </section>

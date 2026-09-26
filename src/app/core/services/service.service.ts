@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ClinicService, CreateServiceRequest, UpdateServiceRequest } from '../models/service.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -9,9 +10,11 @@ import { ClinicService, CreateServiceRequest, UpdateServiceRequest } from '../mo
 export class ServiceService {
     private readonly http = inject(HttpClient);
 
-    private readonly apiUrl =
-        'https://letsapamasego-001-site1.ltempurl.com/api/services';
+    /* private readonly apiUrl =
+        'https://letsapamasego-001-site1.ltempurl.com/api/services'; */
 
+    private readonly apiUrl =
+        `${environment.apiUrl}/services`;
 
     // Public services.
     // The API returns active services from GET /api/Services.

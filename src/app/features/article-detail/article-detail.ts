@@ -27,7 +27,7 @@ export class ArticleDetail implements OnInit {
 
 
 
-   
+
   }
 
   readonly article = signal<Article | null>(null);
@@ -66,10 +66,16 @@ export class ArticleDetail implements OnInit {
         const url =
           `https://www.gyneclinic.org.za/resources/${article.slug}`;
 
+        const image = article.featuredMediaType === 'image'
+          ? article.featuredImage ?? undefined
+          : undefined;
+
         this.seoService.updateSeo(
           title,
           description,
-          url
+          url,
+          image,
+          'article'
         );
 
         this.loading.set(false);

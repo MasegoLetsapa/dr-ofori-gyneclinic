@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreatePatientRequest, Patient, PatientProfile, UpdatePatientRequest } from '../models/patient.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -9,8 +10,11 @@ import { CreatePatientRequest, Patient, PatientProfile, UpdatePatientRequest } f
 export class PatientService {
     private readonly http = inject(HttpClient);
 
-    private readonly apiUrl =
+    /* private readonly apiUrl =
         'https://letsapamasego-001-site1.ltempurl.com/api/admin/patients';
+ */
+    private readonly apiUrl =
+        `${environment.apiUrl}/admin/patients`;
 
     getPatients(): Observable<Patient[]> {
         return this.http.get<Patient[]>(this.apiUrl);

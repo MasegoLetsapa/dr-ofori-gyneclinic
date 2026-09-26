@@ -2,15 +2,18 @@ import { inject, Service } from '@angular/core';
 import { Appointment, AppointmentResponse, CommunicationLog, CreateAppointmentRequest } from '../models/appointment.model';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 
 @Service()
 export class AppointmentService {
     private readonly http = inject(HttpClient);
 
-    private readonly apiUrl =
+    /* private readonly apiUrl =
         'https://letsapamasego-001-site1.ltempurl.com/api/appointments';
-
+ */
+    private readonly apiUrl =
+        `${environment.apiUrl}/appointments`;
 
     createAppointment(
         request: CreateAppointmentRequest

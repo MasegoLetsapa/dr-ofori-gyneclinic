@@ -7,6 +7,7 @@ import {
     CreateArticleRequest,
     UpdateArticleRequest
 } from '../models/article.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -15,8 +16,11 @@ export class AdminArticleService {
 
     private readonly http = inject(HttpClient);
 
+    /* private readonly apiUrl =
+        'https://letsapamasego-001-site1.ltempurl.com/api/admin/articles'; */
+
     private readonly apiUrl =
-        'https://letsapamasego-001-site1.ltempurl.com/api/admin/articles';
+        `${environment.apiUrl}/admin/articles`;
 
     getArticles(): Observable<Article[]> {
         return this.http.get<Article[]>(
