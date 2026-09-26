@@ -17,6 +17,11 @@ export class AdminSidebar {
       icon: 'dashboard'
     },
     {
+      label: 'Analytics',
+      route: '/admin/analytics',
+      icon: 'analytics'
+    },
+    {
       label: 'Appointments',
       route: '/admin/appointments',
       icon: 'calendar'

@@ -1,0 +1,82 @@
+:host {
+    display: block;
+}
+
+.analytics-card {
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.03);
+    padding: 1.25rem;
+    transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        transform 180ms ease;
+}
+
+.analytics-card:hover {
+    border-color: rgb(232 121 249 / 0.2);
+    background: rgb(255 255 255 / 0.045);
+    transform: translateY(-1px);
+}
+
+.analytics-card-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.35);
+}
+
+.analytics-card-value {
+    margin-top: 0.75rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: rgb(255 255 255 / 0.92);
+}
+
+.analytics-card-description {
+    margin-top: 0.75rem;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: rgb(255 255 255 / 0.28);
+}
+
+
+.analytics-platform-card {
+    border: 1px solid rgb(255 255 255 / 0.07);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.025);
+    padding: 1.25rem;
+    transition:
+        border-color 180ms ease,
+        background-color 180ms ease;
+}
+
+.analytics-platform-card:hover {
+    border-color: rgb(232 121 249 / 0.18);
+    background: rgb(255 255 255 / 0.04);
+}
+
+.analytics-platform-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.38);
+}
+
+.analytics-platform-value {
+    margin-top: 0.65rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: rgb(232 121 249 / 0.9);
+}
+
+.analytics-trend-card {
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.03);
+    padding: 1.5rem;
+}

@@ -14,7 +14,7 @@ import { Resources } from './features/resources/resources';
 import { ArticleDetail } from './features/article-detail/article-detail';
 import { Articles } from './pages/admin/articles/articles';
 import { ArticleEditor } from './pages/admin/articles/article-editor/article-editor';
-
+import { Analytics } from './pages/admin/analytics/analytics';
 export const routes: Routes = [
     // ========================================
     // PUBLIC WEBSITE
@@ -62,6 +62,11 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: Dashboard
+                    },
+                    // ANALYTICS
+                    {
+                        path: 'analytics',
+                        component: Analytics
                     },
                     // APPPOINTMENTS
                     {

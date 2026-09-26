@@ -5,6 +5,9 @@ import { Icon, IconName } from '../../shared/icon/icon';
 import { ArticleService } from '../../core/services/article.service';
 import { Article } from '../../core/models/article.model';
 import { SeoService } from '../../core/services/seo.service';
+import { AnalyticsService } from '../../core/services/analytics';
+import { VisitorIdService } from '../../core/services/visitor-id';
+
 @Component({
   selector: 'app-article-detail',
   standalone: true,
@@ -22,13 +25,10 @@ export class ArticleDetail implements OnInit {
   private readonly articleService = inject(ArticleService);
 
   constructor(
-    private readonly seoService: SeoService
-  ) {
-
-
-
-
-  }
+    private readonly seoService: SeoService,
+    private readonly analyticsService: AnalyticsService,
+    private readonly visitorIdService: VisitorIdService
+  ) { }
 
   readonly article = signal<Article | null>(null);
   readonly loading = signal(true);
@@ -55,6 +55,11 @@ export class ArticleDetail implements OnInit {
       next: (article) => {
 
         this.article.set(article);
+
+        this.analyticsService.trackArticleView(
+          article.id,
+          this.visitorIdService.getVisitorId()
+        );
 
         const title =
           `${article.title} | Dr. Ofori Gyne Clinic`;
@@ -140,21 +145,35 @@ export class ArticleDetail implements OnInit {
     const url = this.getArticleUrl();
     const text = `${article.title} — ${url}`;
 
-    window.open(
+    const shareWindow = window.open(
       `https://wa.me/?text=${encodeURIComponent(text)}`,
       '_blank',
       'noopener,noreferrer'
     );
+
+    if (shareWindow) {
+      this.trackArticleShare('whatsapp');
+    }
   }
 
   shareFacebook(): void {
+    const article = this.article();
+
+    if (!article) {
+      return;
+    }
+
     const url = this.getArticleUrl();
 
-    window.open(
+    const shareWindow = window.open(
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
       '_blank',
       'noopener,noreferrer'
     );
+
+    if (shareWindow) {
+      this.trackArticleShare('facebook');
+    }
   }
 
   shareX(): void {
@@ -165,14 +184,17 @@ export class ArticleDetail implements OnInit {
     }
 
     const url = this.getArticleUrl();
-
     const text = article.title;
 
-    window.open(
+    const shareWindow = window.open(
       `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
       '_blank',
       'noopener,noreferrer'
     );
+
+    if (shareWindow) {
+      this.trackArticleShare('x');
+    }
   }
 
   async copyLink(): Promise<void> {
@@ -182,6 +204,8 @@ export class ArticleDetail implements OnInit {
       await navigator.clipboard.writeText(url);
 
       this.copied.set(true);
+
+      this.trackArticleShare('copy-link');
 
       setTimeout(() => {
         this.copied.set(false);
@@ -205,6 +229,9 @@ export class ArticleDetail implements OnInit {
         text: article.excerpt || article.title,
         url: this.getArticleUrl()
       });
+
+      this.trackArticleShare('native-share');
+
     } catch (error) {
       // User cancelling the native share dialog is not an error we need to show.
     }
@@ -213,6 +240,20 @@ export class ArticleDetail implements OnInit {
   canNativeShare(): boolean {
     return typeof navigator !== 'undefined' &&
       typeof navigator.share === 'function';
+  }
+
+  private trackArticleShare(platform: string): void {
+    const article = this.article();
+
+    if (!article) {
+      return;
+    }
+
+    this.analyticsService.trackArticleShare(
+      article.id,
+      platform,
+      this.visitorIdService.getVisitorId()
+    );
   }
 
   private getArticleUrl(): string {
