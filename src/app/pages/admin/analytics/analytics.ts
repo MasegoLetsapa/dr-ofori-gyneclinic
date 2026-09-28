@@ -6,6 +6,7 @@ import {
   ArticleAnalytics,
   DeviceAnalytics,
   TopPageAnalytics,
+  VisitorLocationAnalytics,
   VisitsTrend
 } from '../../../core/models/analytics.model';
 
@@ -39,11 +40,15 @@ export class Analytics implements OnInit {
   readonly deviceBreakdown = signal<DeviceAnalytics[]>([]);
   readonly deviceLoading = signal(false);
 
+  readonly visitorLocations = signal<VisitorLocationAnalytics[]>([]);
+  readonly locationLoading = signal(false);
+
   ngOnInit(): void {
     this.loadAnalytics();
     this.loadVisitsTrend();
     this.loadTopPages();
     this.loadDeviceBreakdown();
+    this.loadVisitorLocations();
   }
 
   private loadAnalytics(): void {
@@ -132,6 +137,21 @@ export class Analytics implements OnInit {
       error: (error) => {
         console.error('Failed to load device breakdown:', error);
         this.deviceLoading.set(false);
+      }
+    });
+  }
+
+  private loadVisitorLocations(): void {
+    this.locationLoading.set(true);
+
+    this.analyticsService.getVisitorLocations().subscribe({
+      next: (locations) => {
+        this.visitorLocations.set(locations);
+        this.locationLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Failed to load visitor locations:', error);
+        this.locationLoading.set(false);
       }
     });
   }

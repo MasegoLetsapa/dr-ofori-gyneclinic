@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AnalyticsSummary, ArticleAnalytics, DeviceAnalytics, TopPageAnalytics, VisitsTrend } from '../models/analytics.model';
+import { AnalyticsSummary, ArticleAnalytics, DeviceAnalytics, TopPageAnalytics, VisitorLocationAnalytics, VisitsTrend } from '../models/analytics.model';
 
 @Injectable({
     providedIn: 'root'
@@ -88,6 +88,12 @@ export class AnalyticsService {
     getDeviceBreakdown() {
         return this.http.get<DeviceAnalytics[]>(
             `${this.apiUrl}/admin/devices`
+        );
+    }
+
+    getVisitorLocations() {
+        return this.http.get<VisitorLocationAnalytics[]>(
+            `${this.apiUrl}/admin/locations`
         );
     }
 }

@@ -56,3 +56,11 @@ export interface DeviceAnalytics {
     uniqueVisitors: number;
     percentage: number;
 }
+
+export interface VisitorLocationAnalytics {
+    country: string;
+    region: string | null;
+    city: string | null;
+    visits: number;
+    uniqueVisitors: number;
+}
