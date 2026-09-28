@@ -380,6 +380,235 @@
         </div>
     </section>
 
+    <!-- Top Pages -->
+    <section class="mb-10">
+        <div class="mb-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-400">
+                Engagement
+            </p>
+
+            <h2 class="mt-2 font-serif text-2xl text-white">
+                Top Pages
+            </h2>
+
+            <p class="mt-2 text-sm text-white/40">
+                Pages receiving the most recorded visits.
+            </p>
+        </div>
+
+        <div class="analytics-top-pages">
+
+            @if (topPagesLoading()) {
+            <div class="flex min-h-[220px] items-center justify-center">
+                <p class="text-sm text-white/40">
+                    Loading top pages...
+                </p>
+            </div>
+            }
+
+            @if (!topPagesLoading() && topPages().length > 0) {
+
+            <div class="space-y-2">
+
+                @for (page of topPages(); track page.pagePath; let i = $index) {
+
+                <div class="analytics-page-row">
+
+                    <!-- Rank -->
+                    <div class="analytics-page-rank">
+                        {{ (i + 1).toString().padStart(2, '0') }}
+                    </div>
+
+                    <!-- Page information -->
+                    <div class="min-w-0 flex-1">
+
+                        <div class="truncate text-sm font-medium text-white/85">
+                            {{ getPageName(page.pagePath) }}
+                        </div>
+
+                        <div class="mt-1 truncate text-xs text-white/25">
+                            {{ page.pagePath }}
+                        </div>
+
+                    </div>
+
+                    <!-- Visits -->
+                    <div class="hidden text-right sm:block">
+                        <div class="text-sm font-medium text-white/75">
+                            {{ page.visits | number }}
+                        </div>
+
+                        <div class="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/25">
+                            Visits
+                        </div>
+                    </div>
+
+                    <!-- Unique visitors -->
+                    <div class="text-right">
+                        <div class="text-sm font-medium text-fuchsia-300/90">
+                            {{ page.uniqueVisitors | number }}
+                        </div>
+
+                        <div class="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/25">
+                            Unique
+                        </div>
+                    </div>
+
+                    <!-- Visit bar -->
+                    <div class="hidden w-32 lg:block">
+                        <div class="h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+
+                            <div class="h-full rounded-full bg-fuchsia-500/70 transition-all duration-500"
+                                [style.width.%]="
+                        topPages()[0].visits > 0
+                          ? (page.visits / topPages()[0].visits) * 100
+                          : 0
+                      "></div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+            @if (!topPagesLoading() && topPages().length === 0) {
+            <div class="flex min-h-[220px] items-center justify-center">
+                <p class="text-sm text-white/30">
+                    No page visit data available.
+                </p>
+            </div>
+            }
+
+        </div>
+    </section>
+
+    <!-- Device Breakdown -->
+    <section class="mb-10">
+        <div class="mb-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-400">
+                Audience
+            </p>
+
+            <h2 class="mt-2 font-serif text-2xl text-white">
+                Device Breakdown
+            </h2>
+
+            <p class="mt-2 text-sm text-white/40">
+                Devices used to access the public website.
+            </p>
+        </div>
+
+        <div class="analytics-device-card">
+
+            @if (deviceLoading()) {
+            <div class="flex min-h-[220px] items-center justify-center">
+                <p class="text-sm text-white/40">
+                    Loading device data...
+                </p>
+            </div>
+            }
+
+            @if (!deviceLoading() && deviceBreakdown().length > 0) {
+
+            <div class="grid gap-4 md:grid-cols-3">
+
+                @for (device of deviceBreakdown(); track device.deviceType) {
+
+                <div class="analytics-device-item">
+
+                    <!-- Header -->
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div>
+                            <p class="analytics-device-name">
+                                {{ getDeviceName(device.deviceType) }}
+                            </p>
+
+                            <p class="mt-1 text-xs text-white/25">
+                                {{ device.uniqueVisitors | number }} unique visitors
+                            </p>
+                        </div>
+
+                        <span class="font-serif text-xl text-fuchsia-300">
+                            {{ device.percentage | number:'1.0-1' }}%
+                        </span>
+
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="mt-5 h-2 overflow-hidden rounded-full bg-white/[0.05]">
+
+                        <div class="h-full rounded-full bg-fuchsia-500/70 transition-all duration-500"
+                            [style.width.%]="device.percentage"></div>
+
+                    </div>
+
+                    <!-- Visit count -->
+                    <div class="mt-4 flex items-end justify-between">
+
+                        <div>
+                            <p class="text-2xl font-serif text-white/90">
+                                {{ device.visits | number }}
+                            </p>
+
+                            <p class="mt-1 text-[10px] uppercase tracking-[0.14em] text-white/25">
+                                Visits
+                            </p>
+                        </div>
+
+                        @if (device.deviceType.toLowerCase() === 'desktop') {
+                        <svg class="h-7 w-7 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="3" y="4" width="18" height="13" rx="2"></rect>
+                            <path d="M8 21h8"></path>
+                            <path d="M12 17v4"></path>
+                        </svg>
+                        }
+
+                        @if (device.deviceType.toLowerCase() === 'mobile') {
+                        <svg class="h-7 w-7 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
+                            <path d="M10 5h4"></path>
+                            <path d="M11 18.5h2"></path>
+                        </svg>
+                        }
+
+                        @if (device.deviceType.toLowerCase() === 'tablet') {
+                        <svg class="h-7 w-7 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="5" y="2.5" width="14" height="19" rx="2"></rect>
+                            <path d="M10 5h4"></path>
+                            <path d="M11 18.5h2"></path>
+                        </svg>
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+            @if (!deviceLoading() && deviceBreakdown().length === 0) {
+            <div class="flex min-h-[220px] items-center justify-center">
+                <p class="text-sm text-white/30">
+                    No device data available.
+                </p>
+            </div>
+            }
+
+        </div>
+    </section>
+
     <!-- ARTICLE OVERVIEW -->
     <div class="mb-10">
 

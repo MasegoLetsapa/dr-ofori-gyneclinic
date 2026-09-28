@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import {
   AnalyticsSummary,
   ArticleAnalytics,
+  DeviceAnalytics,
+  TopPageAnalytics,
   VisitsTrend
 } from '../../../core/models/analytics.model';
 
@@ -31,9 +33,17 @@ export class Analytics implements OnInit {
   readonly trendDays = signal(30);
   readonly trendLoading = signal(false);
 
+  readonly topPages = signal<TopPageAnalytics[]>([]);
+  readonly topPagesLoading = signal(false);
+
+  readonly deviceBreakdown = signal<DeviceAnalytics[]>([]);
+  readonly deviceLoading = signal(false);
+
   ngOnInit(): void {
     this.loadAnalytics();
     this.loadVisitsTrend();
+    this.loadTopPages();
+    this.loadDeviceBreakdown();
   }
 
   private loadAnalytics(): void {
@@ -92,6 +102,36 @@ export class Analytics implements OnInit {
       error: (error) => {
         console.error('Failed to load visitor trend:', error);
         this.trendLoading.set(false);
+      }
+    });
+  }
+
+  private loadTopPages(): void {
+    this.topPagesLoading.set(true);
+
+    this.analyticsService.getTopPages(10).subscribe({
+      next: (pages) => {
+        this.topPages.set(pages);
+        this.topPagesLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Failed to load top pages:', error);
+        this.topPagesLoading.set(false);
+      }
+    });
+  }
+
+  private loadDeviceBreakdown(): void {
+    this.deviceLoading.set(true);
+
+    this.analyticsService.getDeviceBreakdown().subscribe({
+      next: (devices) => {
+        this.deviceBreakdown.set(devices);
+        this.deviceLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Failed to load device breakdown:', error);
+        this.deviceLoading.set(false);
       }
     });
   }
@@ -180,4 +220,47 @@ export class Analytics implements OnInit {
       .find(x => x.platform === platform)
       ?.count ?? 0;
   }
+
+  getPageName(path: string): string {
+    if (path === '/') {
+      return 'Home';
+    }
+
+    if (path.startsWith('/resources/')) {
+      return 'Article';
+    }
+
+    const segments = path
+      .split('/')
+      .filter(Boolean);
+
+    if (segments.length === 0) {
+      return 'Home';
+    }
+
+    return segments
+      .map(segment =>
+        segment
+          .replace(/-/g, ' ')
+          .replace(/\b\w/g, char => char.toUpperCase())
+      )
+      .join(' / ');
+  }
+
+  getDeviceName(deviceType: string): string {
+    switch (deviceType.toLowerCase()) {
+      case 'desktop':
+        return 'Desktop';
+
+      case 'mobile':
+        return 'Mobile';
+
+      case 'tablet':
+        return 'Tablet';
+
+      default:
+        return deviceType;
+    }
+  }
+
 }

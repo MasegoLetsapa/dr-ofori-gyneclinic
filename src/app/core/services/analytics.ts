@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AnalyticsSummary, ArticleAnalytics, VisitsTrend } from '../models/analytics.model';
+import { AnalyticsSummary, ArticleAnalytics, DeviceAnalytics, TopPageAnalytics, VisitsTrend } from '../models/analytics.model';
 
 @Injectable({
     providedIn: 'root'
@@ -76,6 +76,18 @@ export class AnalyticsService {
     getVisitsTrend(days: number = 30) {
         return this.http.get<VisitsTrend[]>(
             `${this.apiUrl}/admin/visits-trend?days=${days}`
+        );
+    }
+
+    getTopPages(limit: number = 10) {
+        return this.http.get<TopPageAnalytics[]>(
+            `${this.apiUrl}/admin/top-pages?limit=${limit}`
+        );
+    }
+
+    getDeviceBreakdown() {
+        return this.http.get<DeviceAnalytics[]>(
+            `${this.apiUrl}/admin/devices`
         );
     }
 }

@@ -43,3 +43,16 @@ export interface VisitsTrend {
     visits: number;
     uniqueVisitors: number;
 }
+
+export interface TopPageAnalytics {
+    pagePath: string;
+    visits: number;
+    uniqueVisitors: number;
+}
+
+export interface DeviceAnalytics {
+    deviceType: string;
+    visits: number;
+    uniqueVisitors: number;
+    percentage: number;
+}

@@ -32,8 +32,16 @@ export class App {
       )
       .subscribe(event => {
 
+        const rawPath = event.urlAfterRedirects;
+
+        if (rawPath.startsWith('/admin')) {
+          return;
+        }
+
+        const path = rawPath.split('?')[0].split('#')[0] || '/';
+
         this.analyticsService.trackVisit(
-          event.urlAfterRedirects,
+          path,
           visitorId,
           this.getDeviceType()
         );
