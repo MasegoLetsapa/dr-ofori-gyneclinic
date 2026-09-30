@@ -10,6 +10,8 @@ import { ServiceService } from '../../core/services/service.service';
 import { ClinicSettingsService } from '../../core/services/clinic-settings.service';
 import { PublicClinicSettings } from '../../core/models/public-clinic-settings.model';
 import { AppointmentModalService } from '../../core/services/appointment-modal.service';
+import { VisitorIdService } from '../../core/services/visitor-id';
+import { TrafficSourceService } from '../../core/services/traffic-source.service';
 
 @Component({
   imports: [ReactiveFormsModule, Icon],
@@ -26,6 +28,12 @@ export class Appointment implements OnInit {
 
 
   private readonly appointmentModal = inject(AppointmentModalService);
+
+  private readonly visitorIdService =
+    inject(VisitorIdService);
+
+  private readonly trafficSourceService =
+    inject(TrafficSourceService);
 
   isOpen = this.appointmentModal.isOpen;
 
@@ -128,6 +136,11 @@ export class Appointment implements OnInit {
     preferredTime: [
       '',
       Validators.required
+    ],
+
+    practiceLocation: [
+      '',
+      [Validators.required]
     ],
 
     message: [
@@ -294,8 +307,13 @@ export class Appointment implements OnInit {
       this.appointmentForm.getRawValue();
 
 
-    const request: CreateAppointmentRequest = {
+    const visitorId =
+      this.visitorIdService.getVisitorId();
 
+    const trafficData =
+      this.trafficSourceService.getTrafficData();
+
+    const request: CreateAppointmentRequest = {
       firstName:
         formValue.firstName ?? '',
 
@@ -317,9 +335,24 @@ export class Appointment implements OnInit {
       preferredTime:
         formValue.preferredTime ?? '',
 
-      message:
-        formValue.message ?? ''
+      practiceLocation: formValue.practiceLocation ?? '',
 
+      message:
+        formValue.message ?? '',
+
+      visitorId,
+
+      sessionId:
+        trafficData.sessionId,
+
+      trafficSource:
+        trafficData.trafficSource,
+
+      trafficMedium:
+        trafficData.trafficMedium,
+
+      trafficCampaign:
+        trafficData.trafficCampaign
     };
 
 

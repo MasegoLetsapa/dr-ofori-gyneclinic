@@ -33,6 +33,12 @@ export interface CreateMessageRequest {
     phone?: string;
     subject?: string;
     messageBody: string;
+    // Analytics attribution
+    visitorId?: string;
+    sessionId?: string;
+    trafficSource?: string;
+    trafficMedium?: string;
+    trafficCampaign?: string | null;
 }
 
 export interface UpdateMessageStatusRequest {

@@ -157,6 +157,549 @@
 
     </div>
 
+    <section class="mb-10">
+        <div class="mb-4">
+            <p class="analytics-card-label">Conversions</p>
+            <h2 class="text-xl font-semibold text-white">
+                Website Conversion Overview
+            </h2>
+            <p class="mt-1 text-sm text-white/50">
+                Appointment requests and contact enquiries generated through the website.
+            </p>
+        </div>
+
+        @if (conversionLoading()) {
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            @for (item of [1, 2, 3, 4]; track item) {
+            <div class="analytics-card">
+                <div class="h-3 w-24 animate-pulse rounded bg-white/10"></div>
+                <div class="mt-4 h-8 w-16 animate-pulse rounded bg-white/10"></div>
+            </div>
+            }
+        </div>
+        }
+
+        @if (!conversionLoading() && conversions()) {
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+            <div class="analytics-card">
+                <p class="analytics-card-label">
+                    Appointment Requests
+                </p>
+
+                <p class="analytics-card-value">
+                    {{ conversions()!.appointments }}
+                </p>
+
+                <p class="analytics-card-description">
+                    Total appointment submissions
+                </p>
+            </div>
+
+            <div class="analytics-card">
+                <p class="analytics-card-label">
+                    Contact Enquiries
+                </p>
+
+                <p class="analytics-card-value">
+                    {{ conversions()!.contactEnquiries }}
+                </p>
+
+                <p class="analytics-card-description">
+                    Messages submitted through the website
+                </p>
+            </div>
+
+            <div class="analytics-card">
+                <p class="analytics-card-label">
+                    Approved Appointments
+                </p>
+
+                <p class="analytics-card-value">
+                    {{ conversions()!.approvedAppointments }}
+                </p>
+
+                <p class="analytics-card-description">
+                    Requests approved or confirmed
+                </p>
+            </div>
+
+            <div class="analytics-card">
+                <p class="analytics-card-label">
+                    Completed Appointments
+                </p>
+
+                <p class="analytics-card-value">
+                    {{ conversions()!.completedAppointments }}
+                </p>
+
+                <p class="analytics-card-description">
+                    Appointments marked completed
+                </p>
+            </div>
+
+        </div>
+
+        <div class="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="analytics-card-label">
+                        Request Rate
+                    </p>
+
+                    <p class="text-sm text-white/50">
+                        Appointment requests + contact enquiries compared with website visits.
+                    </p>
+                </div>
+
+                <div class="text-left sm:text-right">
+                    <p class="text-3xl font-semibold text-white">
+                        {{ conversions()!.conversionRate }}%
+                    </p>
+
+                    <p class="text-xs text-white/40">
+                        Conversion request rate
+                    </p>
+                </div>
+            </div>
+        </div>
+        }
+    </section>
+
+    <!-- CONVERSION ATTRIBUTION -->
+    <section class="mb-10">
+        <div class="mb-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-400">
+                Acquisition
+            </p>
+
+            <h2 class="mt-2 font-serif text-2xl text-white">
+                Conversion Attribution
+            </h2>
+
+            <p class="mt-2 text-sm text-white/40">
+                See which traffic sources and campaigns are generating appointments and enquiries.
+            </p>
+        </div>
+
+        <div class="grid gap-5 xl:grid-cols-2">
+
+            <!-- Appointment Attribution -->
+            <div class="analytics-device-card">
+
+                <div class="mb-5 flex items-center justify-between">
+                    <div>
+                        <p class="analytics-card-label">
+                            Appointments
+                        </p>
+
+                        <h3 class="mt-1 text-lg font-semibold text-white">
+                            Appointment Sources
+                        </h3>
+                    </div>
+
+                    <span
+                        class="rounded-full border border-fuchsia-400/20 bg-fuchsia-400/5 px-3 py-1 text-xs text-fuchsia-300">
+                        {{ conversions()!.appointmentSources.length }}
+                    </span>
+                </div>
+
+                @if (conversions()!.appointmentSources.length > 0) {
+
+                <div class="space-y-3">
+
+                    @for (
+                    source of conversions()!.appointmentSources;
+                    track source.source + source.medium + source.campaign
+                    ) {
+
+                    <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+
+                        <div class="flex items-start justify-between gap-4">
+
+                            <div class="min-w-0">
+
+                                <p class="text-sm font-medium text-white/90">
+                                    {{ source.source }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-white/40">
+                                    {{ source.medium || 'Unknown medium' }}
+                                </p>
+
+                                @if (source.campaign) {
+                                <p class="mt-2 truncate text-xs text-fuchsia-300/70">
+                                    {{ source.campaign }}
+                                </p>
+                                }
+
+                            </div>
+
+                            <div class="shrink-0 text-right">
+                                <p class="text-xl font-semibold text-fuchsia-300">
+                                    {{ source.appointments }}
+                                </p>
+
+                                <p class="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/30">
+                                    Appointments
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                } @else {
+
+                <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 text-center">
+                    <p class="text-sm text-white/30">
+                        No attributed appointments yet.
+                    </p>
+                </div>
+
+                }
+
+            </div>
+
+
+            <!-- Enquiry Attribution -->
+            <div class="analytics-device-card">
+
+                <div class="mb-5 flex items-center justify-between">
+                    <div>
+                        <p class="analytics-card-label">
+                            Contact Enquiries
+                        </p>
+
+                        <h3 class="mt-1 text-lg font-semibold text-white">
+                            Enquiry Sources
+                        </h3>
+                    </div>
+
+                    <span
+                        class="rounded-full border border-fuchsia-400/20 bg-fuchsia-400/5 px-3 py-1 text-xs text-fuchsia-300">
+                        {{ conversions()!.enquirySources.length }}
+                    </span>
+                </div>
+
+                @if (conversions()!.enquirySources.length > 0) {
+
+                <div class="space-y-3">
+
+                    @for (
+                    source of conversions()!.enquirySources;
+                    track source.source + source.medium + source.campaign
+                    ) {
+
+                    <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+
+                        <div class="flex items-start justify-between gap-4">
+
+                            <div class="min-w-0">
+
+                                <p class="text-sm font-medium text-white/90">
+                                    {{ source.source }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-white/40">
+                                    {{ source.medium || 'Unknown medium' }}
+                                </p>
+
+                                @if (source.campaign) {
+                                <p class="mt-2 truncate text-xs text-fuchsia-300/70">
+                                    {{ source.campaign }}
+                                </p>
+                                }
+
+                            </div>
+
+                            <div class="shrink-0 text-right">
+                                <p class="text-xl font-semibold text-fuchsia-300">
+                                    {{ source.contactEnquiries }}
+                                </p>
+
+                                <p class="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/30">
+                                    Enquiries
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                } @else {
+
+                <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 text-center">
+                    <p class="text-sm text-white/30">
+                        No attributed enquiries yet.
+                    </p>
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CAMPAIGN FUNNEL -->
+    <section class="mb-10">
+
+        <div class="mb-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-fuchsia-400">
+                Marketing Performance
+            </p>
+
+            <h2 class="mt-2 font-serif text-2xl text-white">
+                Campaign Funnel
+            </h2>
+
+            <p class="mt-2 text-sm text-white/40">
+                Track how traffic sources turn into enquiries and appointment requests.
+            </p>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+
+            @if (conversionAttributionLoading()) {
+
+            <div class="flex min-h-[220px] items-center justify-center">
+                <p class="text-sm text-white/40">
+                    Loading campaign performance...
+                </p>
+            </div>
+
+            } @else if (conversionAttribution().length === 0) {
+
+            <div class="flex min-h-[220px] items-center justify-center">
+                <p class="text-sm text-white/30">
+                    No campaign attribution data available yet.
+                </p>
+            </div>
+
+            } @else {
+
+            <!-- Desktop -->
+            <div class="hidden overflow-x-auto lg:block">
+
+                <table class="w-full text-left">
+
+                    <thead class="border-b border-white/10">
+
+                        <tr class="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/30">
+
+                            <th class="px-6 py-4">
+                                Source
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Medium
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Campaign
+                            </th>
+
+                            <th class="px-6 py-4 text-right">
+                                Visits
+                            </th>
+
+                            <th class="px-6 py-4 text-right">
+                                Unique
+                            </th>
+
+                            <th class="px-6 py-4 text-right">
+                                Enquiries
+                            </th>
+
+                            <th class="px-6 py-4 text-right">
+                                Appointments
+                            </th>
+
+                            <th class="px-6 py-4 text-right">
+                                Leads
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody class="divide-y divide-white/5">
+
+                        @for (
+                        item of conversionAttribution();
+                        track item.source + item.medium + item.campaign
+                        ) {
+
+                        <tr class="transition hover:bg-white/[0.025]">
+
+                            <td class="px-6 py-5">
+
+                                <p class="text-sm font-medium text-white/85">
+                                    {{ item.source }}
+                                </p>
+
+                            </td>
+
+                            <td class="px-6 py-5">
+
+                                <span
+                                    class="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/50">
+                                    {{ item.medium || '—' }}
+                                </span>
+
+                            </td>
+
+                            <td class="max-w-[220px] px-6 py-5">
+
+                                <p class="truncate text-sm text-fuchsia-300/80">
+                                    {{ item.campaign || 'No campaign' }}
+                                </p>
+
+                            </td>
+
+                            <td class="px-6 py-5 text-right text-sm text-white/70">
+                                {{ item.visits | number }}
+                            </td>
+
+                            <td class="px-6 py-5 text-right text-sm text-white/50">
+                                {{ item.uniqueVisitors | number }}
+                            </td>
+
+                            <td class="px-6 py-5 text-right text-sm text-white/70">
+                                {{ item.enquiries | number }}
+                            </td>
+
+                            <td class="px-6 py-5 text-right text-sm text-fuchsia-300">
+                                {{ item.appointments | number }}
+                            </td>
+
+                            <td class="px-6 py-5 text-right">
+
+                                <span class="text-sm font-semibold text-white">
+                                    {{ item.totalLeads | number }}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Mobile -->
+            <div class="divide-y divide-white/5 lg:hidden">
+
+                @for (
+                item of conversionAttribution();
+                track item.source + item.medium + item.campaign
+                ) {
+
+                <div class="p-5">
+
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div class="min-w-0">
+
+                            <p class="text-sm font-semibold text-white">
+                                {{ item.source }}
+                            </p>
+
+                            <p class="mt-1 text-xs text-white/40">
+                                {{ item.medium || 'Unknown medium' }}
+                            </p>
+
+                            <p class="mt-2 truncate text-xs text-fuchsia-300/70">
+                                {{ item.campaign || 'No campaign' }}
+                            </p>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p class="text-xl font-semibold text-fuchsia-300">
+                                {{ item.totalLeads }}
+                            </p>
+
+                            <p class="text-[10px] uppercase tracking-[0.12em] text-white/30">
+                                Leads
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-5 grid grid-cols-2 gap-2">
+
+                        <div class="rounded-xl bg-white/[0.03] p-3">
+                            <p class="text-[10px] uppercase tracking-wider text-white/30">
+                                Visits
+                            </p>
+
+                            <p class="mt-1 text-lg text-white">
+                                {{ item.visits | number }}
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl bg-white/[0.03] p-3">
+                            <p class="text-[10px] uppercase tracking-wider text-white/30">
+                                Unique
+                            </p>
+
+                            <p class="mt-1 text-lg text-white">
+                                {{ item.uniqueVisitors | number }}
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl bg-white/[0.03] p-3">
+                            <p class="text-[10px] uppercase tracking-wider text-white/30">
+                                Enquiries
+                            </p>
+
+                            <p class="mt-1 text-lg text-white">
+                                {{ item.enquiries | number }}
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl bg-fuchsia-400/5 p-3">
+                            <p class="text-[10px] uppercase tracking-wider text-fuchsia-300/60">
+                                Appointments
+                            </p>
+
+                            <p class="mt-1 text-lg text-fuchsia-300">
+                                {{ item.appointments | number }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+        </div>
+
+    </section>
+
     <!-- Visitor Trend -->
     <section class="mb-10">
         <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -666,6 +1209,75 @@
                     <span>Unique visitors</span>
                     <span class="font-medium text-white/70">
                         {{ location.uniqueVisitors }}
+                    </span>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </section>
+
+    <section class="analytics-device-card mb-10">
+        <div class="mb-5 flex items-center justify-between">
+            <div>
+                <p class="analytics-card-label">Acquisition</p>
+                <h2 class="text-xl font-semibold text-white">
+                    Traffic Sources
+                </h2>
+                <p class="mt-1 text-sm text-white/50">
+                    See where visitors are coming from.
+                </p>
+            </div>
+
+            @if (trafficSourceLoading()) {
+            <span class="text-xs text-white/40">
+                Loading...
+            </span>
+            }
+        </div>
+
+        @if (!trafficSourceLoading() && trafficSources().length === 0) {
+        <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 text-center">
+            <p class="text-sm text-white/50">
+                No traffic source data available yet.
+            </p>
+        </div>
+        }
+
+        @if (trafficSources().length > 0) {
+        <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            @for (
+            source of trafficSources();
+            track source.source + source.medium
+            ) {
+            <div class="analytics-device-item">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <p class="analytics-device-name">
+                            {{ source.source }}
+                        </p>
+
+                        <p class="mt-1 text-sm text-white/50">
+                            {{ source.medium || 'Unknown medium' }}
+                        </p>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-lg font-semibold text-white">
+                            {{ source.visits }}
+                        </p>
+
+                        <p class="text-xs text-white/40">
+                            visits
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between text-xs text-white/40">
+                    <span>Unique visitors</span>
+
+                    <span class="font-medium text-white/70">
+                        {{ source.uniqueVisitors }}
                     </span>
                 </div>
             </div>

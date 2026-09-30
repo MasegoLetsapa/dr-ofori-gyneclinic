@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AnalyticsSummary, ArticleAnalytics, DeviceAnalytics, TopPageAnalytics, VisitorLocationAnalytics, VisitsTrend } from '../models/analytics.model';
+import { AnalyticsSummary, ArticleAnalytics, ConversionAnalytics, ConversionAttribution, DeviceAnalytics, TopPageAnalytics, TrafficSourceAnalytics, VisitorLocationAnalytics, VisitsTrend } from '../models/analytics.model';
 
 @Injectable({
     providedIn: 'root'
@@ -15,13 +15,20 @@ export class AnalyticsService {
     trackVisit(
         pagePath: string,
         visitorId: string,
-        deviceType?: string
+        deviceType?: string,
+        sessionId?: string,
+        trafficSource?: string,
+        trafficMedium?: string,
+        trafficCampaign?: string | null
     ): void {
-
         this.http.post(`${this.apiUrl}/visit`, {
             pagePath,
             visitorId,
-            deviceType
+            deviceType,
+            sessionId,
+            trafficSource,
+            trafficMedium,
+            trafficCampaign
         }).subscribe({
             error: (error) => {
                 console.error('Analytics tracking failed:', error);
@@ -94,6 +101,24 @@ export class AnalyticsService {
     getVisitorLocations() {
         return this.http.get<VisitorLocationAnalytics[]>(
             `${this.apiUrl}/admin/locations`
+        );
+    }
+
+    getTrafficSources() {
+        return this.http.get<TrafficSourceAnalytics[]>(
+            `${this.apiUrl}/admin/traffic-sources`
+        );
+    }
+
+    getConversions() {
+        return this.http.get<ConversionAnalytics>(
+            `${this.apiUrl}/admin/conversions`
+        );
+    }
+
+    getConversionAttribution() {
+        return this.http.get<ConversionAttribution[]>(
+            `${this.apiUrl}/admin/conversion-attribution`
         );
     }
 }

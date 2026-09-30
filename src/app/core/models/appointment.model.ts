@@ -2,23 +2,22 @@ import { Patient } from "./patient.model";
 
 
 export interface CreateAppointmentRequest {
-
     firstName: string;
-
     lastName: string;
-
     email: string;
-
     phone: string;
-
     service: string;
-
     preferredDate: string;
-
     preferredTime: string;
-
+    practiceLocation?: string;
     message?: string;
 
+    // Analytics attribution
+    visitorId?: string;
+    sessionId?: string;
+    trafficSource?: string;
+    trafficMedium?: string;
+    trafficCampaign?: string | null;
 }
 
 
@@ -100,15 +99,17 @@ export interface Appointment {
 
     patient?: Patient | null;
 
+
+
 }
 
 export interface CommunicationLog {
-  id: number;
-  type: string;
-  recipientEmail: string;
-  subject: string;
-  status: string;
-  sentAt: string | null;
-  errorMessage: string | null;
-  createdAt: string;
+    id: number;
+    type: string;
+    recipientEmail: string;
+    subject: string;
+    status: string;
+    sentAt: string | null;
+    errorMessage: string | null;
+    createdAt: string;
 }

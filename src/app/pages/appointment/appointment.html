@@ -446,14 +446,57 @@
                             Afternoon
                         </option>
 
-                        <option value="late-afternoon">
+                        <!-- <option value="late-afternoon">
                             Late Afternoon
-                        </option>
+                        </option> -->
 
                     </select>
 
                 </div>
 
+            </div>
+
+            <div class="space-y-2">
+                <label for="preferredDate" class="text-[10px]
+                                       font-semibold
+                                       text-zinc-400">
+                    Practice Location
+                </label>
+
+                <select id="practiceLocation" formControlName="practiceLocation"
+                    class="mt-2 w-full
+                                   appearance-none
+                                   rounded-xl
+                                   border border-white/[0.08]
+                                   bg-[#11101a]
+                                   px-4 py-3
+                                   text-xs text-zinc-300
+                                   outline-none
+                                   transition
+                                   focus:border-pink-400/40">
+
+                    <option value="" disabled>
+                        Select practice location
+                    </option>
+
+                    <option value="Mahikeng">
+                        Mahikeng Practice
+                    </option>
+
+                    <option value="Lichtenburg">
+                        Lichtenburg Practice
+                    </option>
+
+                </select>
+
+                @if (
+                appointmentForm.get('practiceLocation')?.touched &&
+                appointmentForm.get('practiceLocation')?.invalid
+                ) {
+                <p class="text-xs text-red-400">
+                    Please select a practice location.
+                </p>
+                }
             </div>
 
 

@@ -26,7 +26,6 @@ import { QuillModule } from 'ngx-quill';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     Icon,
     QuillModule
   ],

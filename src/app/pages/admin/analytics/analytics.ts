@@ -4,8 +4,11 @@ import { CommonModule } from '@angular/common';
 import {
   AnalyticsSummary,
   ArticleAnalytics,
+  ConversionAnalytics,
+  ConversionAttribution,
   DeviceAnalytics,
   TopPageAnalytics,
+  TrafficSourceAnalytics,
   VisitorLocationAnalytics,
   VisitsTrend
 } from '../../../core/models/analytics.model';
@@ -43,12 +46,24 @@ export class Analytics implements OnInit {
   readonly visitorLocations = signal<VisitorLocationAnalytics[]>([]);
   readonly locationLoading = signal(false);
 
+  readonly trafficSources = signal<TrafficSourceAnalytics[]>([]);
+  readonly trafficSourceLoading = signal(false);
+
+  readonly conversions = signal<ConversionAnalytics | null>(null);
+  readonly conversionLoading = signal(false);
+
+  readonly conversionAttribution = signal<ConversionAttribution[]>([]);
+  readonly conversionAttributionLoading = signal(false);
+
   ngOnInit(): void {
     this.loadAnalytics();
     this.loadVisitsTrend();
     this.loadTopPages();
     this.loadDeviceBreakdown();
     this.loadVisitorLocations();
+    this.loadTrafficSources();
+    this.loadConversions();
+    this.loadConversionAttribution();
   }
 
   private loadAnalytics(): void {
@@ -152,6 +167,55 @@ export class Analytics implements OnInit {
       error: (error) => {
         console.error('Failed to load visitor locations:', error);
         this.locationLoading.set(false);
+      }
+    });
+  }
+
+  private loadTrafficSources(): void {
+    this.trafficSourceLoading.set(true);
+
+    this.analyticsService.getTrafficSources().subscribe({
+      next: (sources) => {
+        this.trafficSources.set(sources);
+        this.trafficSourceLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Failed to load traffic sources:', error);
+        this.trafficSourceLoading.set(false);
+      }
+    });
+  }
+
+  private loadConversions(): void {
+    this.conversionLoading.set(true);
+
+    this.analyticsService.getConversions().subscribe({
+      next: (data) => {
+        this.conversions.set(data);
+        this.conversionLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Failed to load conversion analytics:', error);
+        this.conversionLoading.set(false);
+      }
+    });
+  }
+
+  private loadConversionAttribution(): void {
+    this.conversionAttributionLoading.set(true);
+
+    this.analyticsService.getConversionAttribution().subscribe({
+      next: (data) => {
+        this.conversionAttribution.set(data);
+        this.conversionAttributionLoading.set(false);
+      },
+      error: (error) => {
+        console.error(
+          'Failed to load conversion attribution:',
+          error
+        );
+
+        this.conversionAttributionLoading.set(false);
       }
     });
   }

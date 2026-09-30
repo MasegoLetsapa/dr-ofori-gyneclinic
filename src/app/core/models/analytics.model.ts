@@ -64,3 +64,41 @@ export interface VisitorLocationAnalytics {
     visits: number;
     uniqueVisitors: number;
 }
+
+export interface TrafficSourceAnalytics {
+    source: string;
+    medium: string | null;
+    visits: number;
+    uniqueVisitors: number;
+}
+
+export interface ConversionSourceAnalytics {
+    source: string;
+    medium: string | null;
+    campaign: string | null;
+    appointments?: number;
+    contactEnquiries?: number;
+}
+
+export interface ConversionAnalytics {
+    appointments: number;
+    contactEnquiries: number;
+    approvedAppointments: number;
+    completedAppointments: number;
+    totalConversions: number;
+    conversionRate: number;
+
+    appointmentSources: ConversionSourceAnalytics[];
+    enquirySources: ConversionSourceAnalytics[];
+}
+
+export interface ConversionAttribution {
+    source: string;
+    medium: string | null;
+    campaign: string | null;
+    visits: number;
+    uniqueVisitors: number;
+    appointments: number;
+    enquiries: number;
+    totalLeads: number;
+}

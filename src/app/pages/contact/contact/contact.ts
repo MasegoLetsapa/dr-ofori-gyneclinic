@@ -5,6 +5,8 @@ import { MessageService } from '../../../core/services/message.service';
 import { CreateMessageRequest } from '../../../core/models/message.model';
 import { ClinicSettingsService } from '../../../core/services/clinic-settings.service';
 import { PublicClinicSettings } from '../../../core/models/public-clinic-settings.model';
+import { VisitorIdService } from '../../../core/services/visitor-id';
+import { TrafficSourceService } from '../../../core/services/traffic-source.service';
 
 @Component({
   imports: [ReactiveFormsModule, Icon],
@@ -20,6 +22,9 @@ export class Contact implements OnInit {
 
   private readonly fb = inject(FormBuilder);
   private readonly messageService = inject(MessageService);
+
+  private readonly visitorIdService = inject(VisitorIdService);
+  private readonly trafficSourceService = inject(TrafficSourceService);
 
   submitted = false;
   submitting = false;
@@ -133,6 +138,9 @@ export class Contact implements OnInit {
     const formValue =
       this.contactForm.getRawValue();
 
+    const visitorId = this.visitorIdService.getVisitorId();
+    const trafficData = this.trafficSourceService.getTrafficData();
+
     const request: CreateMessageRequest = {
 
       firstName:
@@ -151,7 +159,13 @@ export class Contact implements OnInit {
         formValue.subject ?? '',
 
       messageBody:
-        formValue.messageBody ?? ''
+        formValue.messageBody ?? '',
+
+      visitorId,
+      sessionId: trafficData.sessionId,
+      trafficSource: trafficData.trafficSource,
+      trafficMedium: trafficData.trafficMedium,
+      trafficCampaign: trafficData.trafficCampaign
     };
 
     this.messageService

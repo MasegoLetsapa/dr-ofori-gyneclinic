@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AnalyticsService } from './core/services/analytics';
 import { VisitorIdService } from './core/services/visitor-id';
+import { TrafficSourceService } from './core/services/traffic-source.service';
 
 @Component({
   imports: [RouterOutlet],
@@ -18,6 +19,7 @@ export class App {
   private readonly visitorIdService = inject(VisitorIdService);
 
   protected readonly title = signal('dr-ofori-gyneclinic');
+  private readonly trafficSourceService = inject(TrafficSourceService);
 
   constructor() {
 
@@ -40,10 +42,16 @@ export class App {
 
         const path = rawPath.split('?')[0].split('#')[0] || '/';
 
+        const trafficData = this.trafficSourceService.getTrafficData();
+
         this.analyticsService.trackVisit(
           path,
           visitorId,
-          this.getDeviceType()
+          this.getDeviceType(),
+          trafficData.sessionId,
+          trafficData.trafficSource,
+          trafficData.trafficMedium,
+          trafficData.trafficCampaign
         );
 
       });
