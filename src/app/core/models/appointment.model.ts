@@ -86,6 +86,8 @@ export interface Appointment {
 
     preferredTime: string;
 
+    practiceLocation?: string;
+
     message?: string | null;
 
     status: string;

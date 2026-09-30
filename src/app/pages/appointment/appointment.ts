@@ -149,6 +149,61 @@ export class Appointment implements OnInit {
     ]
   });
 
+  // ========================================
+  // PRACTICE LOCATION
+  // ========================================
+
+  clinicClosedMessage = '';
+
+  onDateChanged(): void {
+    const dateValue =
+      this.appointmentForm.controls.preferredDate.value;
+
+    this.clinicClosedMessage = '';
+
+    if (!dateValue) {
+      this.appointmentForm.controls.practiceLocation.setValue('');
+      return;
+    }
+
+    const [year, month, day] =
+      dateValue.split('-').map(Number);
+
+    const selectedDate =
+      new Date(year, month - 1, day);
+
+    const dayOfWeek =
+      selectedDate.getDay();
+
+    // Sunday = clinic closed
+    if (dayOfWeek === 0) {
+      this.appointmentForm.controls.practiceLocation.setValue('');
+
+      this.clinicClosedMessage =
+        'The clinic is closed on Sundays. Please select another appointment date.';
+
+      return;
+    }
+
+    // Thursday = Lichtenburg
+    if (dayOfWeek === 4) {
+      this.appointmentForm.controls.practiceLocation.setValue(
+        'Lichtenburg'
+      );
+
+      return;
+    }
+
+    // Monday–Wednesday, Friday–Saturday = Mahikeng
+    this.appointmentForm.controls.practiceLocation.setValue(
+      'Mahikeng'
+    );
+  }
+
+  get selectedPracticeLocation(): string {
+    return this.appointmentForm.controls.practiceLocation.value ?? '';
+  }
+
   constructor() {
 
     effect(() => {
@@ -273,7 +328,16 @@ export class Appointment implements OnInit {
 
     const today = new Date();
 
-    return today.toISOString().split('T')[0];
+    const year =
+      today.getFullYear();
+
+    const month =
+      String(today.getMonth() + 1).padStart(2, '0');
+
+    const day =
+      String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 
   }
 
@@ -297,6 +361,10 @@ export class Appointment implements OnInit {
 
       this.appointmentForm.markAllAsTouched();
 
+      return;
+    }
+
+    if (this.clinicClosedMessage) {
       return;
     }
 
