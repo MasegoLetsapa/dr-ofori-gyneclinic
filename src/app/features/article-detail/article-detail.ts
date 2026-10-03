@@ -7,6 +7,7 @@ import { Article } from '../../core/models/article.model';
 import { SeoService } from '../../core/services/seo.service';
 import { AnalyticsService } from '../../core/services/analytics';
 import { VisitorIdService } from '../../core/services/visitor-id';
+import { ArticleLikeService } from '../../core/services/article-like.service';
 
 @Component({
   selector: 'app-article-detail',
@@ -23,6 +24,7 @@ export class ArticleDetail implements OnInit {
 
   private readonly route = inject(ActivatedRoute);
   private readonly articleService = inject(ArticleService);
+  private readonly articleLikeService = inject(ArticleLikeService);
 
   constructor(
     private readonly seoService: SeoService,
@@ -33,6 +35,10 @@ export class ArticleDetail implements OnInit {
   readonly article = signal<Article | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
+
+  readonly articleLikeCount = signal(0);
+  readonly articleLiked = signal(false);
+  readonly articleLikeLoading = signal(false);
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -60,6 +66,8 @@ export class ArticleDetail implements OnInit {
           article.id,
           this.visitorIdService.getVisitorId()
         );
+
+        this.loadArticleLikeStatus(article.id);
 
         const title =
           `${article.title} | Dr. Ofori Gyne Clinic`;
@@ -103,6 +111,26 @@ export class ArticleDetail implements OnInit {
     });
   }
 
+  private loadArticleLikeStatus(articleId: number): void {
+    const visitorId =
+      this.visitorIdService.getVisitorId();
+
+    this.articleLikeService
+      .getLikeStatus(articleId, visitorId)
+      .subscribe({
+        next: (response) => {
+          this.articleLikeCount.set(response.likeCount);
+          this.articleLiked.set(response.liked);
+        },
+        error: (error) => {
+          console.error(
+            'Failed to load article like status:',
+            error
+          );
+        }
+      });
+  }
+
   getArticleIcon(icon: string | null | undefined): IconName {
     const validIcons: IconName[] = [
       'heart',
@@ -131,6 +159,37 @@ export class ArticleDetail implements OnInit {
     }
 
     return 'heart';
+  }
+
+  likeArticle(): void {
+    const article = this.article();
+
+    if (!article || this.articleLiked()) {
+      return;
+    }
+
+    const visitorId =
+      this.visitorIdService.getVisitorId();
+
+    this.articleLikeLoading.set(true);
+
+    this.articleLikeService
+      .likeArticle(article.id, visitorId)
+      .subscribe({
+        next: (response) => {
+          this.articleLikeCount.set(response.likeCount);
+          this.articleLiked.set(response.liked);
+          this.articleLikeLoading.set(false);
+        },
+        error: (error) => {
+          console.error(
+            'Failed to like article:',
+            error
+          );
+
+          this.articleLikeLoading.set(false);
+        }
+      });
   }
 
   readonly copied = signal(false);
