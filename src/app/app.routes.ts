@@ -15,6 +15,8 @@ import { ArticleDetail } from './features/article-detail/article-detail';
 import { Articles } from './pages/admin/articles/articles';
 import { ArticleEditor } from './pages/admin/articles/article-editor/article-editor';
 import { Analytics } from './pages/admin/analytics/analytics';
+import { PrivacyPolicy } from './pages/privacy-policy/privacy-policy';
+import { TermsAndConditions } from './pages/terms-and-conditions/terms-and-conditions';
 export const routes: Routes = [
     // ========================================
     // PUBLIC WEBSITE
@@ -35,6 +37,14 @@ export const routes: Routes = [
     {
         path: 'resources/:slug',
         component: ArticleDetail
+    },
+    {
+        path: 'privacy-policy',
+        component: PrivacyPolicy
+    },
+    {
+        path: 'terms-and-conditions',
+        component: TermsAndConditions
     },
 
     // ========================================
