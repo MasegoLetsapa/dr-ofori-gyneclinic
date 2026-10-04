@@ -8,6 +8,7 @@ import { SeoService } from '../../core/services/seo.service';
 import { AnalyticsService } from '../../core/services/analytics';
 import { VisitorIdService } from '../../core/services/visitor-id';
 import { ArticleLikeService } from '../../core/services/article-like.service';
+import { EmailSubscriberService } from '../../core/services/email-subscriber.service';
 
 @Component({
   selector: 'app-article-detail',
@@ -25,6 +26,7 @@ export class ArticleDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly articleService = inject(ArticleService);
   private readonly articleLikeService = inject(ArticleLikeService);
+  private readonly emailSubscriberService = inject(EmailSubscriberService);
 
   constructor(
     private readonly seoService: SeoService,
@@ -39,6 +41,11 @@ export class ArticleDetail implements OnInit {
   readonly articleLikeCount = signal(0);
   readonly articleLiked = signal(false);
   readonly articleLikeLoading = signal(false);
+
+  readonly subscriberEmail = signal('');
+  readonly subscriptionLoading = signal(false);
+  readonly subscriptionMessage = signal('');
+  readonly subscriptionSuccess = signal(false);
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -188,6 +195,45 @@ export class ArticleDetail implements OnInit {
           );
 
           this.articleLikeLoading.set(false);
+        }
+      });
+  }
+
+  subscribeToArticleUpdates(): void {
+    const email = this.subscriberEmail().trim();
+    const article = this.article();
+
+    if (!email || !article) {
+      return;
+    }
+
+    this.subscriptionLoading.set(true);
+    this.subscriptionMessage.set('');
+    this.subscriptionSuccess.set(false);
+
+    this.emailSubscriberService
+      .subscribe(email, article.id)
+      .subscribe({
+        next: (response) => {
+          this.subscriptionMessage.set(
+            response.message
+          );
+
+          this.subscriptionSuccess.set(true);
+          this.subscriptionLoading.set(false);
+        },
+        error: (error) => {
+          console.error(
+            'Failed to subscribe:',
+            error
+          );
+
+          this.subscriptionMessage.set(
+            'Something went wrong. Please try again.'
+          );
+
+          this.subscriptionSuccess.set(false);
+          this.subscriptionLoading.set(false);
         }
       });
   }

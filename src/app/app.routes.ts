@@ -17,6 +17,7 @@ import { ArticleEditor } from './pages/admin/articles/article-editor/article-edi
 import { Analytics } from './pages/admin/analytics/analytics';
 import { PrivacyPolicy } from './pages/privacy-policy/privacy-policy';
 import { TermsAndConditions } from './pages/terms-and-conditions/terms-and-conditions';
+import { Unsubscribe } from './features/unsubscribe/unsubscribe';
 export const routes: Routes = [
     // ========================================
     // PUBLIC WEBSITE
@@ -45,6 +46,10 @@ export const routes: Routes = [
     {
         path: 'terms-and-conditions',
         component: TermsAndConditions
+    },
+    {
+        path: 'unsubscribe',
+        component: Unsubscribe
     },
 
     // ========================================

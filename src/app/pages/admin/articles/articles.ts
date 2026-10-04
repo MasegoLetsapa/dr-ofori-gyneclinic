@@ -12,6 +12,7 @@ import { AdminArticleService } from '../../../core/services/admin-article.servic
 
 import { Article } from '../../../core/models/article.model';
 import { Router } from '@angular/router';
+import { EmailSubscriber, EmailSubscriberService } from '../../../core/services/email-subscriber.service';
 
 @Component({
   selector: 'app-articles',
@@ -25,8 +26,19 @@ export class Articles implements OnInit {
   private readonly articleService =
     inject(AdminArticleService);
 
-  private readonly router = inject(Router);
+  private readonly emailSubscriberService = inject(EmailSubscriberService);
 
+  readonly sendModalOpen = signal(false);
+
+  readonly selectedArticleForSend = signal<Article | null>(null);
+
+  readonly activeSubscriberCount = signal(0);
+
+  readonly sendingArticle = signal(false);
+
+  readonly successMessage = signal<string | null>(null);
+
+  private readonly router = inject(Router);
   // ========================================
   // STATE
   // ========================================
@@ -167,6 +179,99 @@ export class Articles implements OnInit {
 
   editArticle(id: number): void {
     this.router.navigate(['/admin/articles', id, 'edit']);
+  }
+
+  sendArticleToSubscribers(article: Article): void {
+
+    if (!article.isPublished) {
+      this.error.set(
+        'Only published articles can be sent to subscribers.'
+      );
+
+      return;
+    }
+
+    this.error.set(null);
+
+    this.selectedArticleForSend.set(article);
+    this.sendModalOpen.set(true);
+
+    this.emailSubscriberService
+      .getSubscribers()
+      .subscribe({
+        next: (subscribers: EmailSubscriber[]) => {
+
+          const activeCount =
+            subscribers.filter(
+              subscriber => subscriber.isActive
+            ).length;
+
+          this.activeSubscriberCount.set(activeCount);
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Failed to load subscribers:',
+            error
+          );
+
+          this.activeSubscriberCount.set(0);
+        }
+      });
+  }
+
+  closeSendModal(): void {
+    if (this.sendingArticle()) {
+      return;
+    }
+
+    this.sendModalOpen.set(false);
+    this.selectedArticleForSend.set(null);
+  }
+
+  confirmSendArticle(): void {
+
+    const article =
+      this.selectedArticleForSend();
+
+    if (!article) {
+      return;
+    }
+
+    this.sendingArticle.set(true);
+    this.error.set(null);
+    this.successMessage.set(null);
+
+    this.emailSubscriberService
+      .sendArticleUpdate(article.id)
+      .subscribe({
+        next: (response) => {
+
+          this.sendingArticle.set(false);
+          this.sendModalOpen.set(false);
+          this.selectedArticleForSend.set(null);
+
+          this.successMessage.set(
+            `Article sent successfully. ${response.sent} sent, ${response.failed} failed.`
+          );
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Failed to send article to subscribers:',
+            error
+          );
+
+          this.sendingArticle.set(false);
+
+          this.error.set(
+            error?.error?.message ||
+            'Unable to send the article to subscribers.'
+          );
+        }
+      });
   }
 
 

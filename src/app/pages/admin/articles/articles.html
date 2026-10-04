@@ -112,6 +112,22 @@
 
     </div>
 
+    <!-- Success -->
+
+    @if (successMessage()) {
+
+    <div class="mb-5 rounded-xl border
+                   border-emerald-400/20
+                   bg-emerald-400/10
+                   px-4 py-3 text-sm
+                   text-emerald-300">
+
+        {{ successMessage() }}
+
+    </div>
+
+    }
+
 
     <!-- Error -->
     @if (error()) {
@@ -321,6 +337,20 @@
                                     {{ article.isPublished ? 'Unpublish' : 'Publish' }}
                                 </button>
 
+                                @if (article.isPublished) {
+
+                                <button type="button" (click)="sendArticleToSubscribers(article)" class="rounded-lg border border-fuchsia-400/20
+                                    bg-fuchsia-400/5 px-3 py-2
+                                    text-xs text-fuchsia-300
+                                    transition hover:border-fuchsia-400/40
+                                hover:bg-fuchsia-400/10">
+
+                                    Send to Subscribers
+
+                                </button>
+
+                                }
+
                             </div>
 
                         </td>
@@ -340,3 +370,178 @@
     }
 
 </div>
+
+@if (sendModalOpen()) {
+
+<div class="fixed inset-0 z-50 flex items-center
+               justify-center bg-black/70 px-4
+               backdrop-blur-sm">
+
+    <div class="w-full max-w-lg rounded-2xl
+                   border border-white/10
+                   bg-[#111019] p-6
+                   shadow-2xl shadow-fuchsia-950/30">
+
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-4">
+
+            <div>
+
+                <p class="text-xs font-semibold
+                               uppercase tracking-[0.2em]
+                               text-fuchsia-400">
+                    Article Distribution
+                </p>
+
+                <h2 class="mt-2 font-serif text-2xl
+                               text-white">
+                    Send to Subscribers?
+                </h2>
+
+            </div>
+
+            <button type="button" (click)="closeSendModal()" [disabled]="sendingArticle()" class="flex h-9 w-9 items-center
+                           justify-center rounded-lg
+                           border border-white/10
+                           text-white/50
+                           transition hover:bg-white/5
+                           hover:text-white
+                           disabled:opacity-40">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- Article -->
+        @if (selectedArticleForSend(); as article) {
+
+        <div class="mt-6 rounded-xl
+                           border border-white/10
+                           bg-white/[0.03] p-4">
+
+            <p class="text-sm font-medium
+                               leading-6 text-white">
+
+                {{ article.title }}
+
+            </p>
+
+            <p class="mt-2 text-xs
+                               text-white/40">
+
+                /resources/{{ article.slug }}
+
+            </p>
+
+        </div>
+
+        }
+
+
+        <!-- Subscriber count -->
+        <div class="mt-4 rounded-xl
+                       border border-fuchsia-400/10
+                       bg-fuchsia-400/5 p-4">
+
+            <div class="flex items-center
+                           justify-between gap-4">
+
+                <div>
+
+                    <p class="text-sm font-medium
+                                   text-white">
+                        Active subscribers
+                    </p>
+
+                    <p class="mt-1 text-xs
+                                   text-white/40">
+                        Only active subscribers will
+                        receive this article.
+                    </p>
+
+                </div>
+
+                <span class="text-2xl font-semibold
+                               text-fuchsia-300">
+
+                    {{ activeSubscriberCount() }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Warning -->
+        <p class="mt-4 text-xs leading-5
+                       text-white/35">
+
+            This will send the selected article
+            immediately. Subscribers who have
+            unsubscribed will not receive it.
+
+        </p>
+
+
+        <!-- Actions -->
+        <div class="mt-7 flex justify-end
+                       gap-3">
+
+            <button type="button" (click)="closeSendModal()" [disabled]="sendingArticle()" class="rounded-xl border
+                           border-white/10 px-5 py-3
+                           text-sm font-medium
+                           text-white/60
+                           transition hover:bg-white/5
+                           hover:text-white
+                           disabled:opacity-40">
+
+                Cancel
+
+            </button>
+
+            <button type="button" (click)="confirmSendArticle()" [disabled]="
+                        sendingArticle() ||
+                        activeSubscriberCount() === 0
+                    " class="inline-flex items-center
+                           gap-2 rounded-xl
+                           bg-gradient-to-r
+                           from-fuchsia-500
+                           to-violet-500
+                           px-5 py-3
+                           text-sm font-semibold
+                           text-white
+                           transition
+                           hover:from-fuchsia-400
+                           hover:to-violet-400
+                           disabled:cursor-not-allowed
+                           disabled:opacity-50">
+
+                @if (sendingArticle()) {
+
+                <span class="h-4 w-4 animate-spin
+                                   rounded-full border-2
+                                   border-white/30
+                                   border-t-white">
+                </span>
+
+                Sending...
+
+                } @else {
+
+                Send Article
+
+                }
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}
