@@ -17,7 +17,7 @@ export class Unsubscribe implements OnInit {
   readonly message = signal('');
 
   private readonly apiUrl =
-    'https://localhost:7003/api/email-subscribers';
+    'https://letsapamasego-001-site1.ltempurl.com/api/email-subscribers';
 
   ngOnInit(): void {
     const token =

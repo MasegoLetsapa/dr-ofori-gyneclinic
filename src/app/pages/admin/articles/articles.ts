@@ -12,7 +12,7 @@ import { AdminArticleService } from '../../../core/services/admin-article.servic
 
 import { Article } from '../../../core/models/article.model';
 import { Router } from '@angular/router';
-import { EmailSubscriber, EmailSubscriberService } from '../../../core/services/email-subscriber.service';
+import { ArticleDistribution, EmailSubscriber, EmailSubscriberService } from '../../../core/services/email-subscriber.service';
 
 @Component({
   selector: 'app-articles',
@@ -37,6 +37,10 @@ export class Articles implements OnInit {
   readonly sendingArticle = signal(false);
 
   readonly successMessage = signal<string | null>(null);
+
+  readonly distributionHistory = signal<ArticleDistribution[]>([]);
+
+  readonly distributionHistoryLoading = signal(false);
 
   private readonly router = inject(Router);
   // ========================================
@@ -120,6 +124,7 @@ export class Articles implements OnInit {
   ngOnInit(): void {
 
     this.loadArticles();
+    this.loadDistributionHistory();
 
   }
 
@@ -163,6 +168,31 @@ export class Articles implements OnInit {
 
       });
 
+  }
+
+  loadDistributionHistory(): void {
+
+    this.distributionHistoryLoading.set(true);
+
+    this.emailSubscriberService
+      .getArticleDistributionHistory()
+      .subscribe({
+        next: (history) => {
+
+          this.distributionHistory.set(history);
+          this.distributionHistoryLoading.set(false);
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Failed to load article distribution history:',
+            error
+          );
+
+          this.distributionHistoryLoading.set(false);
+        }
+      });
   }
 
   // ========================================
@@ -370,6 +400,88 @@ export class Articles implements OnInit {
 
       });
 
+  }
+
+  getLatestDistribution(
+    articleId: number
+  ): ArticleDistribution | null {
+
+    return (
+      this.distributionHistory()
+        .find(
+          distribution =>
+            distribution.articleId === articleId
+        ) ?? null
+    );
+  }
+
+  resendArticleToSubscribers(article: Article): void {
+
+    const distribution =
+      this.getLatestDistribution(article.id);
+
+    if (!distribution) {
+      this.sendArticleToSubscribers(article);
+      return;
+    }
+
+    const sentDate =
+      new Date(distribution.sentAt)
+        .toLocaleDateString(
+          'en-ZA',
+          {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+          }
+        );
+
+    const confirmed =
+      window.confirm(
+        `This article was already sent on ${sentDate}.\n\n` +
+        `${distribution.sentCount} subscriber(s) previously received it.\n\n` +
+        `Resending will deliver another copy. Continue?`
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.sendingArticle.set(true);
+    this.error.set(null);
+    this.successMessage.set(null);
+
+    this.emailSubscriberService
+      .sendArticleUpdate(article.id)
+      .subscribe({
+        next: (response) => {
+
+          this.sendingArticle.set(false);
+
+          this.successMessage.set(
+            `Article resent successfully. ` +
+            `${response.sent} sent, ` +
+            `${response.failed} failed.`
+          );
+
+          this.loadDistributionHistory();
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Failed to resend article:',
+            error
+          );
+
+          this.sendingArticle.set(false);
+
+          this.error.set(
+            error?.error?.message ||
+            'Unable to resend the article.'
+          );
+        }
+      });
   }
 
 }

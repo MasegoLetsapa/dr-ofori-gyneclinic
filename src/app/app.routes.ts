@@ -18,6 +18,7 @@ import { Analytics } from './pages/admin/analytics/analytics';
 import { PrivacyPolicy } from './pages/privacy-policy/privacy-policy';
 import { TermsAndConditions } from './pages/terms-and-conditions/terms-and-conditions';
 import { Unsubscribe } from './features/unsubscribe/unsubscribe';
+import { Subscribers } from './pages/admin/subscribers/subscribers';
 export const routes: Routes = [
     // ========================================
     // PUBLIC WEBSITE
@@ -102,6 +103,11 @@ export const routes: Routes = [
                     {
                         path: 'articles/new',
                         component: ArticleEditor
+                    },
+                    // SUBSCRIBERS
+                    {
+                        path: 'subscribers',
+                        component: Subscribers
                     },
                     {
                         path: 'articles/:id/edit',

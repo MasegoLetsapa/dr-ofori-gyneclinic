@@ -15,7 +15,7 @@ export class ArticleLikeService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/article-likes';
+        'https://letsapamasego-001-site1.ltempurl.com/api/article-likes';
 
     getLikeStatus(
         articleId: number,

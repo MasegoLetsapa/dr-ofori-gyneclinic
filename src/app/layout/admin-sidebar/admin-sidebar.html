@@ -1,21 +1,56 @@
-<aside class="flex h-full w-72 flex-col border-r border-white/10
-         bg-[#0b0911]">
+<aside class="fixed inset-y-0 left-0 z-[100]
+           flex h-full w-72 flex-col
+           border-r border-white/10
+           bg-[#0b0911]
+           shadow-2xl
+           transition-transform duration-300
+           lg:static lg:z-auto
+           lg:translate-x-0" [class.-translate-x-full]="!mobileMenuOpen" [class.translate-x-0]="mobileMenuOpen">
 
     <!-- BRAND -->
 
-    <div class="border-b border-white/10 px-6 py-7">
+    <!-- Sidebar header -->
+    <div class="flex h-20 items-center justify-between border-b border-white/[0.06] px-5">
 
-        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-fuchsia-400">
-            Dr. Ofori
-        </p>
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center
+                       rounded-xl
+                       border border-pink-400/25
+                       bg-gradient-to-br
+                       from-pink-500/15
+                       to-violet-500/15">
 
-        <h1 class="mt-2 font-serif text-2xl text-white">
-            Gyne Clinic
-        </h1>
+                <span class="font-serif text-lg text-pink-400">D</span>
 
-        <p class="mt-1 text-xs text-white/30">
-            Administration Portal
-        </p>
+            </div>
+
+            <div>
+                <div class="font-serif text-base leading-none text-white">
+                    Dr. Ofori
+                </div>
+
+                <div class="mt-1 text-[7px] font-bold tracking-[0.3em] text-pink-400">
+                    GYNE CLINIC
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile close button -->
+        <button type="button" class="flex h-9 w-9 items-center justify-center
+                   rounded-lg
+                   border border-white/10
+                   text-white/60
+                   transition
+                   hover:border-pink-400/30
+                   hover:bg-white/5
+                   hover:text-white
+                   lg:hidden" aria-label="Close navigation" (click)="closeMobileMenu.emit()">
+
+            <app-icon name="close" [size]="18" [strokeWidth]="1.8">
+            </app-icon>
+
+        </button>
 
     </div>
 
@@ -98,6 +133,17 @@
                 <!-- Articles -->
 
                 @if (item.icon === 'articles') {
+                <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"></path>
+                    <path d="M14 8H6"></path>
+                    <path d="M14 12H6"></path>
+                    <path d="M14 16H6"></path>
+                </svg>
+                }
+
+                <!-- Subscribers -->
+
+                @if (item.icon === 'subscribers') {
                 <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"></path>
                     <path d="M14 8H6"></path>

@@ -1,10 +1,10 @@
 <div class="flex min-h-screen bg-[#08070d] text-white">
 
     <!-- Desktop sidebar -->
-    <div class="hidden lg:block">
+    <div class="block">
 
         <div class="sticky top-0 h-screen">
-            <app-admin-sidebar />
+            <app-admin-sidebar [mobileMenuOpen]="mobileMenuOpen()" (closeMobileMenu)="closeMobileMenu()" />
         </div>
 
     </div>
@@ -15,11 +15,51 @@
 
         <!-- Admin top bar -->
         <header class="sticky top-0 z-50
-             flex h-20 items-center justify-end
-             border-b border-white/[0.06]
-             bg-[#08070d]/90
-             px-6 backdrop-blur-xl
-             sm:px-8">
+                   flex h-20 items-center justify-between
+                   border-b border-white/[0.06]
+                   bg-[#08070d]/90
+                   px-6 backdrop-blur-xl
+                   sm:px-8">
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button type="button" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen()"
+                aria-label="Toggle admin navigation" class="flex h-10 w-10
+                       items-center justify-center
+                       rounded-xl
+                       border border-white/10
+                       bg-white/[0.025]
+                       text-white/70
+                       transition
+                       hover:border-fuchsia-400/30
+                       hover:text-white
+                       lg:hidden">
+
+                @if (mobileMenuOpen()) {
+
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+                    <path d="M6 6l12 12"></path>
+                    <path d="M18 6L6 18"></path>
+
+                </svg>
+
+                } @else {
+
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+                    <path d="M4 6h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 18h16"></path>
+
+                </svg>
+
+                }
+
+            </button>
+
+
+            <!-- NOTIFICATIONS -->
 
             <app-notification-center />
 

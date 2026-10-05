@@ -337,13 +337,54 @@
                                     {{ article.isPublished ? 'Unpublish' : 'Publish' }}
                                 </button>
 
-                                @if (article.isPublished) {
+                                @if (getLatestDistribution(article.id); as distribution) {
 
-                                <button type="button" (click)="sendArticleToSubscribers(article)" class="rounded-lg border border-fuchsia-400/20
-                                    bg-fuchsia-400/5 px-3 py-2
-                                    text-xs text-fuchsia-300
-                                    transition hover:border-fuchsia-400/40
-                                hover:bg-fuchsia-400/10">
+                                <div class="flex items-center gap-2">
+
+                                    <div class="text-right">
+
+                                        <div class="text-[10px] font-medium
+                                                       uppercase tracking-wide
+                                                       text-emerald-300">
+
+                                            ✓ Sent
+
+                                        </div>
+
+                                        <div class="mt-0.5 text-[9px] text-white/35">
+
+                                            {{ distribution.sentCount }} sent ·
+                                            {{ distribution.failedCount }} failed
+
+                                        </div>
+
+                                    </div>
+
+                                    <button type="button" (click)="resendArticleToSubscribers(article)" class="rounded-lg border
+                                                   border-fuchsia-400/20
+                                                   bg-fuchsia-400/5
+                                                   px-3 py-2
+                                                   text-xs text-fuchsia-300
+                                                   transition
+                                                   hover:border-fuchsia-400/40
+                                                   hover:bg-fuchsia-400/10">
+
+                                        Resend
+
+                                    </button>
+
+                                </div>
+
+                                } @else {
+
+                                <button type="button" (click)="sendArticleToSubscribers(article)" class="rounded-lg border
+                                               border-fuchsia-400/20
+                                               bg-fuchsia-400/5
+                                               px-3 py-2
+                                               text-xs text-fuchsia-300
+                                               transition
+                                               hover:border-fuchsia-400/40
+                                               hover:bg-fuchsia-400/10">
 
                                     Send to Subscribers
 
@@ -363,11 +404,156 @@
 
             </table>
 
+
+
         </div>
 
     </div>
 
     }
+
+    <!-- Distribution History -->
+    <div class="mt-10">
+
+        <div class="mb-5">
+            <p class="text-xs font-semibold uppercase
+                       tracking-[0.2em] text-fuchsia-400">
+                Email Distribution
+            </p>
+
+            <h2 class="mt-1 text-xl font-semibold text-white">
+                Distribution History
+            </h2>
+
+            <p class="mt-1 text-sm text-white/40">
+                A record of article updates sent to subscribers.
+            </p>
+        </div>
+
+
+        @if (distributionHistoryLoading()) {
+
+        <div class="rounded-2xl border border-white/10
+                       bg-white/[0.02] px-6 py-8
+                       text-center text-sm text-white/40">
+
+            Loading distribution history...
+
+        </div>
+
+        } @else if (distributionHistory().length === 0) {
+
+        <div class="rounded-2xl border border-white/10
+                       bg-white/[0.02] px-6 py-8
+                       text-center">
+
+            <p class="text-sm text-white/50">
+                No article distributions yet.
+            </p>
+
+            <p class="mt-1 text-xs text-white/25">
+                Distribution records will appear here
+                after an article is sent.
+            </p>
+
+        </div>
+
+        } @else {
+
+        <div class="overflow-hidden rounded-2xl
+                       border border-white/10
+                       bg-white/[0.02]">
+
+            <div class="divide-y divide-white/[0.06]">
+
+                @for (
+                distribution of distributionHistory();
+                track distribution.id
+                ) {
+
+                <div class="flex flex-col gap-4 px-6 py-5
+                                   transition hover:bg-white/[0.02]
+                                   sm:flex-row sm:items-center
+                                   sm:justify-between">
+
+                    <!-- Article -->
+                    <div class="min-w-0">
+
+                        <p class="truncate text-sm
+                                           font-medium text-white">
+
+                            {{ distribution.articleTitle }}
+
+                        </p>
+
+                        <p class="mt-1 text-xs
+                                           text-white/35">
+
+                            Sent
+                            {{ distribution.sentAt | date:'dd MMM yyyy, HH:mm' }}
+                            ·
+                            {{ distribution.sentBy || 'Admin' }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Results -->
+                    <div class="flex shrink-0 items-center
+                                       gap-3">
+
+                        <span class="rounded-full border
+                                           border-emerald-400/20
+                                           bg-emerald-400/10
+                                           px-3 py-1 text-xs
+                                           font-medium
+                                           text-emerald-300">
+
+                            {{ distribution.sentCount }}
+                            sent
+
+                        </span>
+
+
+                        @if (distribution.failedCount > 0) {
+
+                        <span class="rounded-full border
+                                               border-red-400/20
+                                               bg-red-400/10
+                                               px-3 py-1 text-xs
+                                               font-medium
+                                               text-red-300">
+
+                            {{ distribution.failedCount }}
+                            failed
+
+                        </span>
+
+                        } @else {
+
+                        <span class="text-xs
+                                               text-white/30">
+
+                            0 failed
+
+                        </span>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
 
 </div>
 

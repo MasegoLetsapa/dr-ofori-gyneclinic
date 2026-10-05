@@ -1,0 +1,541 @@
+<div class="min-h-screen bg-[#08070d] px-4 py-8 text-white sm:px-6 lg:px-8 space-y-8">
+
+    <!-- Header -->
+    <div>
+
+        <p class="text-xs font-semibold uppercase
+                   tracking-[0.2em] text-fuchsia-400">
+
+            Audience
+
+        </p>
+
+        <h1 class="mt-2 font-serif text-3xl
+                   text-white">
+
+            Email Subscribers
+
+        </h1>
+
+        <p class="mt-2 text-sm text-white/40">
+
+            Manage people who have subscribed
+            to receive article updates.
+
+        </p>
+
+    </div>
+
+
+    <!-- Error -->
+    @if (error()) {
+
+    <div class="rounded-xl border
+                   border-red-400/20
+                   bg-red-400/5
+                   px-4 py-3 text-sm
+                   text-red-300">
+
+        {{ error() }}
+
+    </div>
+
+    }
+
+    @if (actionMessage()) {
+
+    <div class="rounded-xl border
+                   border-fuchsia-400/20
+                   bg-fuchsia-400/5
+                   px-4 py-3 text-sm
+                   text-fuchsia-300">
+
+        {{ actionMessage() }}
+
+    </div>
+
+    }
+
+
+    <!-- Stats -->
+    <div class="grid gap-4
+               sm:grid-cols-3">
+
+        <div class="rounded-2xl border
+                   border-white/10
+                   bg-white/[0.03]
+                   p-5">
+
+            <p class="text-xs text-white/40">
+                Total Subscribers
+            </p>
+
+            <p class="mt-2 text-3xl
+                       font-semibold text-white">
+
+                {{ totalSubscribers() }}
+
+            </p>
+
+        </div>
+
+
+        <div class="rounded-2xl border
+                   border-emerald-400/10
+                   bg-emerald-400/[0.03]
+                   p-5">
+
+            <p class="text-xs text-white/40">
+                Active
+            </p>
+
+            <p class="mt-2 text-3xl
+                       font-semibold
+                       text-emerald-300">
+
+                {{ activeSubscribers() }}
+
+            </p>
+
+        </div>
+
+
+        <div class="rounded-2xl border
+                   border-white/10
+                   bg-white/[0.03]
+                   p-5">
+
+            <p class="text-xs text-white/40">
+                Unsubscribed
+            </p>
+
+            <p class="mt-2 text-3xl
+                       font-semibold text-white/60">
+
+                {{ inactiveSubscribers() }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Subscribers -->
+    <div class="overflow-hidden rounded-2xl
+               border border-white/10
+               bg-white/[0.02]">
+
+        @if (loading()) {
+
+        <div class="px-6 py-10 text-center
+                       text-sm text-white/40">
+
+            Loading subscribers...
+
+        </div>
+
+        } @else if (subscribers().length === 0) {
+
+        <div class="px-6 py-10 text-center">
+
+            <p class="text-sm text-white/50">
+                No subscribers yet.
+            </p>
+
+            <p class="mt-1 text-xs text-white/25">
+
+                Subscribers will appear here
+                when people join your article updates.
+
+            </p>
+
+        </div>
+
+        } @else {
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[700px]">
+
+                <thead class="border-b
+                               border-white/[0.06]">
+
+                    <tr class="text-left text-xs
+                                   uppercase
+                                   tracking-wide
+                                   text-white/35">
+
+                        <th class="px-6 py-4">
+                            Email
+                        </th>
+
+                        <th class="px-6 py-4">
+                            Subscribed
+                        </th>
+
+                        <th class="px-6 py-4">
+                            Source Article
+                        </th>
+
+                        <th class="px-6 py-4">
+                            Status
+                        </th>
+
+                        <th class="px-6 py-4 text-right">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody class="divide-y
+                               divide-white/[0.06]">
+
+                    @for (
+                    subscriber of subscribers();
+                    track subscriber.id
+                    ) {
+
+                    <tr class="transition
+                                       hover:bg-white/[0.02]">
+
+                        <td class="px-6 py-5">
+
+                            <span class="text-sm
+                                               font-medium
+                                               text-white">
+
+                                {{ subscriber.email }}
+
+                            </span>
+
+                        </td>
+
+
+                        <td class="px-6 py-5">
+
+                            <span class="text-sm
+                                               text-white/45">
+
+                                {{
+                                subscriber.subscribedAt
+                                | date:'dd MMM yyyy'
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <td class="px-6 py-5">
+
+                            @if (
+                            subscriber.sourceArticleId
+                            ) {
+
+                            <span class="text-sm
+                                                   text-white/45">
+
+                                Article #{{
+                                subscriber.sourceArticleId
+                                }}
+
+                            </span>
+
+                            } @else {
+
+                            <span class="text-sm
+                                                   text-white/25">
+
+                                Website
+
+                            </span>
+
+                            }
+
+                        </td>
+
+
+                        <td class="px-6 py-5">
+
+                            @if (
+                            subscriber.isActive
+                            ) {
+
+                            <span class="inline-flex
+                                                   rounded-full
+                                                   border
+                                                   border-emerald-400/20
+                                                   bg-emerald-400/10
+                                                   px-3 py-1
+                                                   text-xs
+                                                   font-medium
+                                                   text-emerald-300">
+
+                                Active
+
+                            </span>
+
+                            } @else {
+
+                            <span class="inline-flex
+                                                   rounded-full
+                                                   border
+                                                   border-white/10
+                                                   bg-white/[0.04]
+                                                   px-3 py-1
+                                                   text-xs
+                                                   font-medium
+                                                   text-white/40">
+
+                                Unsubscribed
+
+                            </span>
+
+                            }
+
+                        </td>
+
+                        <td class="px-6 py-5 text-right">
+
+                            @if (subscriber.isActive) {
+
+                            <button type="button" (click)="requestUnsubscribe(subscriber)"
+                                [disabled]="actionLoading() === subscriber.id" class="rounded-lg border
+                                           border-red-400/20
+                                           bg-red-400/5
+                                           px-3 py-2 text-xs
+                                           text-red-300
+                                           transition
+                                           hover:border-red-400/40
+                                           hover:bg-red-400/10
+                                           disabled:cursor-not-allowed
+                                           disabled:opacity-50">
+
+                                @if (actionLoading() === subscriber.id) {
+                                Updating...
+                                } @else {
+                                Unsubscribe
+                                }
+
+                            </button>
+
+                            } @else {
+
+                            <button type="button" (click)="requestReactivate(subscriber)"
+                                [disabled]="actionLoading() === subscriber.id" class="rounded-lg border
+                                           border-emerald-400/20
+                                           bg-emerald-400/5
+                                           px-3 py-2 text-xs
+                                           text-emerald-300
+                                           transition
+                                           hover:border-emerald-400/40
+                                           hover:bg-emerald-400/10
+                                           disabled:cursor-not-allowed
+                                           disabled:opacity-50">
+
+                                @if (actionLoading() === subscriber.id) {
+                                Updating...
+                                } @else {
+                                Reactivate
+                                }
+
+                            </button>
+
+                            }
+
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        }
+
+    </div>
+
+</div>
+@if (pendingSubscriber(); as subscriber) {
+
+<div class="fixed inset-0 z-50
+               flex items-center justify-center
+               bg-black/70 px-5
+               backdrop-blur-sm">
+
+    <div class="w-full max-w-md
+                   overflow-hidden rounded-2xl
+                   border border-white/10
+                   bg-[#100d15]
+                   shadow-2xl">
+
+        <!-- Header -->
+        <div class="border-b border-white/[0.06]
+                       bg-gradient-to-br
+                       from-fuchsia-500/[0.08]
+                       via-transparent
+                       to-violet-500/[0.08]
+                       px-6 py-6">
+
+            <div class="flex h-11 w-11
+                           items-center justify-center
+                           rounded-xl
+                           border border-fuchsia-400/20
+                           bg-fuchsia-400/10">
+
+                @if (
+                pendingAction() === 'unsubscribe'
+                ) {
+
+                <span class="text-lg text-red-300">
+                    !
+                </span>
+
+                } @else {
+
+                <span class="text-lg text-emerald-300">
+                    ✓
+                </span>
+
+                }
+
+            </div>
+
+            <h2 class="mt-5 font-serif
+                           text-2xl text-white">
+
+                @if (
+                pendingAction() === 'unsubscribe'
+                ) {
+                Unsubscribe Subscriber
+                } @else {
+                Reactivate Subscriber
+                }
+
+            </h2>
+
+            <p class="mt-2 text-sm
+                           leading-6 text-white/45">
+
+                @if (
+                pendingAction() === 'unsubscribe'
+                ) {
+
+                This subscriber will no longer
+                receive new article updates.
+
+                } @else {
+
+                This subscriber will start
+                receiving new article updates again.
+
+                }
+
+            </p>
+
+        </div>
+
+
+        <!-- Content -->
+        <div class="px-6 py-6">
+
+            <div class="rounded-xl
+                           border border-white/10
+                           bg-white/[0.03]
+                           px-4 py-4">
+
+                <p class="text-sm font-medium
+                               text-white">
+
+                    {{ subscriber.email }}
+
+                </p>
+
+                <p class="mt-1 text-xs
+                               text-white/35">
+
+                    Current status:
+
+                    @if (subscriber.isActive) {
+                    Active
+                    } @else {
+                    Unsubscribed
+                    }
+
+                </p>
+
+            </div>
+
+
+            <!-- Actions -->
+            <div class="mt-6 flex
+                           justify-end gap-3">
+
+                <button type="button" (click)="closeConfirmation()" class="rounded-xl
+                               border border-white/10
+                               bg-white/[0.03]
+                               px-4 py-2.5
+                               text-sm
+                               text-white/55
+                               transition
+                               hover:bg-white/[0.06]
+                               hover:text-white">
+
+                    Cancel
+
+                </button>
+
+
+                @if (
+                pendingAction() === 'unsubscribe'
+                ) {
+
+                <button type="button" (click)="confirmSubscriberAction()" class="rounded-xl
+                                   border
+                                   border-red-400/20
+                                   bg-red-400/10
+                                   px-4 py-2.5
+                                   text-sm font-medium
+                                   text-red-300
+                                   transition
+                                   hover:bg-red-400/15">
+
+                    Unsubscribe
+
+                </button>
+
+                } @else {
+
+                <button type="button" (click)="confirmSubscriberAction()" class="rounded-xl
+                                   border
+                                   border-emerald-400/20
+                                   bg-emerald-400/10
+                                   px-4 py-2.5
+                                   text-sm font-medium
+                                   text-emerald-300
+                                   transition
+                                   hover:bg-emerald-400/15">
+
+                    Reactivate
+
+                </button>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

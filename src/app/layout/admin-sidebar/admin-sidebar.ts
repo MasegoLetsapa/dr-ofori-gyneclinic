@@ -1,14 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Icon } from '../../shared/icon/icon';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, Icon],
   standalone: true,
   selector: 'app-admin-sidebar',
   styleUrl: './admin-sidebar.scss',
   templateUrl: './admin-sidebar.html',
 })
 export class AdminSidebar {
+
+  @Input()
+  mobileMenuOpen = false;
+
+  @Output()
+  closeMobileMenu = new EventEmitter<void>();
 
   navigationItems = [
     {
@@ -40,6 +47,11 @@ export class AdminSidebar {
       label: 'Articles',
       route: '/admin/articles',
       icon: 'articles'
+    },
+    {
+      label: 'Subscribers',
+      route: '/admin/subscribers',
+      icon: 'subscribers'
     },
     {
       label: 'Messages',

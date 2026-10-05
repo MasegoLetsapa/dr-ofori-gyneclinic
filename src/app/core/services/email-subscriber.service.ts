@@ -22,6 +22,17 @@ export interface EmailSubscriber {
     isActive: boolean;
 }
 
+export interface ArticleDistribution {
+    id: number;
+    articleId: number;
+    articleTitle: string;
+    articleSlug: string;
+    sentAt: string;
+    sentCount: number;
+    failedCount: number;
+    sentBy: string | null;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -29,7 +40,7 @@ export class EmailSubscriberService {
     private readonly http = inject(HttpClient);
 
     private readonly apiUrl =
-        'https://localhost:7003/api/email-subscribers';
+        'https://letsapamasego-001-site1.ltempurl.com/api/email-subscribers';
 
     subscribe(
         email: string,
@@ -60,4 +71,42 @@ export class EmailSubscriberService {
             this.apiUrl
         );
     }
+
+    unsubscribeSubscriber(
+        id: number
+    ): Observable<{ message: string; subscriberId: number; isActive: boolean }> {
+
+        return this.http.delete<{
+            message: string;
+            subscriberId: number;
+            isActive: boolean;
+        }>(
+            `${this.apiUrl}/${id}`
+        );
+    }
+
+
+    reactivateSubscriber(
+        id: number
+    ): Observable<{ message: string; subscriberId: number; isActive: boolean }> {
+
+        return this.http.patch<{
+            message: string;
+            subscriberId: number;
+            isActive: boolean;
+        }>(
+            `${this.apiUrl}/${id}/reactivate`,
+            {}
+        );
+    }
+
+    getArticleDistributionHistory():
+        Observable<ArticleDistribution[]> {
+
+        return this.http.get<ArticleDistribution[]>(
+            `${this.apiUrl}/article-history`
+        );
+    }
+
+
 }
